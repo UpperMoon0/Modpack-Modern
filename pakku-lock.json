@@ -2227,6 +2227,35 @@
             ]
         },
         {
+            "pakku_id": "dfx82R83P3WFMskw",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/Building-Gadgets-Extra"
+            },
+            "name": {
+                "github": "Building-Gadgets-Extra"
+            },
+            "id": {
+                "github": "1304635397"
+            },
+            "redistributable": false,
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "building-gadgets-extra-forge-1.20.1-0.0.4.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/Building-Gadgets-Extra/releases/download/v0.0.4/building-gadgets-extra-forge-1.20.1-0.0.4.jar",
+                    "id": "554890634",
+                    "parent_id": "1304635397",
+                    "hashes": {
+                        "sha256": "deaba4d6c488a1f66dd07d325b91983bdb44c70a60250b921754a88652b6b355"
+                    },
+                    "size": 255891,
+                    "date_published": "2026-09-10T11:37:30Z"
+                }
+            ]
+        },
+        {
             "pakku_id": "sQg1LA2Qq7iu8c8f",
             "type": "MOD",
             "slug": {
@@ -4104,70 +4133,6 @@
             ]
         },
         {
-            "pakku_id": "rLyHGqTvGY2zL0KW",
-            "type": "MOD",
-            "side": "BOTH",
-            "slug": {
-                "curseforge": "create-horse-power",
-                "modrinth": "create-horse-power"
-            },
-            "name": {
-                "curseforge": "Create Horse Power",
-                "modrinth": "Create Horse Power"
-            },
-            "id": {
-                "curseforge": "1121632",
-                "modrinth": "9Qm19XSM"
-            },
-            "files": [
-                {
-                    "type": "curseforge",
-                    "file_name": "createhorsepower-1.20.1-1.1.0.jar",
-                    "mc_versions": [
-                        "1.20.1"
-                    ],
-                    "loaders": [
-                        "forge"
-                    ],
-                    "release_type": "release",
-                    "url": "https://edge.forgecdn.net/files/7259/899/createhorsepower-1.20.1-1.1.0.jar",
-                    "id": "7259899",
-                    "parent_id": "1121632",
-                    "hashes": {
-                        "sha1": "b4a5802ec8e5c1eef4fe69b9ca973eb7fe02ace9",
-                        "md5": "4d2d9e1f33a934e7c60f734b9d848dc3"
-                    },
-                    "required_dependencies": [],
-                    "size": 259693,
-                    "date_published": "2025-11-25T04:44:48.007Z"
-                },
-                {
-                    "type": "modrinth",
-                    "file_name": "createhorsepower-1.20.1-1.1.0.jar",
-                    "mc_versions": [
-                        "1.20.1"
-                    ],
-                    "loaders": [
-                        "forge"
-                    ],
-                    "release_type": "release",
-                    "url": "https://cdn.modrinth.com/data/9Qm19XSM/versions/bHSeI5kR/createhorsepower-1.20.1-1.1.0.jar",
-                    "id": "bHSeI5kR",
-                    "parent_id": "9Qm19XSM",
-                    "hashes": {
-                        "sha512": "8bb9e3d2b9e327709e26e247210efc10db6ade1a13156175d39729fe8bafae5e75f7c9104b03ce7c358bad40dcee767c1181bd8340f2e5ec314a36fc2822abdb",
-                        "sha1": "b4a5802ec8e5c1eef4fe69b9ca973eb7fe02ace9"
-                    },
-                    "required_dependencies": [
-                        "LNytGWDc",
-                        "u6dRKJwZ"
-                    ],
-                    "size": 259693,
-                    "date_published": "2025-11-25T04:46:17.404117Z"
-                }
-            ]
-        },
-        {
             "pakku_id": "pwbSW8PJMxL5nola",
             "pakku_links": [
                 "Nw8xTCQngHA15ilh"
@@ -4349,6 +4314,34 @@
             ]
         },
         {
+            "pakku_id": "jZxJtvloEJcjmCXW",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/Create-Precise-Controls"
+            },
+            "name": {
+                "github": "Create-Precise-Controls"
+            },
+            "id": {
+                "github": "1358499995"
+            },
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "create-precise-controls-forge-1.20.1-0.1.1.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/Create-Precise-Controls/releases/download/v0.1.1/create-precise-controls-forge-1.20.1-0.1.1.jar",
+                    "id": "564079447",
+                    "parent_id": "1358499995",
+                    "hashes": {
+                        "sha256": "6d1f2e012bba9406d32fe5fe1fb998742371f570020d35408d7ddd70fd9b43f2"
+                    },
+                    "size": 1301695,
+                    "date_published": "2026-09-14T19:36:10Z"
+                }
+            ]
+        },
+        {
             "pakku_id": "Fu7EpxmtyqTkOiMR",
             "type": "MOD",
             "side": "BOTH",
@@ -4482,6 +4475,45 @@
                     ],
                     "size": 2003578,
                     "date_published": "2026-08-20T15:14:56.320Z"
+                }
+            ]
+        },
+        {
+            "pakku_id": "G7UKPStjmU4LS4QJ",
+            "type": "MOD",
+            "side": "BOTH",
+            "slug": {
+                "modrinth": "extra-gauges"
+            },
+            "name": {
+                "modrinth": "Create: Extra Gauges"
+            },
+            "id": {
+                "modrinth": "6YJgomwt"
+            },
+            "files": [
+                {
+                    "type": "modrinth",
+                    "file_name": "extra_gauges-2.0.7.jar",
+                    "mc_versions": [
+                        "1.20.1"
+                    ],
+                    "loaders": [
+                        "forge"
+                    ],
+                    "release_type": "release",
+                    "url": "https://cdn.modrinth.com/data/6YJgomwt/versions/ZbA0Ejq9/extra_gauges-2.0.7.jar",
+                    "id": "ZbA0Ejq9",
+                    "parent_id": "6YJgomwt",
+                    "hashes": {
+                        "sha512": "77cbedf768e1865ccc47a809c7fa722fb5bf52b9ae5725c9cc1013c69b8355dcf5c31a5172ad89ff5d58b777b45d94ddbcdf05a8af4800a01793e953355b5310",
+                        "sha1": "6f3331cc877bfaf15bb58723ff3129fc3207d296"
+                    },
+                    "required_dependencies": [
+                        "LNytGWDc"
+                    ],
+                    "size": 1029438,
+                    "date_published": "2025-10-02T16:43:31.740771Z"
                 }
             ]
         },
@@ -4868,6 +4900,34 @@
                     ],
                     "size": 77230,
                     "date_published": "2025-11-10T23:30:35.318568Z"
+                }
+            ]
+        },
+        {
+            "pakku_id": "IDOuIMiezEfnG7mD",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/CreateHorsePower-CE"
+            },
+            "name": {
+                "github": "CreateHorsePower-CE"
+            },
+            "id": {
+                "github": "1350393644"
+            },
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "createhorsepower-ce-1.20.1-1.2.6.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/CreateHorsePower-CE/releases/download/v1.2.6/createhorsepower-ce-1.20.1-1.2.6.jar",
+                    "id": "579403952",
+                    "parent_id": "1350393644",
+                    "hashes": {
+                        "sha256": "ba6dcc4028019c000a2eb7d270bccde16e558cd07ce9671e322ff704e87b1249"
+                    },
+                    "size": 402531,
+                    "date_published": "2026-09-21T16:22:30Z"
                 }
             ]
         },
@@ -5743,6 +5803,35 @@
                     "required_dependencies": [],
                     "size": 1121750,
                     "date_published": "2026-05-13T06:18:18.303Z"
+                }
+            ]
+        },
+        {
+            "pakku_id": "idrWT5Eew1TQ0gKB",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/Economy"
+            },
+            "name": {
+                "github": "Economy"
+            },
+            "id": {
+                "github": "1169139940"
+            },
+            "redistributable": false,
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "economy-forge-1.20.1-0.0.13.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/Economy/releases/download/v0.0.13/economy-forge-1.20.1-0.0.13.jar",
+                    "id": "581795582",
+                    "parent_id": "1169139940",
+                    "hashes": {
+                        "sha256": "3890e33933d11139384b51c7e45ceefd13b0d17fae0ec6f2ee93ccf33dd3f031"
+                    },
+                    "size": 581892,
+                    "date_published": "2026-09-22T16:35:02Z"
                 }
             ]
         },
@@ -8975,8 +9064,8 @@
                 "modrinth": "ihearttfc"
             },
             "name": {
-                "curseforge": "I ❤ TFC (I Heart TFC)",
-                "modrinth": "I ❤ TFC (I Heart TFC)"
+                "curseforge": "I Γ¥ñ TFC (I Heart TFC)",
+                "modrinth": "I Γ¥ñ TFC (I Heart TFC)"
             },
             "id": {
                 "curseforge": "1118578",
@@ -9912,8 +10001,8 @@
                 "modrinth": "jade"
             },
             "name": {
-                "curseforge": "Jade 🔍",
-                "modrinth": "Jade 🔍"
+                "curseforge": "Jade ≡ƒöì",
+                "modrinth": "Jade ≡ƒöì"
             },
             "id": {
                 "curseforge": "324717",
@@ -12133,6 +12222,34 @@
             ]
         },
         {
+            "pakku_id": "oofTsOROqpR4Ghm7",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/OpenUI-MC"
+            },
+            "name": {
+                "github": "OpenUI-MC"
+            },
+            "id": {
+                "github": "1341517843"
+            },
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "openui-mc-forge-1.20.1-0.0.11.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/OpenUI-MC/releases/download/v0.0.11/openui-mc-forge-1.20.1-0.0.11.jar",
+                    "id": "581564304",
+                    "parent_id": "1341517843",
+                    "hashes": {
+                        "sha256": "a8c00a2cf36c4160f7c6ae9888c30ffddb235180b67121bc162d492c9146117b"
+                    },
+                    "size": 1294911,
+                    "date_published": "2026-09-22T14:23:08Z"
+                }
+            ]
+        },
+        {
             "pakku_id": "xpyLKTSOZvJLu3M2",
             "type": "MOD",
             "side": "BOTH",
@@ -12451,8 +12568,8 @@
                 "modrinth": "particular-reforged"
             },
             "name": {
-                "curseforge": "Particular ✨ Reforged",
-                "modrinth": "Particular ✨ Reforged"
+                "curseforge": "Particular Γ£¿ Reforged",
+                "modrinth": "Particular Γ£¿ Reforged"
             },
             "id": {
                 "curseforge": "1219053",
@@ -14013,6 +14130,64 @@
                     "required_dependencies": [],
                     "size": 20849,
                     "date_published": "2026-02-21T09:46:54.760Z"
+                }
+            ]
+        },
+        {
+            "pakku_id": "hNiauSlUK7ICnq9g",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/Simply-Screens"
+            },
+            "name": {
+                "github": "Simply-Screens"
+            },
+            "id": {
+                "github": "917864621"
+            },
+            "redistributable": false,
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "simply_screens-forge-1.20.1-0.8.9.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/Simply-Screens/releases/download/v0.8.9/simply_screens-forge-1.20.1-0.8.9.jar",
+                    "id": "575202308",
+                    "parent_id": "917864621",
+                    "hashes": {
+                        "sha256": "d37e7ba7c78a51a0d086dfc21fee326de1bc5f66103a50da065aa3fbee97b662"
+                    },
+                    "size": 194553,
+                    "date_published": "2026-09-19T17:43:43Z"
+                }
+            ]
+        },
+        {
+            "pakku_id": "wlS2ZvKI0oJCYDwU",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/Simply-Speakers"
+            },
+            "name": {
+                "github": "Simply-Speakers"
+            },
+            "id": {
+                "github": "936467663"
+            },
+            "redistributable": false,
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "simplyspeakers-forge-1.20.1-0.8.3.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/Simply-Speakers/releases/download/v0.8.3/simplyspeakers-forge-1.20.1-0.8.3.jar",
+                    "id": "533653688",
+                    "parent_id": "936467663",
+                    "hashes": {
+                        "sha256": "12496acc396a28d19aade3229a7bb37f155fc35981fbf80c0de2b074a3cfda5e"
+                    },
+                    "size": 404866,
+                    "date_published": "2026-08-28T10:44:04Z"
                 }
             ]
         },

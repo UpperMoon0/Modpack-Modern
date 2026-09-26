@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "baseRef": "0.13.10",
+  "overlays": [
+    {
+      "format": "yaml",
+      "path": "config/gtceu.yaml",
+      "targets": [
+        "server"
+      ],
+      "values": {
+        "machines.shouldWeatherOrTerrainExplosion": false
+      }
+    },
+    {
+      "format": "toml",
+      "path": "defaultconfigs/createhorsepower-server.toml",
+      "targets": [
+        "client",
+        "server"
+      ],
+      "values": {
+        "creatureRPMRange": 16,
+        "smallCreatureStressRange": 16,
+        "mediumCreatureStressRange": 24,
+        "largeCreatureStressRange": 32,
+        "poorMultiplier": 0.5,
+        "normalMultiplier": 1.0,
+        "greatMultiplier": 2.0,
+        "balance.globalRpmMultiplier": 1.0,
+        "balance.globalStressMultiplier": 1.0,
+        "balance.enableIndividualAnimalStats": false,
+        "path.evaluationMode": "LEGACY",
+        "path.enableStressScaling": false,
+        "path.minimumCoverage": 1.0
+      }
+    },
+    {
+      "format": "snbt",
+      "path": "{levelName}/serverconfig/ftbchunks-world.snbt",
+      "targets": [
+        "server"
+      ],
+      "values": {
+        "max_claimed_chunks": 1000000,
+        "max_force_loaded_chunks": 1000000
+      }
+    },
+    {
+      "format": "snbtAll",
+      "path": "{levelName}/serverconfig/ftbranks/ranks.snbt",
+      "targets": [
+        "server"
+      ],
+      "values": {
+        "ftbchunks.max_claimed": 1000000,
+        "ftbchunks.max_force_loaded": 1000000
+      }
+    }
+  ]
+}

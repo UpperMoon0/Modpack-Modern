@@ -19,7 +19,6 @@
         "!defaultconfigs/tfc-server.toml",
         "!defaultconfigs/ftbranks/ranks.snbt",
         "!config/ftbbackups2.json"
-        
     ],
     "server_overrides": [
     ],
@@ -297,6 +296,32 @@
         "probejs": {
             "side": "CLIENT",
             "export": false
+        },
+        "UpperMoon0/Economy": {
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/OpenUI-MC": {
+            "side": "CLIENT",
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/Create-Precise-Controls": {
+            "side": "CLIENT",
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/Simply-Screens": {
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/Simply-Speakers": {
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/CreateHorsePower-CE": {
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/Building-Gadgets-Extra": {
+            "update_strategy": "NONE"
+        },
+        "extra-gauges": {
+            "update_strategy": "NONE"
         }
     },
     "export_server_side_projects_to_client": true

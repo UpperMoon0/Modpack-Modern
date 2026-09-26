@@ -32,3 +32,14 @@ mediumCreatures = ["tfc:cow", "tfc:donkey", "tfc:dolphin", "wan_ancient_beasts:g
 #Valid "Large" creatures
 largeCreatures = ["tfc:horse", "tfc:mule", "tfc:musk_ox", "tfc:yak", "tfg:sniffer", "wan_ancient_beasts:walker", "species:cruncher", "wan_ancient_beasts:charger", "species:mammutilation", "minecraft:zombie_horse"]
 
+[balance]
+# NsTut policy: preserve legacy TFG output instead of per-animal stat scaling.
+globalRpmMultiplier = 1.0
+globalStressMultiplier = 1.0
+enableIndividualAnimalStats = false
+
+[path]
+# NsTut policy: keep the pre-1.2 path behavior and stress model.
+evaluationMode = "LEGACY"
+enableStressScaling = false
+minimumCoverage = 1.0

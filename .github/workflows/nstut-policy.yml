@@ -1,0 +1,22 @@
+name: NsTut fork policy
+
+on:
+  push:
+    branches:
+      - "nstut/**"
+  pull_request:
+    branches:
+      - "nstut/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate NsTut fork policy
+        run: |
+          python nstut/tools/generate-modpack-manager-manifest.py
+          git diff --exit-code -- nstut/modpack-manager.patch.json
+          python nstut/tools/validate.py

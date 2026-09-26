@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "id": "tfg-nstut-managed",
+  "name": "TFG NsTut Fork Overlay",
+  "version": "0.13.10-nstut.1",
+  "description": "Generated from UpperMoon0/Modpack-Modern nstut-0.13.10.1 on upstream 0.13.10.",
+  "requiredPaths": [
+    "mods",
+    "config",
+    "kubejs",
+    "defaultconfigs"
+  ],
+  "artifacts": [
+    {
+      "id": "economy",
+      "url": "https://github.com/UpperMoon0/Economy/releases/download/v0.0.13/economy-forge-1.20.1-0.0.13.jar",
+      "sha256": "3890e33933d11139384b51c7e45ceefd13b0d17fae0ec6f2ee93ccf33dd3f031",
+      "fileName": "economy-forge-1.20.1-0.0.13.jar"
+    },
+    {
+      "id": "openui",
+      "url": "https://github.com/UpperMoon0/OpenUI-MC/releases/download/v0.0.11/openui-mc-forge-1.20.1-0.0.11.jar",
+      "sha256": "a8c00a2cf36c4160f7c6ae9888c30ffddb235180b67121bc162d492c9146117b",
+      "fileName": "openui-mc-forge-1.20.1-0.0.11.jar"
+    },
+    {
+      "id": "create-precise-controls",
+      "url": "https://github.com/UpperMoon0/Create-Precise-Controls/releases/download/v0.1.1/create-precise-controls-forge-1.20.1-0.1.1.jar",
+      "sha256": "6d1f2e012bba9406d32fe5fe1fb998742371f570020d35408d7ddd70fd9b43f2",
+      "fileName": "create-precise-controls-forge-1.20.1-0.1.1.jar"
+    },
+    {
+      "id": "simply-screens",
+      "url": "https://github.com/UpperMoon0/Simply-Screens/releases/download/v0.8.9/simply_screens-forge-1.20.1-0.8.9.jar",
+      "sha256": "d37e7ba7c78a51a0d086dfc21fee326de1bc5f66103a50da065aa3fbee97b662",
+      "fileName": "simply_screens-forge-1.20.1-0.8.9.jar"
+    },
+    {
+      "id": "simply-speakers",
+      "url": "https://github.com/UpperMoon0/Simply-Speakers/releases/download/v0.8.3/simplyspeakers-forge-1.20.1-0.8.3.jar",
+      "sha256": "12496acc396a28d19aade3229a7bb37f155fc35981fbf80c0de2b074a3cfda5e",
+      "fileName": "simplyspeakers-forge-1.20.1-0.8.3.jar"
+    },
+    {
+      "id": "create-horse-power-ce",
+      "url": "https://github.com/UpperMoon0/CreateHorsePower-CE/releases/download/v1.2.6/createhorsepower-ce-1.20.1-1.2.6.jar",
+      "sha256": "ba6dcc4028019c000a2eb7d270bccde16e558cd07ce9671e322ff704e87b1249",
+      "fileName": "createhorsepower-ce-1.20.1-1.2.6.jar"
+    },
+    {
+      "id": "building-gadgets-extra",
+      "url": "https://github.com/UpperMoon0/Building-Gadgets-Extra/releases/download/v0.0.4/building-gadgets-extra-forge-1.20.1-0.0.4.jar",
+      "sha256": "deaba4d6c488a1f66dd07d325b91983bdb44c70a60250b921754a88652b6b355",
+      "fileName": "building-gadgets-extra-forge-1.20.1-0.0.4.jar"
+    },
+    {
+      "id": "extra-gauges",
+      "url": "https://cdn.modrinth.com/data/6YJgomwt/versions/ZbA0Ejq9/extra_gauges-2.0.7.jar",
+      "sha256": "8d45dc713998e5b8690b8a6d98af7260dfe4b5febffd0b391538a7bac2037f3d",
+      "fileName": "extra_gauges-2.0.7.jar"
+    }
+  ],
+  "operations": [
+    {
+      "type": "removeMatching",
+      "pattern": "mods/economy-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "economy",
+      "destination": "mods/economy-forge-1.20.1-0.0.13.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/openui-mc-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "openui",
+      "destination": "mods/openui-mc-forge-1.20.1-0.0.11.jar",
+      "targets": [
+        "client"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/create-precise-controls-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "create-precise-controls",
+      "destination": "mods/create-precise-controls-forge-1.20.1-0.1.1.jar",
+      "targets": [
+        "client"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/simply_screens-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/simply-screens-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "simply-screens",
+      "destination": "mods/simply_screens-forge-1.20.1-0.8.9.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/simplyspeakers-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/simply_speakers-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/simply-speakers-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "simply-speakers",
+      "destination": "mods/simplyspeakers-forge-1.20.1-0.8.3.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/createhorsepower-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "create-horse-power-ce",
+      "destination": "mods/createhorsepower-ce-1.20.1-1.2.6.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/building-gadgets-extra-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/buildinggadgetsextra-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "building-gadgets-extra",
+      "destination": "mods/building-gadgets-extra-forge-1.20.1-0.0.4.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/extra_gauges-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "extra-gauges",
+      "destination": "mods/extra_gauges-2.0.7.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "patchYaml",
+      "destination": "config/gtceu.yaml",
+      "values": {
+        "machines.shouldWeatherOrTerrainExplosion": false
+      },
+      "skipIfMissing": false,
+      "targets": [
+        "server"
+      ]
+    },
+    {
+      "type": "patchToml",
+      "destination": "defaultconfigs/createhorsepower-server.toml",
+      "values": {
+        "creatureRPMRange": 16,
+        "smallCreatureStressRange": 16,
+        "mediumCreatureStressRange": 24,
+        "largeCreatureStressRange": 32,
+        "poorMultiplier": 0.5,
+        "normalMultiplier": 1.0,
+        "greatMultiplier": 2.0,
+        "balance.globalRpmMultiplier": 1.0,
+        "balance.globalStressMultiplier": 1.0,
+        "balance.enableIndividualAnimalStats": false,
+        "path.evaluationMode": "LEGACY",
+        "path.enableStressScaling": false,
+        "path.minimumCoverage": 1.0
+      },
+      "skipIfMissing": false,
+      "targets": [
+        "client",
+        "server"
+      ]
+    }
+  ]
+}
