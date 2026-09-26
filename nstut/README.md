@@ -31,3 +31,5 @@ Run these commands from the repository root:
     python nstut/tools/validate.py
 
 The validator checks the upstream ancestry, Forge/Minecraft target, exact managed JAR filenames/hashes, client-only boundaries, native config policy, server FTB defaults, and generated manifest freshness.
+
+Promotion note: nstut/stable is the branch Modpack Manager follows. It points at the approved version-branch commit, whose release.json names an immutable deployment tag. Pakku server-overrides and client-overrides are generated to their real installation path and target, never copied under .pakku.

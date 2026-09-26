@@ -55,6 +55,16 @@ def raw_url(source_ref: str, path: str) -> str:
     )
 
 
+def deployment_path(path: str) -> tuple[str, list[str]]:
+    server_prefix = ".pakku/server-overrides/"
+    client_prefix = ".pakku/client-overrides/"
+    if path.startswith(server_prefix):
+        return path[len(server_prefix):], ["server"]
+    if path.startswith(client_prefix):
+        return path[len(client_prefix):], ["client"]
+    return path, ["client", "server"]
+
+
 def build_manifest() -> dict:
     release = load(NSTUT / "release.json")
     managed = load(NSTUT / "managed-mods.json")
@@ -125,12 +135,13 @@ def build_manifest() -> dict:
     for status, path in fork_changes(release["baseRef"]):
         if ignored(path) or path in SEMANTIC_PATHS:
             continue
+        destination, targets = deployment_path(path)
         if status.startswith("D"):
             operations.append(
                 {
                     "type": "removeMatching",
-                    "pattern": path,
-                    "targets": ["client", "server"],
+                    "pattern": destination,
+                    "targets": targets,
                 }
             )
             continue
@@ -150,8 +161,8 @@ def build_manifest() -> dict:
             {
                 "type": "installFile",
                 "artifact": artifact_id,
-                "destination": path,
-                "targets": ["client", "server"],
+                "destination": destination,
+                "targets": targets,
             }
         )
 

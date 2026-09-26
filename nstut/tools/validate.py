@@ -95,6 +95,12 @@ def main() -> int:
             if not matches or any(v != "1000000" for v in matches):
                 fail(f"{rel} does not enforce {key}=1000000")
 
+    generated = load(NSTUT / "modpack-manager.patch.json")
+    for operation in generated["operations"]:
+        destination = operation.get("destination") or operation.get("pattern") or ""
+        if destination.startswith(".pakku/"):
+            fail(f"generated install operation leaks Pakku metadata path: {destination}")
+
     result = subprocess.run(
         [sys.executable, str(ROOT / "nstut/tools/generate-modpack-manager-manifest.py"), "--check"]
     )
