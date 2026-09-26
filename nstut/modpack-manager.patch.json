@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "tfg-nstut-managed",
   "name": "TFG NsTut Fork Overlay",
-  "version": "0.13.10-nstut.1",
-  "description": "Generated from UpperMoon0/Modpack-Modern nstut-0.13.10.1 on upstream 0.13.10.",
+  "version": "0.13.10-nstut.2",
+  "description": "Generated from UpperMoon0/Modpack-Modern nstut-0.13.10.2 on upstream 0.13.10.",
   "requiredPaths": [
     "mods",
     "config",
@@ -259,6 +259,32 @@
       "skipIfMissing": false,
       "targets": [
         "client",
+        "server"
+      ]
+    },
+    {
+      "type": "patchSnbt",
+      "destination": "{levelName}/serverconfig/ftbchunks-world.snbt",
+      "values": {
+        "max_claimed_chunks": 1000000,
+        "max_force_loaded_chunks": 1000000
+      },
+      "replaceAll": false,
+      "skipIfMissing": true,
+      "targets": [
+        "server"
+      ]
+    },
+    {
+      "type": "patchSnbt",
+      "destination": "{levelName}/serverconfig/ftbranks/ranks.snbt",
+      "values": {
+        "ftbchunks.max_claimed": 1000000,
+        "ftbchunks.max_force_loaded": 1000000
+      },
+      "replaceAll": true,
+      "skipIfMissing": true,
+      "targets": [
         "server"
       ]
     }

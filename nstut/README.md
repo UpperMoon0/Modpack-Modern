@@ -19,7 +19,7 @@ GitHub projects with multiple loader assets are pinned to the reviewed Forge 1.2
 
 nstut/managed-mods.json contains exact downloadable artifacts and cleanup rules.
 
-nstut/runtime-overlays.json describes semantic overlays for mutable config/runtime files. YAML/TOML entries are emitted into nstut/modpack-manager.patch.json. Existing-world FTB SNBT is intentionally not replaced wholesale; nstut/tools/patch-existing-server.py updates only the managed keys.
+nstut/runtime-overlays.json describes semantic overlays for mutable config/runtime files. YAML, TOML, and SNBT entries are emitted into nstut/modpack-manager.patch.json. Existing-world FTB SNBT is patched semantically through patchSnbt; nstut/tools/patch-existing-server.py remains a standalone fallback that updates the same managed keys.
 
 nstut/tools/generate-modpack-manager-manifest.py also inspects the fork diff against baseRef. Any future ordinary changed file not classified as mutable or metadata is emitted as an exact file replacement, sourced from the immutable sourceRef tag.
 

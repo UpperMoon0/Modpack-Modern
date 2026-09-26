@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Generate the Modpack Manager manifest from the NsTut TFG fork source of truth."""
 
 from __future__ import annotations
@@ -107,6 +107,17 @@ def build_manifest() -> dict:
                     "destination": overlay["path"],
                     "values": overlay["values"],
                     "skipIfMissing": False,
+                    "targets": overlay["targets"],
+                }
+            )
+        elif overlay["format"] in {"snbt", "snbtAll"}:
+            operations.append(
+                {
+                    "type": "patchSnbt",
+                    "destination": overlay["path"],
+                    "values": overlay["values"],
+                    "replaceAll": overlay["format"] == "snbtAll",
+                    "skipIfMissing": True,
                     "targets": overlay["targets"],
                 }
             )

@@ -1,7 +1,7 @@
-﻿{
+{
   "schemaVersion": 1,
   "baseRef": "0.13.10",
   "branch": "nstut/0.13.10",
-  "overlayVersion": "0.13.10-nstut.1",
-  "sourceRef": "nstut-0.13.10.1"
+  "overlayVersion": "0.13.10-nstut.2",
+  "sourceRef": "nstut-0.13.10.2"
 }
