@@ -82,7 +82,7 @@ def main() -> int:
         fail("ordinary fork file deployment mapping regressed")
 
     tag_url = generator.raw_url(release["sourceRef"], "config/example file.toml")
-    expected_tag_prefix = f"https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/{release['sourceRef']}/"
+    expected_tag_prefix = f"https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/{release['sourceRef']}/"
     if not tag_url.startswith(expected_tag_prefix):
         fail(f"fork artifact URL is not pinned to the tag namespace: {tag_url}")
 

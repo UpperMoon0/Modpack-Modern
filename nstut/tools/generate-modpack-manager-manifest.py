@@ -50,7 +50,7 @@ def ignored(path: str) -> bool:
 def raw_url(source_ref: str, path: str) -> str:
     encoded_path = "/".join(quote(part, safe="") for part in path.split("/"))
     return (
-        "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/"
+        "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/"
         f"refs/tags/{quote(source_ref, safe='')}/{encoded_path}"
     )
 
@@ -184,7 +184,7 @@ def build_manifest() -> dict:
         "name": "TFG NsTut Fork Overlay",
         "version": release["overlayVersion"],
         "description": (
-            f"Generated from UpperMoon0/Modpack-Modern {release['sourceRef']} "
+            f"Generated from UpperMoon0/TFG-Modern-Fork {release['sourceRef']} "
             f"on upstream {release['baseRef']}."
         ),
         "requiredPaths": ["mods", "config", "kubejs", "defaultconfigs"],
