@@ -1,0 +1,35 @@
+name: "LV Renewable Ore Validation"
+
+on:
+  pull_request:
+    branches:
+      - dev
+    paths:
+      - "kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js"
+      - "kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js"
+      - "kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js"
+      - "kubejs/server_scripts/tfg/recipes.js"
+      - "kubejs/startup_scripts/tfg/materials.js"
+      - "pakku-lock.json"
+      - ".github/scripts/validate_lv_renewable_ores.py"
+      - ".github/workflows/validate-lv-renewable-ores.yml"
+  push:
+    branches:
+      - dev
+    paths:
+      - "kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js"
+      - "kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js"
+      - "kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js"
+      - "kubejs/server_scripts/tfg/recipes.js"
+      - "kubejs/startup_scripts/tfg/materials.js"
+      - "pakku-lock.json"
+      - ".github/scripts/validate_lv_renewable_ores.py"
+      - ".github/workflows/validate-lv-renewable-ores.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate LV renewable ore chains
+        run: python3 .github/scripts/validate_lv_renewable_ores.py
