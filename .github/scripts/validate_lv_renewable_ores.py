@@ -10,6 +10,9 @@ ROOT = Path(__file__).resolve().parents[2]
 RECIPES = ROOT / "kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js"
 MATERIALS = ROOT / "kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js"
 TAGS = ROOT / "kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js"
+CONCRETE_RECIPES = ROOT / "kubejs/server_scripts/tfg/natural_blocks/recipes.concrete.js"
+ROCK_TAGS = ROOT / "kubejs/server_scripts/tfg/natural_blocks/tags.rocks.js"
+CHROMIUM_RECIPES = ROOT / "kubejs/server_scripts/tfg/ores_and_materials/recipes.chromium.js"
 RECIPE_REGISTRY = ROOT / "kubejs/server_scripts/tfg/recipes.js"
 MATERIAL_REGISTRY = ROOT / "kubejs/startup_scripts/tfg/materials.js"
 TFC_LANG = ROOT / "kubejs/assets/tfc/lang/en_us.json"
@@ -18,6 +21,9 @@ PAKKU_LOCK = ROOT / "pakku-lock.json"
 recipe_text = RECIPES.read_text(encoding="utf-8")
 material_text = MATERIALS.read_text(encoding="utf-8")
 tags_text = TAGS.read_text(encoding="utf-8")
+concrete_text = CONCRETE_RECIPES.read_text(encoding="utf-8")
+rock_tags_text = ROCK_TAGS.read_text(encoding="utf-8")
+chromium_text = CHROMIUM_RECIPES.read_text(encoding="utf-8")
 recipe_registry = RECIPE_REGISTRY.read_text(encoding="utf-8")
 material_registry = MATERIAL_REGISTRY.read_text(encoding="utf-8")
 tfc_lang = TFC_LANG.read_text(encoding="utf-8")
@@ -99,7 +105,7 @@ limits = {
     "autoclave": (2, 2, 1, 1),
     "electric_blast_furnace": (3, 3, 1, 1),
 }
-require(len(blocks) == 18, f"expected 18 renewable recipes, found {len(blocks)}")
+require(len(blocks) == 33, f"expected 33 renewable recipes, found {len(blocks)}")
 recipe_ids = [recipe_id for _, recipe_id, _ in blocks]
 require(len(recipe_ids) == len(set(recipe_ids)), "duplicate renewable recipe ID")
 
@@ -152,6 +158,73 @@ balance_snippets = {
         ".duration(600)",
     ],
     "tfg:lv_renewable_poor_sphalerite": [".duration(1400)"],
+    "tfg:lv_refine_marine_gypsum": [
+        ".itemInputs('tfg:marine_gypsum_dust')",
+        ".itemOutputs('gtceu:gypsum_dust')",
+        ".duration(80)",
+    ],
+    "tfg:lv_refine_calcium_carbonate_residue": [
+        ".itemInputs('2x tfg:calcium_carbonate_residue_dust')",
+        ".itemOutputs('gtceu:calcium_carbonate_dust')",
+    ],
+    "tfg:lv_recycle_iron_silicate_tailings": [
+        ".itemInputs('8x tfg:iron_silicate_tailings_dust')",
+        ".itemOutputs('gtceu:stone_dust')",
+    ],
+    "tfg:lv_recycle_copper_silicate_tailings": [
+        ".itemInputs('8x tfg:copper_silicate_tailings_dust')",
+        ".itemOutputs('gtceu:stone_dust')",
+    ],
+    "tfg:lv_recycle_zinc_carbonate_tailings": [
+        ".itemInputs('8x tfg:zinc_carbonate_tailings_dust')",
+        ".itemOutputs('gtceu:calcite_dust')",
+    ],
+    "tfg:lv_recycle_iron_impurity_sludge": [
+        ".itemInputs('8x tfg:iron_impurity_sludge_dust')",
+        ".itemOutputs('gtceu:clay_dust')",
+    ],
+    "tfg:lv_recycle_copper_impurity_sludge": [
+        ".itemInputs('4x tfg:copper_impurity_sludge_dust')",
+        ".itemOutputs('gtceu:clay_dust')",
+    ],
+    "tfg:lv_recycle_zinc_impurity_sludge": [
+        ".itemInputs('4x tfg:zinc_impurity_sludge_dust')",
+        ".itemOutputs('gtceu:clay_dust')",
+    ],
+    "tfg:lv_recycle_spent_marine_brine": [
+        "Fluid.of('tfg:spent_marine_brine', 1000)",
+        ".itemOutputs('2x gtceu:salt_dust')",
+        "Fluid.of('minecraft:water', 750)",
+    ],
+    "tfg:lv_neutralize_acidic_iron_wastewater": [
+        ".itemInputs('4x tfc:powder/flux')",
+        "Fluid.of('tfg:acidic_iron_wastewater', 8000)",
+        ".itemOutputs('4x gtceu:gypsum_dust')",
+        "Fluid.of('minecraft:water', 6000)",
+    ],
+    "tfg:lv_neutralize_copper_sulfate_wastewater": [
+        ".itemInputs('2x tfc:powder/flux')",
+        "Fluid.of('tfg:copper_sulfate_wastewater', 6000)",
+        ".itemOutputs('2x gtceu:gypsum_dust')",
+        "Fluid.of('minecraft:water', 4500)",
+    ],
+    "tfg:mv_reclaim_iron_wastewater_acid": [
+        "Fluid.of('gtceu:diluted_sulfuric_acid', 750)",
+        ".EUt(MV)",
+    ],
+    "tfg:mv_reclaim_copper_wastewater_acid": [
+        "Fluid.of('gtceu:diluted_sulfuric_acid', 375)",
+        ".EUt(MV)",
+    ],
+    "tfg:lv_desalinate_spent_chloride_brine": [
+        "Fluid.of('tfg:spent_chloride_brine', 6000)",
+        ".itemOutputs('2x gtceu:salt_dust')",
+        "Fluid.of('minecraft:water', 4500)",
+    ],
+    "tfg:mv_reclaim_spent_chloride_hcl": [
+        "Fluid.of('gtceu:diluted_hydrochloric_acid', 1000)",
+        ".EUt(MV)",
+    ],
 }
 for recipe_id, snippets in balance_snippets.items():
     body = recipe_bodies.get(recipe_id)
@@ -231,29 +304,84 @@ for material in sorted(custom_materials):
         require(".flags(noDecomp)" in body,
                 f"tfg:{material} is not explicitly protected from decomposition")
 
-# Waste products are sinks at LV. Reusing them as inputs here would create a
-# recovery loop and invalidate the stated resource costs.
-waste_materials = {
-    "acidic_iron_wastewater",
-    "copper_sulfate_wastewater",
-    "spent_chloride_brine",
-    "iron_silicate_tailings",
-    "copper_silicate_tailings",
-    "zinc_carbonate_tailings",
-    "iron_impurity_sludge",
-    "copper_impurity_sludge",
-    "zinc_impurity_sludge",
-    "spent_marine_brine",
-    "calcium_carbonate_residue",
-}
-for material in waste_materials:
-    require(not re.search(
-        rf"\.(?:itemInputs|inputFluids)\([^\n]*tfg:{re.escape(material)}",
-        recipe_text,
-    ), f"LV waste stream is recycled: tfg:{material}")
+# Waste recovery must stay conversion-first and feed existing TFG/GT materials.
+# No new circuit selectors are permitted here: alternate treatments are separated
+# by recipe map instead, which removes both circuit-number and subset-input clashes.
+require(".circuit(" not in recipe_text and ".circuitMeta(" not in recipe_text,
+        "renewable recovery must not rely on programmed-circuit selection")
 
-# No other server recipe file may produce/use the custom intermediates yet.
-# This keeps the initial system closed and prevents accidental multiplication.
+# The requested conversions must terminate in ingredients already used by the
+# existing concrete/material economy; custom wastes must not become substitutes.
+require("event.add('tfg:stone_dusts', 'gtceu:stone_dust')" in rock_tags_text,
+        "recovered stone dust is no longer accepted by #tfg:stone_dusts")
+for ingredient in ("gtceu:calcite_dust", "gtceu:clay_dust", "gtceu:gypsum_dust"):
+    require(ingredient in concrete_text,
+            f"recovered concrete ingredient is not consumed by existing recipes: {ingredient}")
+require("tfg:marine_gypsum" not in concrete_text + rock_tags_text,
+        "marine gypsum must be refined to real gypsum, not tagged as a substitute")
+require("gtceu:calcium_carbonate_dust" in chromium_text,
+        "calcium-carbonate residue no longer feeds the existing chromium economy")
+
+# Recovery outputs must never recreate the exact renewable rock feeds. Otherwise
+# tailings could lower the geological feed cost into a self-supporting loop.
+for forbidden_feed in (
+    "tfg:igneous_mafic_dust",
+    "tfg:igneous_intermediate_dust",
+    "tfg:sedimentary_carbonate_dust",
+):
+    require(not re.search(
+        rf"\.itemOutputs\([^\n]*{re.escape(forbidden_feed)}", recipe_text
+    ), f"recovery emits renewable feedstock: {forbidden_feed}")
+
+# Every waste has an explicit allowlist of consumers. If a waste has two treatment
+# paths, those paths must use different recipe maps so a machine can never match
+# both from a subset of the same inventory.
+approved_waste_consumers = {
+    "acidic_iron_wastewater": {
+        "tfg:lv_neutralize_acidic_iron_wastewater",
+        "tfg:mv_reclaim_iron_wastewater_acid",
+    },
+    "copper_sulfate_wastewater": {
+        "tfg:lv_neutralize_copper_sulfate_wastewater",
+        "tfg:mv_reclaim_copper_wastewater_acid",
+    },
+    "spent_chloride_brine": {
+        "tfg:lv_desalinate_spent_chloride_brine",
+        "tfg:mv_reclaim_spent_chloride_hcl",
+    },
+    "iron_silicate_tailings": {"tfg:lv_recycle_iron_silicate_tailings"},
+    "copper_silicate_tailings": {"tfg:lv_recycle_copper_silicate_tailings"},
+    "zinc_carbonate_tailings": {"tfg:lv_recycle_zinc_carbonate_tailings"},
+    "iron_impurity_sludge": {"tfg:lv_recycle_iron_impurity_sludge"},
+    "copper_impurity_sludge": {"tfg:lv_recycle_copper_impurity_sludge"},
+    "zinc_impurity_sludge": {"tfg:lv_recycle_zinc_impurity_sludge"},
+    "spent_marine_brine": {"tfg:lv_recycle_spent_marine_brine"},
+    "calcium_carbonate_residue": {"tfg:lv_refine_calcium_carbonate_residue"},
+}
+
+def input_region(body: str) -> str:
+    output_positions = [
+        pos for pos in (body.find(".itemOutputs("), body.find(".outputFluids("))
+        if pos >= 0
+    ]
+    return body[:min(output_positions)] if output_positions else body
+
+for material, expected_ids in approved_waste_consumers.items():
+    consumers = [
+        (machine, recipe_id)
+        for machine, recipe_id, body in blocks
+        if f"tfg:{material}" in input_region(body)
+    ]
+    actual_ids = {recipe_id for _, recipe_id in consumers}
+    require(actual_ids == expected_ids,
+            f"unexpected consumers for tfg:{material}: {sorted(actual_ids)}")
+    machines = [machine for machine, _ in consumers]
+    if len(consumers) > 1:
+        require(len(machines) == len(set(machines)),
+                f"alternate tfg:{material} treatments share a recipe map: {machines}")
+
+# No other server recipe file may produce/use the custom intermediates.
+# Explicit recovery remains centralized here so later scripts cannot multiply it.
 for path in (ROOT / "kubejs/server_scripts").rglob("*.js"):
     if path == RECIPES:
         continue
