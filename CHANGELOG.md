@@ -2,7 +2,7 @@
 
 ## Unreleased
 ### Changes
-- Added expensive LV renewable Poor Ore synthesis chains for hematite, malachite, and sphalerite, including renewable marine sulfate/H2S chemistry. @UpperMoon0
+- Added expensive LV renewable Poor Ore synthesis chains for hematite, malachite, and sphalerite, including a renewable seawater sulfate-brine -> marine gypsum -> calcium sulfide -> H2S chain. @UpperMoon0
 ### Bug fixes
 
 ## [0.13.10] - 05-09-2026
