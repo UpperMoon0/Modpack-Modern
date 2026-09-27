@@ -14,6 +14,13 @@ function registerTFGMaterialItemTags(event) {
 	event.add('tfg:platinum_ore_group', 'gtceu:purified_chalcocite_ore')
 	event.add('tfg:platinum_ore_group', 'gtceu:purified_ferhodsite_ore')
 	
+	// Renewable ore discovery seeds: any grade proves the player has found the mineral.
+	for (const ore of ['hematite', 'malachite', 'sphalerite']) {
+		event.add('tfg:renewable_' + ore + '_seed', 'tfc:ore/poor_' + ore)
+		event.add('tfg:renewable_' + ore + '_seed', 'tfc:ore/normal_' + ore)
+		event.add('tfg:renewable_' + ore + '_seed', 'tfc:ore/rich_' + ore)
+	}
+
 	// Crafting components
 	event.add('tfg:aluminium_oxide', '#forge:dusts/alumina')
 	event.add('tfg:aluminium_oxide', '#forge:dusts/bauxite')

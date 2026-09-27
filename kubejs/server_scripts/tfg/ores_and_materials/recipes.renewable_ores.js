@@ -6,7 +6,7 @@
  *
  * Design rules:
  * - Final outputs are TFC poor raw ores, so all normal TFG beneficiation still applies.
- * - Each final autoclave recipe requires a non-consumable sample of the ore being grown.
+ * - Each final autoclave recipe requires a non-consumable Poor, Normal, or Rich sample of the ore being grown.
  *   The renewable line therefore cannot bootstrap a metal the player has never found.
  * - Intermediates are non-decomposable and intentionally have no alternate recovery recipes.
  * - Waste streams are deliberately not recycled at LV; reagent recovery can be a later-tier feature.
@@ -105,7 +105,7 @@ function registerTFGLVRenewableOreRecipes(event) {
 
     event.recipes.gtceu.autoclave('tfg:lv_renewable_poor_hematite')
         .itemInputs('8x tfg:iron_hydroxide_precipitate_dust')
-        .notConsumable('tfc:ore/poor_hematite')
+        .notConsumable('#tfg:renewable_hematite_seed')
         .inputFluids(Fluid.of('minecraft:water', 8000))
         .itemOutputs('tfc:ore/poor_hematite')
         .duration(1200)
@@ -147,7 +147,7 @@ function registerTFGLVRenewableOreRecipes(event) {
 
     event.recipes.gtceu.autoclave('tfg:lv_renewable_poor_malachite')
         .itemInputs('8x tfg:basic_copper_carbonate_dust')
-        .notConsumable('tfc:ore/poor_malachite')
+        .notConsumable('#tfg:renewable_malachite_seed')
         .inputFluids(Fluid.of('minecraft:water', 6000))
         .itemOutputs('tfc:ore/poor_malachite')
         .duration(1000)
@@ -198,7 +198,7 @@ function registerTFGLVRenewableOreRecipes(event) {
 
     event.recipes.gtceu.autoclave('tfg:lv_renewable_poor_sphalerite')
         .itemInputs('8x tfg:sphalerite_crystals_dust')
-        .notConsumable('tfc:ore/poor_sphalerite')
+        .notConsumable('#tfg:renewable_sphalerite_seed')
         .inputFluids(Fluid.of('minecraft:water', 6000))
         .itemOutputs('tfc:ore/poor_sphalerite')
         .duration(1400)

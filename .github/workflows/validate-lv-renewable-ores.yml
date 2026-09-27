@@ -6,6 +6,7 @@ on:
       - dev
     paths:
       - "kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js"
+      - "kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js"
       - "kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js"
       - "kubejs/server_scripts/tfg/recipes.js"
       - "kubejs/startup_scripts/tfg/materials.js"
@@ -17,6 +18,7 @@ on:
       - dev
     paths:
       - "kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js"
+      - "kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js"
       - "kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js"
       - "kubejs/server_scripts/tfg/recipes.js"
       - "kubejs/startup_scripts/tfg/materials.js"
