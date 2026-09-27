@@ -55,6 +55,18 @@ def raw_url(source_ref: str, path: str) -> str:
     )
 
 
+def git_normalized_file_bytes(path: str) -> bytes:
+    """Return the bytes Git will store/serve for path, after clean filters/EOL normalization."""
+    raw = (ROOT / path).read_bytes()
+    object_id = subprocess.check_output(
+        ["git", "-C", str(ROOT), "hash-object", "-w", "--path", path, "--stdin"],
+        input=raw,
+    ).decode().strip()
+    return subprocess.check_output(
+        ["git", "-C", str(ROOT), "cat-file", "blob", object_id]
+    )
+
+
 def deployment_path(path: str) -> tuple[str, list[str]]:
     server_prefix = ".pakku/server-overrides/"
     client_prefix = ".pakku/client-overrides/"
@@ -153,7 +165,7 @@ def build_manifest() -> dict:
             {
                 "id": artifact_id,
                 "url": raw_url(release["sourceRef"], path),
-                "sha256": hashlib.sha256(file_path.read_bytes()).hexdigest(),
+                "sha256": hashlib.sha256(git_normalized_file_bytes(path)).hexdigest(),
                 "fileName": file_path.name,
             }
         )
