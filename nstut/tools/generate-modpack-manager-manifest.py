@@ -33,7 +33,7 @@ def git(*args: str) -> str:
 
 
 def fork_changes(base_ref: str) -> list[tuple[str, str]]:
-    out = git("diff", "--name-status", base_ref, "--")
+    out = git("diff", "--no-renames", "--name-status", base_ref, "--")
     result = []
     for line in out.splitlines():
         if not line:
@@ -51,7 +51,7 @@ def raw_url(source_ref: str, path: str) -> str:
     encoded_path = "/".join(quote(part, safe="") for part in path.split("/"))
     return (
         "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/"
-        f"{quote(source_ref, safe='')}/{encoded_path}"
+        f"refs/tags/{quote(source_ref, safe='')}/{encoded_path}"
     )
 
 

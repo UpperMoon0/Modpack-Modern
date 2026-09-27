@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 import subprocess
@@ -26,6 +27,35 @@ def main() -> int:
     release = load(NSTUT / "release.json")
     managed = load(NSTUT / "managed-mods.json")
     runtime = load(NSTUT / "runtime-overlays.json")
+    sys.dont_write_bytecode = True
+    generator_path = ROOT / "nstut/tools/generate-modpack-manager-manifest.py"
+    spec = importlib.util.spec_from_file_location("nstut_manifest_generator", generator_path)
+    if spec is None or spec.loader is None:
+        fail("could not load manifest generator for invariant checks")
+    generator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(generator)
+
+    if generator.deployment_path(".pakku/server-overrides/config/example.toml") != ("config/example.toml", ["server"]):
+        fail("server override deployment mapping regressed")
+    if generator.deployment_path(".pakku/client-overrides/config/example.toml") != ("config/example.toml", ["client"]):
+        fail("client override deployment mapping regressed")
+    if generator.deployment_path("config/example.toml") != ("config/example.toml", ["client", "server"]):
+        fail("ordinary fork file deployment mapping regressed")
+
+    tag_url = generator.raw_url(release["sourceRef"], "config/example file.toml")
+    expected_tag_prefix = f"https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/{release['sourceRef']}/"
+    if not tag_url.startswith(expected_tag_prefix):
+        fail(f"fork artifact URL is not pinned to the tag namespace: {tag_url}")
+
+    captured_git_args = []
+    original_git = generator.git
+    try:
+        generator.git = lambda *args: captured_git_args.append(args) or ""
+        generator.fork_changes("TEST_BASE")
+    finally:
+        generator.git = original_git
+    if captured_git_args != [("diff", "--no-renames", "--name-status", "TEST_BASE", "--")]:
+        fail(f"fork change detection must disable rename folding: {captured_git_args}")
     lock = load(ROOT / "pakku-lock.json")
     pakku = load(ROOT / "pakku.json")
 
