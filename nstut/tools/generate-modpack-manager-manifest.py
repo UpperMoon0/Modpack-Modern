@@ -20,7 +20,7 @@ SEMANTIC_PATHS = {
     ".pakku/server-overrides/defaultconfigs/ftbchunks-world.snbt",
     ".pakku/server-overrides/defaultconfigs/ftbranks/ranks.snbt",
 }
-IGNORED_PREFIXES = ("nstut/", "scripts/nstut/", ".github/workflows/nstut-")
+IGNORED_PREFIXES = ("nstut/", "scripts/nstut/", ".github/")
 IGNORED_EXACT = {"pakku.json", "pakku-lock.json"}
 
 
