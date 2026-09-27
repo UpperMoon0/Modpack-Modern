@@ -144,8 +144,11 @@ def main() -> int:
                 f"{side or 'BOTH'} ({expected_targets!r})"
             )
         cleanup_targets = mod.get("cleanupTargets")
-        if not isinstance(cleanup_targets, list) or not set(expected_targets).issubset(cleanup_targets):
-            fail(f"{cfg_key} cleanupTargets must cover every install target")
+        if cleanup_targets != ["client", "server"]:
+            fail(f"{cfg_key} cleanupTargets must be ['client', 'server'] to scrub stale copies on both sides")
+        cleanup_patterns = mod.get("cleanupPatterns")
+        if not isinstance(cleanup_patterns, list) or not cleanup_patterns:
+            fail(f"{cfg_key} must declare at least one cleanup pattern")
 
     for client_key in ("UpperMoon0/OpenUI-MC", "UpperMoon0/Create-Precise-Controls"):
         if (config_projects.get(client_key) or {}).get("side") != "CLIENT":
