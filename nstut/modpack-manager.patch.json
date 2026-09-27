@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "tfg-nstut-managed",
   "name": "TFG NsTut Fork Overlay",
-  "version": "0.13.10-nstut.8",
-  "description": "Generated from UpperMoon0/TFG-Modern-Fork nstut-0.13.10.8 on upstream 0.13.10.",
+  "version": "0.13.10-nstut.9",
+  "description": "Generated from UpperMoon0/TFG-Modern-Fork nstut-0.13.10.9 on upstream 0.13.10.",
   "requiredPaths": [
     "mods",
     "config",
@@ -61,37 +61,37 @@
     },
     {
       "id": "fork-b33be5cbe1b980b9",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.8/kubejs/assets/tfg/lang/en_us.json",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.9/kubejs/assets/tfg/lang/en_us.json",
       "sha256": "0d80271283053ac7a47349083d4359760d81da5cda547415c904e4f53f51e135",
       "fileName": "en_us.json"
     },
     {
       "id": "fork-b98f9210172db41f",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.8/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.9/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
       "sha256": "6fa6f604710b7c338754755754d695702940f14fc07e465e5d6bd6e4ad110988",
       "fileName": "recipes.renewable_ores.js"
     },
     {
       "id": "fork-d47bef3134b6f04b",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.8/kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.9/kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
       "sha256": "4b9bec80a3b18eae7e7ed901f4c33f2716e433c4712000549b98188cd1b5bacc",
       "fileName": "tags.materials.js"
     },
     {
       "id": "fork-49f8525e4c1f8aeb",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.8/kubejs/server_scripts/tfg/recipes.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.9/kubejs/server_scripts/tfg/recipes.js",
       "sha256": "e6b85410bd3eb17f1fccce4954ffdfaa08a1cb8f9c2afbce93d9af17a283196f",
       "fileName": "recipes.js"
     },
     {
       "id": "fork-5449fb0a6e2f7eb0",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.8/kubejs/startup_scripts/tfg/materials.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.9/kubejs/startup_scripts/tfg/materials.js",
       "sha256": "1b73035ff03e85d2b3ed75cb55ccd46860c74f9c9f006d694a8dacbe1d2c29f8",
       "fileName": "materials.js"
     },
     {
       "id": "fork-8720a4453c43dfce",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.8/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.9/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
       "sha256": "9e3cd3ad6e459a0a17d99004425c8bc555d4064695f6121624b8403e8ba48df8",
       "fileName": "materials.renewable_ores.js"
     }
@@ -295,6 +295,17 @@
       "skipIfMissing": false,
       "targets": [
         "client",
+        "server"
+      ]
+    },
+    {
+      "type": "patchToml",
+      "destination": "config/simplyspeakers-common.toml",
+      "values": {
+        "speakerRange": 512
+      },
+      "skipIfMissing": false,
+      "targets": [
         "server"
       ]
     },

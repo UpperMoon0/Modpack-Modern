@@ -9,6 +9,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import tomllib
 from pathlib import Path
 
@@ -179,7 +180,11 @@ def main() -> int:
         fail("GTCEu weather/terrain explosion policy is not disabled")
 
     chp = tomllib.loads((ROOT / "defaultconfigs/createhorsepower-server.toml").read_text(encoding="utf-8"))
-    expected = next(x["values"] for x in runtime["overlays"] if x["format"] == "toml")
+    chp_overlay = next(
+        x for x in runtime["overlays"]
+        if x["path"] == "defaultconfigs/createhorsepower-server.toml"
+    )
+    expected = chp_overlay["values"]
     for dotted, value in expected.items():
         cur = chp
         for part in dotted.split("."):
@@ -188,6 +193,39 @@ def main() -> int:
             cur = cur[part]
         if cur != value:
             fail(f"horse-power {dotted}: expected {value!r}, got {cur!r}")
+
+    speaker_overlay = next(
+        (x for x in runtime["overlays"] if x["path"] == "config/simplyspeakers-common.toml"),
+        None,
+    )
+    if speaker_overlay is None:
+        fail("Simply Speakers server runtime overlay is missing")
+    if speaker_overlay.get("format") != "toml":
+        fail("Simply Speakers runtime overlay must use TOML patching")
+    if speaker_overlay.get("targets") != ["server"]:
+        fail(f"Simply Speakers runtime overlay must be server-only: {speaker_overlay.get('targets')!r}")
+    if speaker_overlay.get("values") != {"speakerRange": 512}:
+        fail(f"Simply Speakers speakerRange policy must be 512: {speaker_overlay.get('values')!r}")
+
+    patcher = NSTUT / "tools" / "patch-existing-server.py"
+    with tempfile.TemporaryDirectory() as temp_dir:
+        server = Path(temp_dir)
+        config = server / "config" / "simplyspeakers-common.toml"
+        config.parent.mkdir(parents=True)
+        config.write_text(
+            "# Simply Speakers\nspeakerRange = 64\ndisableUpload = false\n",
+            encoding="utf-8",
+        )
+        subprocess.run([sys.executable, str(patcher), str(server)], check=True)
+        first_pass = config.read_text(encoding="utf-8")
+        patched = tomllib.loads(first_pass)
+        if patched.get("speakerRange") != 512:
+            fail(f"existing-server patcher left speakerRange at {patched.get('speakerRange')!r}")
+        if patched.get("disableUpload") is not False:
+            fail("existing-server patcher changed unrelated Simply Speakers config")
+        subprocess.run([sys.executable, str(patcher), str(server)], check=True)
+        if config.read_text(encoding="utf-8") != first_pass:
+            fail("existing-server Simply Speakers patch is not idempotent")
 
     checks = (
         (".pakku/server-overrides/defaultconfigs/ftbchunks-world.snbt", ("max_claimed_chunks", "max_force_loaded_chunks")),
@@ -201,6 +239,17 @@ def main() -> int:
                 fail(f"{rel} does not enforce {key}=1000000")
 
     generated = load(NSTUT / "modpack-manager.patch.json")
+    speaker_ops = [
+        operation for operation in generated["operations"]
+        if operation.get("type") == "patchToml"
+        and operation.get("destination") == "config/simplyspeakers-common.toml"
+    ]
+    if len(speaker_ops) != 1:
+        fail(f"expected one generated Simply Speakers TOML patch, found {len(speaker_ops)}")
+    speaker_op = speaker_ops[0]
+    if speaker_op.get("values") != {"speakerRange": 512} or speaker_op.get("targets") != ["server"]:
+        fail(f"generated Simply Speakers patch is wrong: {speaker_op!r}")
+
     for operation in generated["operations"]:
         destination = operation.get("destination") or operation.get("pattern") or ""
         if destination.startswith(".pakku/"):

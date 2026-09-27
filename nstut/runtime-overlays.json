@@ -36,6 +36,16 @@
       }
     },
     {
+      "format": "toml",
+      "path": "config/simplyspeakers-common.toml",
+      "targets": [
+        "server"
+      ],
+      "values": {
+        "speakerRange": 512
+      }
+    },
+    {
       "format": "snbt",
       "path": "{levelName}/serverconfig/ftbchunks-world.snbt",
       "targets": [
