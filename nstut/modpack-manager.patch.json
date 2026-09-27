@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "tfg-nstut-managed",
   "name": "TFG NsTut Fork Overlay",
-  "version": "0.13.10-nstut.2",
-  "description": "Generated from UpperMoon0/Modpack-Modern nstut-0.13.10.2 on upstream 0.13.10.",
+  "version": "0.13.10-nstut.3",
+  "description": "Generated from UpperMoon0/Modpack-Modern nstut-0.13.10.3 on upstream 0.13.10.",
   "requiredPaths": [
     "mods",
     "config",
@@ -58,6 +58,42 @@
       "url": "https://cdn.modrinth.com/data/6YJgomwt/versions/ZbA0Ejq9/extra_gauges-2.0.7.jar",
       "sha256": "8d45dc713998e5b8690b8a6d98af7260dfe4b5febffd0b391538a7bac2037f3d",
       "fileName": "extra_gauges-2.0.7.jar"
+    },
+    {
+      "id": "fork-b33be5cbe1b980b9",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/nstut-0.13.10.3/kubejs/assets/tfg/lang/en_us.json",
+      "sha256": "5ebef3e20e6b488b172afc850498fade00d07342661ba1754814664e0115b978",
+      "fileName": "en_us.json"
+    },
+    {
+      "id": "fork-b98f9210172db41f",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/nstut-0.13.10.3/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
+      "sha256": "fe3d9612e5f4ef6e9a525c009ac7630975df5645378fc8820ea5d12f803e6767",
+      "fileName": "recipes.renewable_ores.js"
+    },
+    {
+      "id": "fork-d47bef3134b6f04b",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/nstut-0.13.10.3/kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
+      "sha256": "0287cf900de58003aa553f7895fd33abd27481777dcc8dc683566fb734806a4f",
+      "fileName": "tags.materials.js"
+    },
+    {
+      "id": "fork-49f8525e4c1f8aeb",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/nstut-0.13.10.3/kubejs/server_scripts/tfg/recipes.js",
+      "sha256": "0f76dd7e9305b39b271c4454019aa43ec638e4a8e4ea8000637a6cbf89f57be4",
+      "fileName": "recipes.js"
+    },
+    {
+      "id": "fork-5449fb0a6e2f7eb0",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/nstut-0.13.10.3/kubejs/startup_scripts/tfg/materials.js",
+      "sha256": "c8eef97034e0be6586a743c6c168c3464406ae71ab83c9569d1ec455401f6268",
+      "fileName": "materials.js"
+    },
+    {
+      "id": "fork-8720a4453c43dfce",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/Modpack-Modern/refs/tags/nstut-0.13.10.3/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
+      "sha256": "517a50d14e814e05dcdc2552790534274cf7b1c063505adf96c546e4a8f25f11",
+      "fileName": "materials.renewable_ores.js"
     }
   ],
   "operations": [
@@ -285,6 +321,60 @@
       "replaceAll": true,
       "skipIfMissing": true,
       "targets": [
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-b33be5cbe1b980b9",
+      "destination": "kubejs/assets/tfg/lang/en_us.json",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-b98f9210172db41f",
+      "destination": "kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-d47bef3134b6f04b",
+      "destination": "kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-49f8525e4c1f8aeb",
+      "destination": "kubejs/server_scripts/tfg/recipes.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-5449fb0a6e2f7eb0",
+      "destination": "kubejs/startup_scripts/tfg/materials.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-8720a4453c43dfce",
+      "destination": "kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
+      "targets": [
+        "client",
         "server"
       ]
     }
