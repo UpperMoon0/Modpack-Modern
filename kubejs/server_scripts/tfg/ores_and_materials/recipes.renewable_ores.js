@@ -253,7 +253,7 @@ function registerTFGLVRenewableOreRecipes(event) {
     // Impurity sludge is washed down to ordinary clay, another ingredient of the
     // existing low-yield concrete route. One poor ore produces at most one clay.
     event.recipes.gtceu.centrifuge('tfg:lv_recycle_iron_impurity_sludge')
-        .itemInputs('4x tfg:iron_impurity_sludge_dust')
+        .itemInputs('8x tfg:iron_impurity_sludge_dust')
         .itemOutputs('gtceu:clay_dust')
         .duration(200)
         .EUt(16);
