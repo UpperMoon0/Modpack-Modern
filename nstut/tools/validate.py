@@ -131,8 +131,21 @@ def main() -> int:
         if (file.get("hashes") or {}).get("sha256") not in (None, mod["sha256"]):
             fail(f"{key} SHA-256 does not match managed-mods.json")
         cfg_key = key.split("modrinth:", 1)[-1] if key.startswith("modrinth:") else key
-        if (config_projects.get(cfg_key) or {}).get("update_strategy") != "NONE":
+        config_entry = config_projects.get(cfg_key) or {}
+        if config_entry.get("update_strategy") != "NONE":
             fail(f"{cfg_key} is not pinned with update_strategy NONE")
+
+        side = config_entry.get("side")
+        expected_targets = ["client"] if side == "CLIENT" else ["server"] if side == "SERVER" else ["client", "server"]
+        install_targets = mod.get("installTargets")
+        if install_targets != expected_targets:
+            fail(
+                f"{cfg_key} installTargets {install_targets!r} do not match Pakku side "
+                f"{side or 'BOTH'} ({expected_targets!r})"
+            )
+        cleanup_targets = mod.get("cleanupTargets")
+        if not isinstance(cleanup_targets, list) or not set(expected_targets).issubset(cleanup_targets):
+            fail(f"{cfg_key} cleanupTargets must cover every install target")
 
     for client_key in ("UpperMoon0/OpenUI-MC", "UpperMoon0/Create-Precise-Controls"):
         if (config_projects.get(client_key) or {}).get("side") != "CLIENT":
