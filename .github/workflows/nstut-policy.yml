@@ -10,13 +10,33 @@ on:
 
 jobs:
   validate:
+    name: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Validate NsTut fork policy
+      - name: Validate generated overlay and fork policy
         run: |
           python nstut/tools/generate-modpack-manager-manifest.py
           git diff --exit-code -- nstut/modpack-manager.patch.json
           python nstut/tools/validate.py
+
+  promotion-gate:
+    name: promotion-gate
+    if: github.event_name == 'pull_request' && github.base_ref == 'nstut/stable'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Fetch current stable and immutable tags
+        run: |
+          git fetch origin nstut/stable:refs/remotes/origin/nstut/stable --force
+          git fetch origin --tags --force
+      - name: Require an immutable release promotion
+        run: |
+          python nstut/tools/validate_promotion.py \
+            --source-branch "${{ github.head_ref }}" \
+            --head-sha "${{ github.event.pull_request.head.sha }}"

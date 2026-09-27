@@ -51,6 +51,19 @@ def validate_promoted_contract(release: dict) -> None:
             fail(f"promotion branch references missing immutable tag {source_ref}")
         return
 
+    if os.environ.get("GITHUB_REF_NAME") == "nstut/stable":
+        head_tree = subprocess.check_output(
+            ["git", "-C", str(ROOT), "rev-parse", "HEAD^{tree}"], text=True
+        ).strip()
+        tag_tree = subprocess.check_output(
+            ["git", "-C", str(ROOT), "rev-parse", f"{tag_ref}^{{tree}}"], text=True
+        ).strip()
+        if head_tree != tag_tree:
+            fail(
+                f"nstut/stable tree does not match immutable tag {source_ref}; "
+                "promote a tagged nstut/<base> release branch instead of merging development directly"
+            )
+
     comparison = subprocess.run(
         ["git", "-C", str(ROOT), "diff", "--quiet", tag_ref, "HEAD", "--", *PROMOTED_CONTRACT_FILES]
     )
@@ -64,6 +77,13 @@ def validate_promoted_contract(release: dict) -> None:
 
 def main() -> int:
     release = load(NSTUT / "release.json")
+
+    expected_release_branch = f"nstut/{release.get('baseRef', '')}"
+    if release.get("branch") != expected_release_branch:
+        fail(
+            f"release.json branch must be {expected_release_branch!r}, "
+            f"got {release.get('branch')!r}"
+        )
     managed = load(NSTUT / "managed-mods.json")
     runtime = load(NSTUT / "runtime-overlays.json")
     validate_promoted_contract(release)
