@@ -179,6 +179,18 @@ balance_snippets = {
         ".itemInputs('8x tfg:zinc_carbonate_tailings_dust')",
         ".itemOutputs('gtceu:calcite_dust')",
     ],
+    "tfg:lv_recycle_iron_impurity_sludge": [
+        ".itemInputs('8x tfg:iron_impurity_sludge_dust')",
+        ".itemOutputs('gtceu:clay_dust')",
+    ],
+    "tfg:lv_recycle_copper_impurity_sludge": [
+        ".itemInputs('4x tfg:copper_impurity_sludge_dust')",
+        ".itemOutputs('gtceu:clay_dust')",
+    ],
+    "tfg:lv_recycle_zinc_impurity_sludge": [
+        ".itemInputs('4x tfg:zinc_impurity_sludge_dust')",
+        ".itemOutputs('gtceu:clay_dust')",
+    ],
     "tfg:lv_recycle_spent_marine_brine": [
         "Fluid.of('tfg:spent_marine_brine', 1000)",
         ".itemOutputs('2x gtceu:salt_dust')",
