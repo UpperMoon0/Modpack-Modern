@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RECIPES = ROOT / "kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js"
 MATERIALS = ROOT / "kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js"
+TAGS = ROOT / "kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js"
 RECIPE_REGISTRY = ROOT / "kubejs/server_scripts/tfg/recipes.js"
 MATERIAL_REGISTRY = ROOT / "kubejs/startup_scripts/tfg/materials.js"
 TFC_LANG = ROOT / "kubejs/assets/tfc/lang/en_us.json"
@@ -16,6 +17,7 @@ PAKKU_LOCK = ROOT / "pakku-lock.json"
 
 recipe_text = RECIPES.read_text(encoding="utf-8")
 material_text = MATERIALS.read_text(encoding="utf-8")
+tags_text = TAGS.read_text(encoding="utf-8")
 recipe_registry = RECIPE_REGISTRY.read_text(encoding="utf-8")
 material_registry = MATERIAL_REGISTRY.read_text(encoding="utf-8")
 tfc_lang = TFC_LANG.read_text(encoding="utf-8")
@@ -45,10 +47,14 @@ final_ores = {
 for name, item_id in final_ores.items():
     require(f".itemOutputs('{item_id}')" in recipe_text,
             f"{name}: missing poor-ore final output")
-    require(f".notConsumable('{item_id}')" in recipe_text,
-            f"{name}: missing non-consumable discovery seed")
-    require(f'"item.tfc.ore.poor_{name}"' in tfc_lang,
-            f"{name}: TFC poor grade is not present in the pack")
+    seed_tag = f"tfg:renewable_{name}_seed"
+    require(f".notConsumable('#{seed_tag}')" in recipe_text,
+            f"{name}: missing non-consumable any-grade discovery seed")
+    for grade in ("poor", "normal", "rich"):
+        require(f"'tfc:ore/{grade}_' + ore" in tags_text,
+                f"{name}: renewable seed tag no longer includes all ore grades")
+        require(f'"item.tfc.ore.{grade}_{name}"' in tfc_lang,
+                f"{name}: TFC {grade} grade is not present in the pack")
 
 # Tin starts in MV, not in this LV feature.
 require(not re.search(r"\b(?:tin|cassiterite)\b", recipe_text, re.IGNORECASE),
@@ -262,11 +268,12 @@ require(recipe_registry.count("registerTFGLVRenewableOreRecipes(event)") == 1,
 require(material_registry.count("registerTFGRenewableOreMaterials(event)") == 1,
         "renewable material registrar must be called exactly once")
 
-# Anti-bootstrap invariant: each final ore is both catalyst and output only once
-# inside the renewable feature.
-for item_id in final_ores.values():
-    require(recipe_text.count(f".notConsumable('{item_id}')") == 1,
-            f"{item_id}: seed must appear once as non-consumable")
+# Anti-bootstrap invariant: every final ore recipe has exactly one non-consumable
+# same-mineral seed tag and exactly one Poor Ore output.
+for name, item_id in final_ores.items():
+    seed = f".notConsumable('#tfg:renewable_{name}_seed')"
+    require(recipe_text.count(seed) == 1,
+            f"{item_id}: any-grade seed tag must appear once as non-consumable")
     require(recipe_text.count(f".itemOutputs('{item_id}')") == 1,
             f"{item_id}: final output must appear once")
 
