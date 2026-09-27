@@ -8,6 +8,7 @@
 - Added the Higgs Emitter multiblock to replace Ad Astra's Gravity Normalizer with a significantly larger area of effect. @ashleney
 - Added the Heat Pump multiblock, when built into an outer wall it will regulate the temperature of a large room. @ashleney
 #### Recipes
+- Added expensive LV renewable Poor Ore synthesis chains for hematite, malachite, and sphalerite, including renewable marine sulfate/H2S chemistry. @UpperMoon0
 - Laser hatches now need a glass lens instead of a diamond lens @ashleney
 - GregTech covers are now crafting table recipes instead of assembler recipes (#4997) @ashleney
 - Changed mechanical press double ingot/double plate recipes to use circuit 0 (#4991) @Pyritie
