@@ -1,5 +1,5 @@
-﻿#!/usr/bin/env python3
-"""Apply runtime-only SNBT overlays to an existing TFG server world."""
+#!/usr/bin/env python3
+"""Apply managed server-side TOML/SNBT overlays to an existing TFG server."""
 
 from __future__ import annotations
 
@@ -52,6 +52,83 @@ def replace_values(path: pathlib.Path, values: dict[str, int], replace_all: bool
     return True
 
 
+
+def render_toml_scalar(value):
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return str(value)
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=False)
+    raise RuntimeError(f"unsupported TOML scalar {value!r}")
+
+
+def replace_toml_values(path: pathlib.Path, values: dict[str, object], dry_run: bool):
+    original = path.read_text(encoding="utf-8") if path.is_file() else ""
+    updated = original
+
+    for dotted, value in values.items():
+        parts = dotted.split(".")
+        leaf = parts[-1]
+        section = ".".join(parts[:-1])
+        lines = updated.splitlines()
+        line_ending = "\r\n" if "\r\n" in updated else "\n"
+        trailing = updated.endswith(("\n", "\r"))
+
+        current = ""
+        matches = []
+        section_header = None
+        for index, line in enumerate(lines):
+            header = re.match(r"^\s*\[([^\]]+)\]\s*(?:#.*)?$", line)
+            if header:
+                current = header.group(1).strip()
+                if current == section:
+                    section_header = index
+                continue
+            if current != section:
+                continue
+            if re.match(rf"^\s*{re.escape(leaf)}\s*=", line):
+                matches.append(index)
+
+        if len(matches) > 1:
+            raise RuntimeError(f"TOML key {dotted!r} is ambiguous in {path}")
+
+        rendered = render_toml_scalar(value)
+        if matches:
+            index = matches[0]
+            match = re.match(
+                rf"^(?P<prefix>\s*{re.escape(leaf)}\s*=\s*)(?P<value>[^#]*?)(?P<suffix>\s*(?:#.*)?)$",
+                lines[index],
+            )
+            if not match:
+                raise RuntimeError(f"cannot safely patch TOML key {dotted!r} in {path}")
+            lines[index] = f"{match.group('prefix')}{rendered}{match.group('suffix')}"
+        elif not section:
+            first_section = next((i for i, line in enumerate(lines) if re.match(r"^\s*\[", line)), len(lines))
+            lines.insert(first_section, f"{leaf} = {rendered}")
+        elif section_header is not None:
+            insert_at = section_header + 1
+            while insert_at < len(lines) and not re.match(r"^\s*\[", lines[insert_at]):
+                insert_at += 1
+            lines.insert(insert_at, f"{leaf} = {rendered}")
+        else:
+            if lines and lines[-1].strip():
+                lines.append("")
+            lines.extend([f"[{section}]", f"{leaf} = {rendered}"])
+
+        updated = line_ending.join(lines)
+        if trailing or not original:
+            updated += line_ending
+
+    if updated == original:
+        print(f"current {path}")
+        return False
+    print(f"{'would patch' if dry_run else 'patch'} {path}")
+    if not dry_run:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(updated, encoding="utf-8")
+    return True
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("server_root", type=pathlib.Path)
@@ -69,16 +146,20 @@ def main() -> int:
     policy = json.loads(POLICY.read_text(encoding="utf-8-sig"))
     changed = False
     for overlay in policy["overlays"]:
-        if overlay["format"] not in {"snbt", "snbtAll"}:
+        if "server" not in overlay.get("targets", []):
             continue
         rel = overlay["path"].replace("{levelName}", world.name)
-        changed |= replace_values(
-            server_root / rel,
-            overlay["values"],
-            overlay["format"] == "snbtAll",
-            args.dry_run,
-        )
-    print("runtime SNBT overlays changed files" if changed else "runtime SNBT overlays already current")
+        path = server_root / rel
+        if overlay["format"] == "toml":
+            changed |= replace_toml_values(path, overlay["values"], args.dry_run)
+        elif overlay["format"] in {"snbt", "snbtAll"}:
+            changed |= replace_values(
+                path,
+                overlay["values"],
+                overlay["format"] == "snbtAll",
+                args.dry_run,
+            )
+    print("managed server overlays changed files" if changed else "managed server overlays already current")
     return 0
 
 
