@@ -5,11 +5,14 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import sys
 import tomllib
 from pathlib import Path
+
+sys.dont_write_bytecode = True
 
 ROOT = Path(__file__).resolve().parents[2]
 NSTUT = ROOT / "nstut"
@@ -23,11 +26,47 @@ def fail(message: str):
     raise AssertionError(message)
 
 
+PROMOTED_CONTRACT_FILES = (
+    "nstut/release.json",
+    "nstut/managed-mods.json",
+    "nstut/runtime-overlays.json",
+    "nstut/modpack-manager.patch.json",
+)
+
+
+def validate_promoted_contract(release: dict) -> None:
+    source_ref = release.get("sourceRef", "")
+    if not re.fullmatch(r"nstut-[A-Za-z0-9._-]+", source_ref):
+        fail(f"invalid immutable sourceRef: {source_ref!r}")
+
+    tag_ref = f"refs/tags/{source_ref}"
+    tag_exists = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "--verify", "--quiet", tag_ref],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    ).returncode == 0
+
+    if not tag_exists:
+        if os.environ.get("GITHUB_REF_NAME") == "nstut/stable":
+            fail(f"promotion branch references missing immutable tag {source_ref}")
+        return
+
+    comparison = subprocess.run(
+        ["git", "-C", str(ROOT), "diff", "--quiet", tag_ref, "HEAD", "--", *PROMOTED_CONTRACT_FILES]
+    )
+    if comparison.returncode == 1:
+        fail(
+            f"deployable contract drifted from immutable tag {source_ref}; "
+            "bump overlayVersion/sourceRef and create the new tag before promotion"
+        )
+    if comparison.returncode != 0:
+        fail(f"could not compare deployable contract with immutable tag {source_ref}")
+
 def main() -> int:
     release = load(NSTUT / "release.json")
     managed = load(NSTUT / "managed-mods.json")
     runtime = load(NSTUT / "runtime-overlays.json")
-    sys.dont_write_bytecode = True
+    validate_promoted_contract(release)
     generator_path = ROOT / "nstut/tools/generate-modpack-manager-manifest.py"
     spec = importlib.util.spec_from_file_location("nstut_manifest_generator", generator_path)
     if spec is None or spec.loader is None:
