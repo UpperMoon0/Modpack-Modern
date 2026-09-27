@@ -4,9 +4,9 @@
 /**
  * LV renewable-ore intermediates.
  *
- * These materials are intentionally non-decomposable. Their only purpose is to
- * carry state between the renewable synthesis stages; they must not expose
- * alternate decomposition paths that bypass the normal TFG ore chain.
+ * These materials are intentionally non-decomposable. Process intermediates
+ * carry state between renewable synthesis stages, while waste materials may only
+ * be reclaimed through explicit recipes whose yields cannot bypass the ore gate.
  *
  * @param {Internal.MaterialEventJS} event
  */
