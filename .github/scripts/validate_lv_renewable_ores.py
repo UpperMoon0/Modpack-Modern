@@ -91,10 +91,73 @@ limits = {
     "chemical_reactor": (2, 2, 3, 2),
     "centrifuge": (2, 6, 1, 6),
     "autoclave": (2, 2, 1, 1),
+    "electric_blast_furnace": (3, 3, 1, 1),
 }
-require(len(blocks) == 16, f"expected 16 renewable recipes, found {len(blocks)}")
+require(len(blocks) == 18, f"expected 18 renewable recipes, found {len(blocks)}")
 recipe_ids = [recipe_id for _, recipe_id, _ in blocks]
 require(len(recipe_ids) == len(set(recipe_ids)), "duplicate renewable recipe ID")
+
+recipe_bodies = {recipe_id: body for _, recipe_id, body in blocks}
+
+# Balance contract: keep renewable ore expensive while staying on the scale of
+# TFG's existing LV/MV chemistry instead of multi-minute individual reactions.
+balance_snippets = {
+    "tfg:lv_renewable_sulfate_rich_brine": [
+        "Fluid.of('tfc:salt_water', 8000)",
+        "Fluid.of('tfg:sulfate_rich_brine', 1000)",
+        ".duration(400)",
+    ],
+    "tfg:lv_renewable_marine_gypsum": [
+        ".itemInputs('2x tfc:powder/flux')",
+        "Fluid.of('tfg:sulfate_rich_brine', 1000)",
+        ".itemOutputs('2x tfg:marine_gypsum_dust')",
+        ".duration(300)",
+    ],
+    "tfg:lv_renewable_calcium_sulfide": [
+        ".itemInputs('2x tfg:marine_gypsum_dust', '4x gtceu:charcoal_dust')",
+        ".itemOutputs('2x tfg:calcium_sulfide_dust')",
+        ".blastFurnaceTemp(1000)",
+        ".duration(600)",
+    ],
+    "tfg:lv_renewable_hydrogen_sulfide": [
+        "Fluid.of('gtceu:hydrogen_sulfide', 2000)",
+        ".duration(400)",
+    ],
+    "tfg:lv_renewable_iron_acid_leach": [
+        "Fluid.of('gtceu:sulfuric_acid', 500)",
+        ".duration(600)",
+    ],
+    "tfg:lv_renewable_iron_hydroxide_precipitation": [
+        "Fluid.of('gtceu:oxygen', 1000)",
+        ".duration(600)",
+    ],
+    "tfg:lv_renewable_poor_hematite": [".duration(1200)"],
+    "tfg:lv_renewable_copper_acid_leach": [
+        "Fluid.of('gtceu:sulfuric_acid', 1000)",
+        ".duration(600)",
+    ],
+    "tfg:lv_renewable_poor_malachite": [".duration(1000)"],
+    "tfg:lv_renewable_zinc_chloride_leach": [
+        "Fluid.of('gtceu:hydrochloric_acid', 1000)",
+        ".duration(700)",
+    ],
+    "tfg:lv_renewable_zinc_sulfide_precipitation": [
+        "Fluid.of('gtceu:hydrogen_sulfide', 500)",
+        ".duration(600)",
+    ],
+    "tfg:lv_renewable_poor_sphalerite": [".duration(1400)"],
+}
+for recipe_id, snippets in balance_snippets.items():
+    body = recipe_bodies.get(recipe_id)
+    require(body is not None, f"missing balance-critical recipe: {recipe_id}")
+    if body is not None:
+        for snippet in snippets:
+            require(snippet in body, f"{recipe_id}: balance contract changed: {snippet}")
+
+require("marine_sulfate_concentrate" not in recipe_text + material_text,
+        "obsolete vague marine sulfate concentrate must not return")
+require("sulfate_reduction_slag" not in recipe_text + material_text,
+        "obsolete abstract sulfate-reduction slag must not return")
 
 for machine, recipe_id, body in blocks:
     require(machine in limits, f"{recipe_id}: unexpected machine type {machine}")
@@ -131,15 +194,18 @@ custom_materials = {
     "spent_chloride_brine",
     "iron_silicate_tailings",
     "copper_silicate_tailings",
-    "zinc_silicate_tailings",
+    "zinc_carbonate_tailings",
     "iron_impurity_sludge",
     "iron_hydroxide_precipitate",
     "copper_impurity_sludge",
     "basic_copper_carbonate",
     "zinc_impurity_sludge",
     "sphalerite_crystals",
-    "marine_sulfate_concentrate",
-    "sulfate_reduction_slag",
+    "sulfate_rich_brine",
+    "spent_marine_brine",
+    "marine_gypsum",
+    "calcium_sulfide",
+    "calcium_carbonate_residue",
 }
 
 # Every intermediate must be explicitly non-decomposable, not merely coexist in
@@ -167,11 +233,12 @@ waste_materials = {
     "spent_chloride_brine",
     "iron_silicate_tailings",
     "copper_silicate_tailings",
-    "zinc_silicate_tailings",
+    "zinc_carbonate_tailings",
     "iron_impurity_sludge",
     "copper_impurity_sludge",
     "zinc_impurity_sludge",
-    "sulfate_reduction_slag",
+    "spent_marine_brine",
+    "calcium_carbonate_residue",
 }
 for material in waste_materials:
     require(not re.search(

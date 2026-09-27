@@ -5,8 +5,8 @@
  * LV renewable-ore intermediates.
  *
  * These materials are intentionally non-decomposable. Their only purpose is to
- * carry state between the expensive renewable synthesis stages; they must not
- * expose alternate decomposition paths that bypass the normal TFG ore chain.
+ * carry state between the renewable synthesis stages; they must not expose
+ * alternate decomposition paths that bypass the normal TFG ore chain.
  *
  * @param {Internal.MaterialEventJS} event
  */
@@ -71,6 +71,17 @@ function registerTFGRenewableOreMaterials(event) {
         .color(0x8f8b77)
         .flags(noDecomp);
 
+    // Renewable marine sulfur line.
+    event.create('tfg:sulfate_rich_brine')
+        .liquid(new GTFluidBuilder().temperature(303))
+        .color(0xb6c8c6)
+        .flags(noDecomp);
+
+    event.create('tfg:spent_marine_brine')
+        .liquid(new GTFluidBuilder().temperature(303))
+        .color(0x8f9d99)
+        .flags(noDecomp);
+
     // Solid intermediates and deliberately low-value waste streams.
     event.create('tfg:iron_silicate_tailings')
         .dust()
@@ -82,7 +93,7 @@ function registerTFGRenewableOreMaterials(event) {
         .color(0x66756d)
         .flags(noDecomp);
 
-    event.create('tfg:zinc_silicate_tailings')
+    event.create('tfg:zinc_carbonate_tailings')
         .dust()
         .color(0x8c8974)
         .flags(noDecomp);
@@ -117,13 +128,18 @@ function registerTFGRenewableOreMaterials(event) {
         .color(0xd6bd69)
         .flags(noDecomp);
 
-    event.create('tfg:marine_sulfate_concentrate')
+    event.create('tfg:marine_gypsum')
         .dust()
-        .color(0xd8d4bf)
+        .color(0xe5e0cf)
         .flags(noDecomp);
 
-    event.create('tfg:sulfate_reduction_slag')
+    event.create('tfg:calcium_sulfide')
         .dust()
-        .color(0x625f55)
+        .color(0xc7bd88)
+        .flags(noDecomp);
+
+    event.create('tfg:calcium_carbonate_residue')
+        .dust()
+        .color(0xc8c5b5)
         .flags(noDecomp);
 }

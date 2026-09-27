@@ -8483,13 +8483,16 @@
 	"material.tfg.spent_chloride_brine": "Spent Chloride Brine",
 	"material.tfg.iron_silicate_tailings": "Iron Silicate Tailings",
 	"material.tfg.copper_silicate_tailings": "Copper Silicate Tailings",
-	"material.tfg.zinc_silicate_tailings": "Zinc Silicate Tailings",
+	"material.tfg.zinc_carbonate_tailings": "Zinc Carbonate Tailings",
 	"material.tfg.iron_impurity_sludge": "Iron Impurity Sludge",
 	"material.tfg.iron_hydroxide_precipitate": "Iron Hydroxide Precipitate",
 	"material.tfg.copper_impurity_sludge": "Copper Impurity Sludge",
 	"material.tfg.basic_copper_carbonate": "Basic Copper Carbonate",
 	"material.tfg.zinc_impurity_sludge": "Zinc Impurity Sludge",
 	"material.tfg.sphalerite_crystals": "Sphalerite Crystals",
-	"material.tfg.marine_sulfate_concentrate": "Marine Sulfate Concentrate",
-	"material.tfg.sulfate_reduction_slag": "Sulfate Reduction Slag"
+	"material.tfg.sulfate_rich_brine": "Sulfate-Rich Brine",
+	"material.tfg.spent_marine_brine": "Spent Marine Brine",
+	"material.tfg.marine_gypsum": "Marine Gypsum",
+	"material.tfg.calcium_sulfide": "Calcium Sulfide",
+	"material.tfg.calcium_carbonate_residue": "Calcium Carbonate Residue"
 }
