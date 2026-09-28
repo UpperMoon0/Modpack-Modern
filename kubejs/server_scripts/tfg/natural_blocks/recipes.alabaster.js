@@ -76,7 +76,7 @@ function registerTFGAlabasterRecipes(event) {
 		.EUt(2)
 
 	event.recipes.gtceu.chemical_bath('tfc:alabaster/raw')
-		.itemInputs('#tfc:colored_bricks_alabaster')
+		.itemInputs('#tfc:colored_raw_alabaster')
 		.inputFluids(Fluid.of('gtceu:chlorine', 72))
 		.itemOutputs('tfc:alabaster/raw')
 		.duration(400)
@@ -100,12 +100,5 @@ function registerTFGAlabasterRecipes(event) {
 			.EUt(7)
 			.category(GTRecipeCategories.CHEM_DYES)
 
-		event.recipes.gtceu.chemical_bath(`tfg:alabaster/bricks/${global.MINECRAFT_DYE_NAMES[i]}`)
-			.itemInputs('tfc:alabaster/bricks')
-			.inputFluids(Fluid.of(`tfc:${global.MINECRAFT_DYE_NAMES[i]}_dye`, 36))
-			.itemOutputs(`tfc:alabaster/bricks/${global.MINECRAFT_DYE_NAMES[i]}`)
-			.duration(20)
-			.EUt(7)
-			.category(GTRecipeCategories.CHEM_DYES)
 	}
 }

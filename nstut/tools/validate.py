@@ -175,6 +175,62 @@ def main() -> int:
         if (config_projects.get(client_key) or {}).get("side") != "CLIENT":
             fail(f"{client_key} must remain client-only")
 
+    # Alabaster recipe audit: raw decoloring must target raw alabaster, and
+    # colored bricks must have exactly one dyeing registration. Duplicate
+    # Chemical Bath signatures are rejected by GTCEu's lookup DB.
+    alabaster = (ROOT / "kubejs/server_scripts/tfg/natural_blocks/recipes.alabaster.js").read_text(
+        encoding="utf-8"
+    )
+    raw_decolor = re.search(
+        r"chemical_bath\('tfc:alabaster/raw'\)(.*?)(?=\n\s*for \(let i = 0; i < 16; i\+\+\))",
+        alabaster,
+        re.DOTALL,
+    )
+    if raw_decolor is None or "#tfc:colored_raw_alabaster" not in raw_decolor.group(1):
+        fail("raw alabaster decolor recipe must consume #tfc:colored_raw_alabaster")
+    if raw_decolor is not None and "#tfc:colored_bricks_alabaster" in raw_decolor.group(1):
+        fail("raw alabaster decolor recipe still consumes the colored-bricks tag")
+
+    canonical_bricks_recipe = "chemical_bath(`tfg:tfc/alabaster/bricks/${global.MINECRAFT_DYE_NAMES[i]}`)"
+    duplicate_bricks_recipe = "chemical_bath(`tfg:alabaster/bricks/${global.MINECRAFT_DYE_NAMES[i]}`)"
+    if alabaster.count(canonical_bricks_recipe) != 1:
+        fail("colored alabaster bricks must have exactly one canonical dye registration")
+    if duplicate_bricks_recipe in alabaster:
+        fail("duplicate 36 mB colored-alabaster-bricks dye registration remains")
+    bricks_dye_72 = "Fluid.of(`tfc:${global.MINECRAFT_DYE_NAMES[i]}_dye`, 72)"
+    if bricks_dye_72 not in alabaster:
+        fail("colored alabaster bricks must retain the original 72 mB dye cost")
+
+    sandwiches = (ROOT / "kubejs/server_scripts/tfg/food/recipes.food.sandwiches.js").read_text(
+        encoding="utf-8"
+    )
+    jam_one_start = sandwiches.find("jam_sandwich_1`, 100, 16, {")
+    if jam_one_start < 0:
+        fail("jam sandwich recipe 1 block is missing")
+    jam_one_end = sandwiches.find("});", jam_one_start)
+    jam_one = sandwiches[jam_one_start:jam_one_end] if jam_one_start >= 0 and jam_one_end >= 0 else ""
+    if "circuit: 5" not in jam_one:
+        fail("jam sandwich recipe 1 must use circuit 5 to avoid the recipe-3 lookup-prefix collision")
+    if "#tfc:foods/preserves" not in jam_one:
+        fail("jam sandwich recipe 1 must retain the normal preserves tag")
+
+    medicine = (ROOT / "kubejs/server_scripts/tfg/primitive/medicine/recipes.medicine.js").read_text(
+        encoding="utf-8"
+    )
+    for token in (
+        "spring_water/pill_${type.name}_with_herbal_slime_ball",
+        "distilled_water/pill_${type.name}_with_herbal_slime_ball",
+        "spring_water/tablet_${type.name}_with_herbal_slime_ball",
+        "distilled_water/tablet_${type.name}_with_herbal_slime_ball",
+    ):
+        if token not in medicine:
+            fail(f"herbal medicine mixer recipe missing: {token}")
+    herbal_section = medicine.split("// With Herbal Slime Ball", 1)[1].split("// Arrow", 1)[0]
+    if herbal_section.count("Fluid.of('tfc:spring_water', 250)") != 2:
+        fail("herbal spring-water pill/tablet routes must each consume 250 mB spring water")
+    if herbal_section.count("Fluid.of('gtceu:distilled_water', 50)") != 2:
+        fail("herbal distilled-water pill/tablet routes must each consume 50 mB distilled water")
+
     gtceu = (ROOT / "config/gtceu.yaml").read_text(encoding="utf-8")
     if not re.search(r"(?m)^\s*shouldWeatherOrTerrainExplosion:\s*false\s*$", gtceu):
         fail("GTCEu weather/terrain explosion policy is not disabled")
