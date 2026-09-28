@@ -217,7 +217,7 @@ function registerTFGRenewableOreRecipes(event) {
     // Redstone: fictional mineralization, but grounded in the pack's existing
     // silicate / iron / sulfur chemistry. 2 poor raw Redstone per 96k EU batch.
     event.recipes.gtceu.mixer('tfg:lv_renewable_redstone_slurry')
-        .itemInputs('24x tfg:igneous_felsic_dust', '4x gtceu:quartzite_dust')
+        .itemInputs('24x tfg:igneous_felsic_dust', '4x tfg:iron_silicate_tailings_dust')
         .inputFluids(Fluid.of('minecraft:water', 8000))
         .outputFluids(Fluid.of('tfg:redstone_mineral_slurry', 8000))
         .duration(500)
@@ -321,7 +321,7 @@ function registerTFGRenewableOreRecipes(event) {
 
     event.recipes.gtceu.centrifuge('tfg:lv_renewable_lead_liquor_purification')
         .itemInputs('24x tfg:lead_leached_concentrate_dust')
-        .itemOutputs('16x tfg:lead_gangue_dust', '4x tfg:argentiferous_residue_dust')
+        .itemOutputs('16x tfg:lead_gangue_dust')
         .outputFluids(Fluid.of('tfg:purified_lead_liquor', 6000))
         .duration(500)
         .EUt(LV);
@@ -419,13 +419,6 @@ function registerTFGRenewableOreRecipes(event) {
         .inputFluids(Fluid.of('tfg:chloride_brine_lixiviant', 4000))
         .itemOutputs('16x tfg:silver_leached_calcine_dust')
         .duration(600)
-        .EUt(MV);
-
-    event.recipes.gtceu.chemical_bath('tfg:mv_renewable_silver_from_galena_residue')
-        .itemInputs('8x tfg:argentiferous_residue_dust')
-        .inputFluids(Fluid.of('tfg:chloride_brine_lixiviant', 2000))
-        .itemOutputs('8x tfg:silver_leached_calcine_dust')
-        .duration(400)
         .EUt(MV);
 
     event.recipes.gtceu.centrifuge('tfg:mv_renewable_silver_chloride_precipitation')
@@ -535,15 +528,6 @@ function registerTFGRenewableOreRecipes(event) {
     // HV batch; it remains a genuinely expensive strategic material.
     // ---------------------------------------------------------------------
 
-    event.recipes.gtceu.large_chemical_reactor('tfg:hv_renewable_aqua_regia')
-        .inputFluids(
-            Fluid.of('gtceu:hydrochloric_acid', 3000),
-            Fluid.of('gtceu:nitric_acid', 1000)
-        )
-        .outputFluids(Fluid.of('tfg:aqua_regia', 4000))
-        .duration(200)
-        .EUt(HV);
-
     event.recipes.gtceu.electric_blast_furnace('tfg:hv_renewable_gold_refractory_roast')
         .itemInputs('48x tfg:igneous_felsic_dust')
         .itemOutputs('24x tfg:refractory_gold_calcine_dust', '24x tfg:gold_refractory_tailings_dust')
@@ -554,7 +538,7 @@ function registerTFGRenewableOreRecipes(event) {
     event.recipes.gtceu.large_chemical_reactor('tfg:hv_renewable_gold_aqua_regia_leach')
         .itemInputs('24x tfg:refractory_gold_calcine_dust')
         .inputFluids(
-            Fluid.of('tfg:aqua_regia', 4000),
+            Fluid.of('gtceu:aqua_regia', 4000),
             Fluid.of('minecraft:water', 4000)
         )
         .outputFluids(Fluid.of('tfg:chloroauric_leachate', 8000))

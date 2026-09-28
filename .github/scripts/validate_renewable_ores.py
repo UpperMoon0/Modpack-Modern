@@ -20,6 +20,7 @@ tags_text = TAGS.read_text(encoding="utf-8")
 recipe_registry = RECIPE_REGISTRY.read_text(encoding="utf-8")
 material_registry = MATERIAL_REGISTRY.read_text(encoding="utf-8")
 pakku_lock = PAKKU_LOCK.read_text(encoding="utf-8")
+gt_lang = (ROOT / "kubejs/assets/gtceu/lang/en_us.json").read_text(encoding="utf-8")
 
 errors: list[str] = []
 
@@ -143,7 +144,6 @@ machine_contract = {
     "tfg:mv_renewable_arsenic_leach": "chemical_bath",
     "tfg:mv_renewable_cobalt_oxidative_roast": "electric_blast_furnace",
     "tfg:mv_renewable_cobalt_pressure_leach": "autoclave",
-    "tfg:hv_renewable_aqua_regia": "large_chemical_reactor",
     "tfg:hv_renewable_gold_aqua_regia_leach": "large_chemical_reactor",
     "tfg:hv_renewable_gold_reduction": "large_chemical_reactor",
 }
@@ -203,8 +203,7 @@ chains = {
         "tfg:mv_renewable_cobaltite_precursor",
         "tfg:mv_renewable_poor_cobaltite",
     ]),
-    "gold": (480, 4, 3300, [
-        "tfg:hv_renewable_aqua_regia",
+    "gold": (480, 4, 3100, [
         "tfg:hv_renewable_gold_refractory_roast",
         "tfg:hv_renewable_gold_aqua_regia_leach",
         "tfg:hv_renewable_gold_liquor_purification",
@@ -239,12 +238,36 @@ for name, (voltage, output_count, expected_ticks, ids) in chains.items():
             require(eu_per_output >= 350000,
                     f"gold should remain strategically expensive, got {eu_per_output} EU/output")
 
+# Galena already yields Silver through GTCEu ore processing; do not double-count
+# that geological byproduct with a second renewable Lead-side Silver stream.
+require("argentiferous_residue" not in recipe_text and "argentiferous_residue" not in material_text,
+        "renewable Lead must not duplicate Galena's built-in Silver byproduct")
+
+# Use GTCEu's canonical Aqua Regia material instead of a parallel TFG fluid.
+require("tfg:aqua_regia" not in recipe_text and "tfg:aqua_regia" not in material_text,
+        "renewable Gold must use canonical gtceu:aqua_regia")
+require("Fluid.of('gtceu:aqua_regia', 4000)" in recipe_text,
+        "renewable Gold leach must consume gtceu:aqua_regia")
+
 # Cobaltite explicitly consumes elemental arsenic from the independent arsenic chain.
 cobalt_body = recipe_bodies.get("tfg:mv_renewable_cobaltite_precursor", "")
 require("'4x gtceu:arsenic_dust'" in cobalt_body,
         "Cobaltite precursor must consume elemental arsenic dust")
 require("tfg:arsenic_" not in cobalt_body,
         "Cobaltite must not consume a hidden custom arsenic precursor")
+
+# Custom materials must not shadow an existing GTCEu material ID.
+gt_material_ids = set(re.findall(r'\"material\.gtceu\.([a-z0-9_]+)\"', gt_lang))
+custom_material_ids = set(re.findall(r"event\.create\('tfg:([a-z0-9_]+)'\)", material_text))
+require(not (gt_material_ids & custom_material_ids),
+        f"custom renewable materials shadow GTCEu IDs: {sorted(gt_material_ids & custom_material_ids)}")
+
+# Redstone must not depend on finite Quartzite mining; reuse renewable Iron tailings.
+redstone_body = recipe_bodies.get("tfg:lv_renewable_redstone_slurry", "")
+require("tfg:iron_silicate_tailings_dust" in redstone_body,
+        "renewable Redstone must consume renewable silicate tailings")
+require("quartzite" not in redstone_body,
+        "renewable Redstone must not depend on mined Quartzite")
 
 # All renewable custom materials are non-decomposable and have both a producer
 # and a downstream consumer/recovery reference in this centralized recipe file.
@@ -258,12 +281,25 @@ material_blocks = {
 }
 require(len(material_blocks) >= 70,
         f"expected at least 70 renewable custom materials, found {len(material_blocks)}")
+method_calls = re.findall(
+    r"\.(itemInputs|inputFluids|notConsumable|itemOutputs|outputFluids)\((.*?)\)\s*(?=\.|;)",
+    recipe_text,
+    re.DOTALL,
+)
 for material, body in sorted(material_blocks.items()):
     require(".flags(noDecomp)" in body,
             f"tfg:{material}: missing DISABLE_DECOMPOSITION")
-    refs = recipe_text.count(f"tfg:{material}")
-    require(refs >= 2,
-            f"tfg:{material}: dead-end material has only {refs} recipe reference(s)")
+    producers = 0
+    consumers = 0
+    for method, args in method_calls:
+        if f"tfg:{material}" not in args:
+            continue
+        if method in {"itemOutputs", "outputFluids"}:
+            producers += 1
+        else:
+            consumers += 1
+    require(producers >= 1, f"tfg:{material}: has no producing recipe")
+    require(consumers >= 1, f"tfg:{material}: has no downstream use/recovery recipe")
 
 # Custom intermediates remain centralized so another script cannot silently add
 # an unreviewed producer/consumer and break the recovery balance.

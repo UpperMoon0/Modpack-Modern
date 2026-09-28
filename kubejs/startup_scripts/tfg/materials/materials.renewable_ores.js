@@ -166,7 +166,6 @@ function registerTFGRenewableOreMaterials(event) {
     event.create('tfg:purified_lead_liquor').liquid(new GTFluidBuilder().temperature(323)).color(0xb0abb3).flags(noDecomp);
     event.create('tfg:galena_precursor').dust().color(0x6f6b73).flags(noDecomp);
     event.create('tfg:lead_gangue').dust().color(0x77716c).flags(noDecomp);
-    event.create('tfg:argentiferous_residue').dust().color(0xa49fa4).flags(noDecomp);
 
     // Shared sulfate pressure lixiviant for Nickel and Cobalt autoclaves.
     event.create('tfg:sulfate_pressure_lixiviant').liquid(new GTFluidBuilder().temperature(373)).color(0x9a9a83).flags(noDecomp);
@@ -205,7 +204,6 @@ function registerTFGRenewableOreMaterials(event) {
     event.create('tfg:cobalt_sulfate_wastewater').liquid(new GTFluidBuilder().temperature(313)).color(0x697681).flags(noDecomp);
 
     // Renewable Gold line.
-    event.create('tfg:aqua_regia').liquid(new GTFluidBuilder().temperature(303)).color(0xd59b38).flags(noDecomp);
     event.create('tfg:refractory_gold_calcine').dust().color(0x9a8758).flags(noDecomp);
     event.create('tfg:chloroauric_leachate').liquid(new GTFluidBuilder().temperature(353)).color(0xd2a744).flags(noDecomp);
     event.create('tfg:purified_gold_chloride').liquid(new GTFluidBuilder().temperature(333)).color(0xe0b84a).flags(noDecomp);

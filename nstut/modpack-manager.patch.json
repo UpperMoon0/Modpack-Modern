@@ -62,13 +62,13 @@
     {
       "id": "fork-b33be5cbe1b980b9",
       "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.10/kubejs/assets/tfg/lang/en_us.json",
-      "sha256": "f2db7fb835f8095dcc1f404a25d96e0703c1dc4c34bf6c260822ac0162a2544f",
+      "sha256": "3a2c47d653038985cecd1316f248c96cea4f86b7195f49188226eb0d4b963959",
       "fileName": "en_us.json"
     },
     {
       "id": "fork-b98f9210172db41f",
       "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.10/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
-      "sha256": "ff8075d77977200cf15833cb3d8bc3d61850a24ecd2e6580f98a115364530524",
+      "sha256": "8a3a5c16d4b0787e837d9eaf4b950b8101c94e90e175522cda04524fbdeefaa6",
       "fileName": "recipes.renewable_ores.js"
     },
     {
@@ -92,7 +92,7 @@
     {
       "id": "fork-8720a4453c43dfce",
       "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.10/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
-      "sha256": "a465d2598923f66d063971c164dfbb2b7a7b66b5384b0ce326764af3ce83c99c",
+      "sha256": "8645d46eef6ad2bfb02f341566c338d89f86fbb87966b22f953a88a0f752eb09",
       "fileName": "materials.renewable_ores.js"
     }
   ],
