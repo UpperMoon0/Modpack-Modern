@@ -15,11 +15,20 @@ function registerTFGMaterialItemTags(event) {
 	event.add('tfg:platinum_ore_group', 'gtceu:purified_ferhodsite_ore')
 	
 	// Renewable ore discovery seeds: any grade proves the player has found the mineral.
-	for (const ore of ['hematite', 'malachite', 'sphalerite']) {
+	for (const ore of ['hematite', 'malachite', 'sphalerite', 'cassiterite', 'garnierite', 'native_silver', 'native_gold']) {
 		event.add('tfg:renewable_' + ore + '_seed', 'tfc:ore/poor_' + ore)
 		event.add('tfg:renewable_' + ore + '_seed', 'tfc:ore/normal_' + ore)
 		event.add('tfg:renewable_' + ore + '_seed', 'tfc:ore/rich_' + ore)
 	}
+
+	// GT raw-ore discovery seeds use the pack's poor/normal/rich raw forms.
+	for (const material of [GTMaterials.Redstone, GTMaterials.Galena, GTMaterials.Cobaltite]) {
+		const name = material.getName();
+		event.add('tfg:renewable_' + name + '_seed', ChemicalHelper.get(TFGTagPrefix.poorRawOre, material, 1).getItem().id)
+		event.add('tfg:renewable_' + name + '_seed', ChemicalHelper.get(TagPrefix.rawOre, material, 1).getItem().id)
+		event.add('tfg:renewable_' + name + '_seed', ChemicalHelper.get(TFGTagPrefix.richRawOre, material, 1).getItem().id)
+	}
+	event.add('tfg:renewable_arsenic_seed', 'gtceu:arsenic_dust')
 
 	// Crafting components
 	event.add('tfg:aluminium_oxide', '#forge:dusts/alumina')
