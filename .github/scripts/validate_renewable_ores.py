@@ -60,6 +60,18 @@ require(max(fluid_amounts, default=0) <= 8000,
 require(".circuit(" not in recipe_text and ".circuitMeta(" not in recipe_text,
         "renewable chains must not depend on circuit-number selection")
 
+# GTCEu 7.5.3 lookup regression: the Tin EBF recipe is rejected if TFC lye is
+# part of its search-key inputs. Keep the roast item-only, and preserve the
+# original caustic cost by consuming 8 NaOH in the following mixer.
+tin_roast = recipe_bodies.get("tfg:lv_renewable_tin_alkaline_roast", "")
+tin_mixer = recipe_bodies.get("tfg:lv_renewable_sodium_stannate", "")
+require("24x tfg:igneous_felsic_dust" in tin_roast and "4x tfc:powder/soda_ash" in tin_roast,
+        "tin alkaline roast must use felsic dust + soda ash")
+require(".inputFluids(" not in tin_roast and "tfc:lye" not in tin_roast,
+        "tin alkaline roast must remain item-only for GTCEu 7.5.3 lookup compatibility")
+require("8x gtceu:sodium_hydroxide_dust" in tin_mixer,
+        "tin sodium-stannate mixer must preserve the original 8 NaOH reagent cost")
+
 # GTCEu Chemical Bath is item + one fluid -> item. Leaching stages that need a
 # process liquor must produce a wet/leached solid first, then separate it in a
 # centrifuge or use a Chemical Reactor for fluid-fluid chemistry.

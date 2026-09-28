@@ -260,9 +260,11 @@ function registerTFGRenewableOreRecipes(event) {
 
     // Tin: alkaline roast -> sodium stannate -> hydrated oxide -> seeded Cassiterite.
     // 1 poor Cassiterite per 111k EU batch.
+    // Keep the roast item-only. GTCEu 7.5.3 rejects this recipe from its
+    // lookup DB when lye is also a fluid search key. The original 8 NaOH cost
+    // is paid in the following sodium-stannate mixer instead.
     event.recipes.gtceu.electric_blast_furnace('tfg:lv_renewable_tin_alkaline_roast')
         .itemInputs('24x tfg:igneous_felsic_dust', '4x tfc:powder/soda_ash')
-        .inputFluids(Fluid.of('tfc:lye', 1000))
         .itemOutputs('12x tfg:tin_alkaline_calcine_dust', '12x tfg:tin_silicate_residue_dust')
         .duration(900)
         .EUt(LV)
