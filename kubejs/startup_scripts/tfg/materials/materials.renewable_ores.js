@@ -2,7 +2,7 @@
 "use strict";
 
 /**
- * LV renewable-ore intermediates.
+ * Multi-tier renewable resource intermediates.
  *
  * These materials are intentionally non-decomposable. Process intermediates
  * carry state between renewable synthesis stages, while waste materials may only
@@ -142,4 +142,73 @@ function registerTFGRenewableOreMaterials(event) {
         .dust()
         .color(0xc8c5b5)
         .flags(noDecomp);
+
+    // Renewable Redstone line.
+    event.create('tfg:redstone_mineral_slurry').liquid(new GTFluidBuilder().temperature(333)).color(0x8f2f2f).flags(noDecomp);
+    event.create('tfg:purified_redstone_liquor').liquid(new GTFluidBuilder().temperature(323)).color(0xb33b3b).flags(noDecomp);
+    event.create('tfg:redstone_crystal_precursor').dust().color(0xc24141).flags(noDecomp);
+    event.create('tfg:redstone_mineralized_precursor').dust().color(0xd34a44).flags(noDecomp);
+    event.create('tfg:redstone_silicate_tailings').dust().color(0x776b67).flags(noDecomp);
+
+    // Renewable Tin / Cassiterite line.
+    event.create('tfg:tin_alkaline_calcine').dust().color(0x9b9b93).flags(noDecomp);
+    event.create('tfg:sodium_stannate_liquor').liquid(new GTFluidBuilder().temperature(353)).color(0xc9d0c2).flags(noDecomp);
+    event.create('tfg:hydrated_tin_oxide').dust().color(0xd7d6c8).flags(noDecomp);
+    event.create('tfg:tin_oxide_precursor').dust().color(0xc7c7bc).flags(noDecomp);
+    event.create('tfg:tin_silicate_residue').dust().color(0x8d887c).flags(noDecomp);
+    event.create('tfg:spent_alkaline_brine').liquid(new GTFluidBuilder().temperature(313)).color(0xa8ad9c).flags(noDecomp);
+
+    // Shared chloride-brine lixiviant for Lead and Silver hydrometallurgy.
+    event.create('tfg:chloride_brine_lixiviant').liquid(new GTFluidBuilder().temperature(333)).color(0xa5aa96).flags(noDecomp);
+
+    // Renewable Lead / Galena line.
+    event.create('tfg:lead_leached_concentrate').dust().color(0x8f8b91).flags(noDecomp);
+    event.create('tfg:purified_lead_liquor').liquid(new GTFluidBuilder().temperature(323)).color(0xb0abb3).flags(noDecomp);
+    event.create('tfg:galena_precursor').dust().color(0x6f6b73).flags(noDecomp);
+    event.create('tfg:lead_gangue').dust().color(0x77716c).flags(noDecomp);
+
+    // Shared sulfate pressure lixiviant for Nickel and Cobalt autoclaves.
+    event.create('tfg:sulfate_pressure_lixiviant').liquid(new GTFluidBuilder().temperature(373)).color(0x9a9a83).flags(noDecomp);
+
+    // Renewable Nickel / Garnierite line.
+    event.create('tfg:activated_nickel_laterite').dust().color(0x8d7f58).flags(noDecomp);
+    event.create('tfg:nickel_sulfate_leachate').liquid(new GTFluidBuilder().temperature(393)).color(0x6f8f72).flags(noDecomp);
+    event.create('tfg:purified_nickel_liquor').liquid(new GTFluidBuilder().temperature(343)).color(0x8fb27d).flags(noDecomp);
+    event.create('tfg:nickel_hydroxide_precipitate').dust().color(0x91aa76).flags(noDecomp);
+    event.create('tfg:nickel_silicate_gel').dust().color(0x9aa86f).flags(noDecomp);
+    event.create('tfg:nickel_iron_silica_residue').dust().color(0x725b48).flags(noDecomp);
+    event.create('tfg:nickel_sulfate_wastewater').liquid(new GTFluidBuilder().temperature(313)).color(0x718078).flags(noDecomp);
+
+    // Renewable Silver line.
+    event.create('tfg:silver_chloride_calcine').dust().color(0xc9c4b0).flags(noDecomp);
+    event.create('tfg:silver_leached_calcine').dust().color(0xb6b09e).flags(noDecomp);
+    event.create('tfg:silver_chloride_precipitate').dust().color(0xd8d5c7).flags(noDecomp);
+    event.create('tfg:silver_nuclei').dust().color(0xd5d8d8).flags(noDecomp);
+    event.create('tfg:silver_silicate_residue').dust().color(0x89857c).flags(noDecomp);
+    event.create('tfg:depleted_silver_brine').liquid(new GTFluidBuilder().temperature(313)).color(0x8f8c84).flags(noDecomp);
+
+    // Renewable Arsenic line. Final product is normal GT arsenic dust.
+    event.create('tfg:arsenic_bearing_calcine').dust().color(0x9b704e).flags(noDecomp);
+    event.create('tfg:arsenic_leached_concentrate').dust().color(0x8f6b4d).flags(noDecomp);
+    event.create('tfg:arsenic_oxide_concentrate').dust().color(0xb58a62).flags(noDecomp);
+    event.create('tfg:arsenic_silicate_tailings').dust().color(0x7c6f65).flags(noDecomp);
+    event.create('tfg:arsenic_spent_liquor').liquid(new GTFluidBuilder().temperature(313)).color(0x81766d).flags(noDecomp);
+
+    // Renewable Cobaltite line.
+    event.create('tfg:cobalt_oxidized_calcine').dust().color(0x5f6d89).flags(noDecomp);
+    event.create('tfg:cobalt_sulfate_leachate').liquid(new GTFluidBuilder().temperature(393)).color(0x6679a0).flags(noDecomp);
+    event.create('tfg:purified_cobalt_liquor').liquid(new GTFluidBuilder().temperature(343)).color(0x7891bb).flags(noDecomp);
+    event.create('tfg:cobalt_hydroxide_precipitate').dust().color(0x7185a8).flags(noDecomp);
+    event.create('tfg:cobaltite_precursor').dust().color(0x566070).flags(noDecomp);
+    event.create('tfg:cobalt_impurity_sludge').dust().color(0x665b56).flags(noDecomp);
+    event.create('tfg:cobalt_sulfate_wastewater').liquid(new GTFluidBuilder().temperature(313)).color(0x697681).flags(noDecomp);
+
+    // Renewable Gold line.
+    event.create('tfg:refractory_gold_calcine').dust().color(0x9a8758).flags(noDecomp);
+    event.create('tfg:chloroauric_leachate').liquid(new GTFluidBuilder().temperature(353)).color(0xd2a744).flags(noDecomp);
+    event.create('tfg:purified_gold_chloride').liquid(new GTFluidBuilder().temperature(333)).color(0xe0b84a).flags(noDecomp);
+    event.create('tfg:gold_nuclei').dust().color(0xe4bd45).flags(noDecomp);
+    event.create('tfg:gold_refractory_tailings').dust().color(0x796d5e).flags(noDecomp);
+    event.create('tfg:spent_aqua_regia').liquid(new GTFluidBuilder().temperature(313)).color(0x9b8760).flags(noDecomp);
+
 }

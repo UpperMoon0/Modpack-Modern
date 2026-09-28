@@ -2,7 +2,7 @@
 "use strict";
 
 /**
- * LV renewable basic ores.
+ * Multi-tier renewable industrial ores and strategic elements.
  *
  * Design rules:
  * - Final outputs are TFC poor raw ores, so all normal TFG beneficiation still applies.
@@ -14,9 +14,10 @@
  *
  * @param {Internal.RecipesEventJS} event
  */
-function registerTFGLVRenewableOreRecipes(event) {
+function registerTFGRenewableOreRecipes(event) {
     const LV = GTValues.VA[GTValues.LV];
     const MV = GTValues.VA[GTValues.MV];
+    const HV = GTValues.VA[GTValues.HV];
 
     // Shared renewable sulfur / H2S infrastructure.
     //
@@ -205,6 +206,475 @@ function registerTFGLVRenewableOreRecipes(event) {
         .itemOutputs('tfc:ore/poor_sphalerite')
         .duration(1400)
         .EUt(LV);
+
+
+    // ---------------------------------------------------------------------
+    // LV expansion: Redstone, Tin and Lead.
+    // Higher-tier common materials below increase batch yield instead of
+    // multiplying EU per ore purely because their recipes run at higher voltage.
+    // ---------------------------------------------------------------------
+
+    // Redstone: fictional mineralization, but grounded in the pack's existing
+    // silicate / iron / sulfur chemistry. 2 poor raw Redstone per 96k EU batch.
+    event.recipes.gtceu.mixer('tfg:lv_renewable_redstone_slurry')
+        .itemInputs('24x tfg:igneous_felsic_dust', '4x tfg:iron_silicate_tailings_dust')
+        .inputFluids(Fluid.of('minecraft:water', 8000))
+        .outputFluids(Fluid.of('tfg:redstone_mineral_slurry', 8000))
+        .duration(500)
+        .EUt(LV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:lv_renewable_redstone_leach')
+        .inputFluids(
+            Fluid.of('tfg:redstone_mineral_slurry', 8000),
+            Fluid.of('gtceu:hydrochloric_acid', 500)
+        )
+        .itemOutputs('12x tfg:redstone_silicate_tailings_dust')
+        .outputFluids(Fluid.of('tfg:purified_redstone_liquor', 6000))
+        .duration(600)
+        .EUt(LV);
+
+    event.recipes.gtceu.centrifuge('tfg:lv_renewable_redstone_concentration')
+        .inputFluids(Fluid.of('tfg:purified_redstone_liquor', 6000))
+        .itemOutputs('8x tfg:redstone_crystal_precursor_dust')
+        .outputFluids(Fluid.of('minecraft:water', 4000))
+        .duration(400)
+        .EUt(LV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:lv_renewable_redstone_mineralization')
+        .itemInputs('8x tfg:redstone_crystal_precursor_dust', '2x tfg:iron_hydroxide_precipitate_dust')
+        .inputFluids(
+            Fluid.of('gtceu:hydrogen_sulfide', 250),
+            Fluid.of('gtceu:oxygen', 500)
+        )
+        .itemOutputs('8x tfg:redstone_mineralized_precursor_dust')
+        .duration(700)
+        .EUt(LV);
+
+    event.recipes.gtceu.autoclave('tfg:lv_renewable_poor_redstone')
+        .itemInputs('8x tfg:redstone_mineralized_precursor_dust')
+        .notConsumable('#tfg:renewable_redstone_seed')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs(ChemicalHelper.get(TFGTagPrefix.poorRawOre, GTMaterials.Redstone, 2))
+        .duration(1000)
+        .EUt(LV);
+
+    // Tin: alkaline roast -> sodium stannate -> hydrated oxide -> seeded Cassiterite.
+    // 1 poor Cassiterite per 111k EU batch.
+    event.recipes.gtceu.electric_blast_furnace('tfg:lv_renewable_tin_alkaline_roast')
+        .itemInputs('24x tfg:igneous_felsic_dust', '8x gtceu:sodium_hydroxide_dust', '4x tfc:powder/soda_ash')
+        .itemOutputs('12x tfg:tin_alkaline_calcine_dust', '12x tfg:tin_silicate_residue_dust')
+        .duration(900)
+        .EUt(LV)
+        .blastFurnaceTemp(1000);
+
+    event.recipes.gtceu.mixer('tfg:lv_renewable_sodium_stannate')
+        .itemInputs('12x tfg:tin_alkaline_calcine_dust')
+        .inputFluids(Fluid.of('minecraft:water', 8000))
+        .outputFluids(Fluid.of('tfg:sodium_stannate_liquor', 6000))
+        .duration(600)
+        .EUt(LV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:lv_renewable_hydrated_tin_oxide')
+        .inputFluids(
+            Fluid.of('tfg:sodium_stannate_liquor', 6000),
+            Fluid.of('gtceu:hydrochloric_acid', 1000)
+        )
+        .itemOutputs('8x tfg:hydrated_tin_oxide_dust')
+        .outputFluids(Fluid.of('tfg:spent_alkaline_brine', 6000))
+        .duration(800)
+        .EUt(LV);
+
+    event.recipes.gtceu.centrifuge('tfg:lv_renewable_tin_oxide_precursor')
+        .itemInputs('8x tfg:hydrated_tin_oxide_dust')
+        .itemOutputs('8x tfg:tin_oxide_precursor_dust')
+        .outputFluids(Fluid.of('minecraft:water', 1000))
+        .duration(300)
+        .EUt(LV);
+
+    event.recipes.gtceu.autoclave('tfg:lv_renewable_poor_cassiterite')
+        .itemInputs('8x tfg:tin_oxide_precursor_dust')
+        .notConsumable('#tfg:renewable_cassiterite_seed')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs('tfc:ore/poor_cassiterite')
+        .duration(1100)
+        .EUt(LV);
+
+    // Shared chloride-brine lixiviant. Preparation is a utility cost shared by
+    // Lead and Silver and is not counted in either core per-ore timing contract.
+    event.recipes.gtceu.mixer('tfg:lv_renewable_chloride_brine_lixiviant')
+        .inputFluids(
+            Fluid.of('tfc:salt_water', 6000),
+            Fluid.of('gtceu:hydrochloric_acid', 1000)
+        )
+        .outputFluids(Fluid.of('tfg:chloride_brine_lixiviant', 7000))
+        .duration(200)
+        .EUt(LV);
+
+    // Lead: chloride leach -> purified Pb liquor -> sulfide precipitation.
+    // The silver-bearing residue is a feedstock for the dedicated Silver plant.
+    event.recipes.gtceu.chemical_bath('tfg:lv_renewable_lead_chloride_leach')
+        .itemInputs('32x tfg:metamorphic_dust')
+        .inputFluids(Fluid.of('tfg:chloride_brine_lixiviant', 7000))
+        .itemOutputs('24x tfg:lead_leached_concentrate_dust')
+        .duration(800)
+        .EUt(LV);
+
+    event.recipes.gtceu.centrifuge('tfg:lv_renewable_lead_liquor_purification')
+        .itemInputs('24x tfg:lead_leached_concentrate_dust')
+        .itemOutputs('16x tfg:lead_gangue_dust')
+        .outputFluids(Fluid.of('tfg:purified_lead_liquor', 6000))
+        .duration(500)
+        .EUt(LV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:lv_renewable_galena_precipitation')
+        .inputFluids(
+            Fluid.of('tfg:purified_lead_liquor', 6000),
+            Fluid.of('gtceu:hydrogen_sulfide', 500)
+        )
+        .itemOutputs('8x tfg:galena_precursor_dust')
+        .outputFluids(Fluid.of('tfg:spent_chloride_brine', 6000))
+        .duration(800)
+        .EUt(LV);
+
+    event.recipes.gtceu.autoclave('tfg:lv_renewable_poor_galena')
+        .itemInputs('8x tfg:galena_precursor_dust')
+        .notConsumable('#tfg:renewable_galena_seed')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs(ChemicalHelper.get(TFGTagPrefix.poorRawOre, GTMaterials.Galena, 1))
+        .duration(1400)
+        .EUt(LV);
+
+    // ---------------------------------------------------------------------
+    // MV expansion: Nickel, Silver, Arsenic and Cobaltite.
+    // Nickel and Silver are normal industrial materials, so MV recipes process
+    // four ore outputs per batch. Cobaltite stays deliberately expensive.
+    // ---------------------------------------------------------------------
+
+    // Shared sulfate pressure lixiviant keeps Autoclave recipes to one fluid input.
+    // Its utility-preparation cost is separate from the normalized core ore chains.
+    event.recipes.gtceu.mixer('tfg:mv_renewable_sulfate_pressure_lixiviant')
+        .inputFluids(
+            Fluid.of('gtceu:sulfuric_acid', 3000),
+            Fluid.of('minecraft:water', 4500)
+        )
+        .outputFluids(Fluid.of('tfg:sulfate_pressure_lixiviant', 7500))
+        .duration(200)
+        .EUt(MV);
+
+    event.recipes.gtceu.electric_blast_furnace('tfg:mv_renewable_nickel_laterite_activation')
+        .itemInputs('48x tfg:igneous_mafic_dust')
+        .itemOutputs('24x tfg:activated_nickel_laterite_dust')
+        .duration(700)
+        .EUt(MV)
+        .blastFurnaceTemp(1200);
+
+    event.recipes.gtceu.autoclave('tfg:mv_renewable_nickel_pressure_leach')
+        .itemInputs('24x tfg:activated_nickel_laterite_dust')
+        .inputFluids(Fluid.of('tfg:sulfate_pressure_lixiviant', 7500))
+        .itemOutputs('12x tfg:nickel_iron_silica_residue_dust')
+        .outputFluids(Fluid.of('tfg:nickel_sulfate_leachate', 8000))
+        .duration(1100)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_renewable_nickel_liquor_purification')
+        .inputFluids(Fluid.of('tfg:nickel_sulfate_leachate', 8000))
+        .outputFluids(Fluid.of('tfg:purified_nickel_liquor', 6000))
+        .duration(500)
+        .EUt(MV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:mv_renewable_nickel_hydroxide')
+        .itemInputs('12x gtceu:sodium_hydroxide_dust')
+        .inputFluids(Fluid.of('tfg:purified_nickel_liquor', 6000))
+        .itemOutputs('16x tfg:nickel_hydroxide_precipitate_dust')
+        .outputFluids(Fluid.of('tfg:nickel_sulfate_wastewater', 6000))
+        .duration(700)
+        .EUt(MV);
+
+    event.recipes.gtceu.mixer('tfg:mv_renewable_nickel_silicate_gel')
+        .itemInputs('16x tfg:nickel_hydroxide_precipitate_dust', '8x tfg:nickel_iron_silica_residue_dust')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs('16x tfg:nickel_silicate_gel_dust')
+        .duration(400)
+        .EUt(MV);
+
+    event.recipes.gtceu.autoclave('tfg:mv_renewable_poor_garnierite')
+        .itemInputs('16x tfg:nickel_silicate_gel_dust')
+        .notConsumable('#tfg:renewable_garnierite_seed')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs('4x tfc:ore/poor_garnierite')
+        .duration(800)
+        .EUt(MV);
+
+    event.recipes.gtceu.electric_blast_furnace('tfg:mv_renewable_silver_chlorination_roast')
+        .itemInputs('32x tfg:metamorphic_dust')
+        .inputFluids(Fluid.of('gtceu:chlorine', 2000))
+        .itemOutputs('16x tfg:silver_chloride_calcine_dust', '16x tfg:silver_silicate_residue_dust')
+        .duration(700)
+        .EUt(MV)
+        .blastFurnaceTemp(1100);
+
+    // Galena's argentiferous residue can substitute for half the fresh calcine input.
+    event.recipes.gtceu.chemical_bath('tfg:mv_renewable_silver_chloride_leach')
+        .itemInputs('16x tfg:silver_chloride_calcine_dust')
+        .inputFluids(Fluid.of('tfg:chloride_brine_lixiviant', 4000))
+        .itemOutputs('16x tfg:silver_leached_calcine_dust')
+        .duration(600)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_renewable_silver_chloride_precipitation')
+        .itemInputs('16x tfg:silver_leached_calcine_dust')
+        .itemOutputs('16x tfg:silver_chloride_precipitate_dust')
+        .outputFluids(Fluid.of('tfg:depleted_silver_brine', 6000))
+        .duration(500)
+        .EUt(MV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:mv_renewable_silver_reduction')
+        .itemInputs('16x tfg:silver_chloride_precipitate_dust')
+        .inputFluids(Fluid.of('gtceu:hydrogen', 1000))
+        .itemOutputs('16x tfg:silver_nuclei_dust')
+        .outputFluids(Fluid.of('gtceu:hydrochloric_acid', 1000))
+        .duration(600)
+        .EUt(MV);
+
+    event.recipes.gtceu.autoclave('tfg:mv_renewable_poor_native_silver')
+        .itemInputs('16x tfg:silver_nuclei_dust')
+        .notConsumable('#tfg:renewable_native_silver_seed')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs('4x tfc:ore/poor_native_silver')
+        .duration(1200)
+        .EUt(MV);
+
+    // Arsenic: a complete renewable element chain. It terminates in normal
+    // gtceu:arsenic_dust, not a renewable arsenic ore item.
+    event.recipes.gtceu.electric_blast_furnace('tfg:mv_renewable_arsenic_roast')
+        .itemInputs('32x tfg:metamorphic_dust')
+        .inputFluids(Fluid.of('gtceu:oxygen', 1000))
+        .itemOutputs('16x tfg:arsenic_bearing_calcine_dust', '16x tfg:arsenic_silicate_tailings_dust')
+        .duration(800)
+        .EUt(MV)
+        .blastFurnaceTemp(1100);
+
+    event.recipes.gtceu.chemical_bath('tfg:mv_renewable_arsenic_leach')
+        .itemInputs('16x tfg:arsenic_bearing_calcine_dust')
+        .inputFluids(Fluid.of('gtceu:diluted_hydrochloric_acid', 6000))
+        .itemOutputs('16x tfg:arsenic_leached_concentrate_dust')
+        .duration(700)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_renewable_arsenic_oxide_concentration')
+        .itemInputs('16x tfg:arsenic_leached_concentrate_dust')
+        .itemOutputs('8x tfg:arsenic_oxide_concentrate_dust')
+        .outputFluids(Fluid.of('tfg:arsenic_spent_liquor', 4000))
+        .duration(500)
+        .EUt(MV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:mv_renewable_arsenic_reduction')
+        .itemInputs('8x tfg:arsenic_oxide_concentrate_dust')
+        .notConsumable('#tfg:renewable_arsenic_seed')
+        .inputFluids(Fluid.of('gtceu:hydrogen', 3000))
+        .itemOutputs('4x gtceu:arsenic_dust')
+        .outputFluids(Fluid.of('minecraft:water', 3000))
+        .duration(1600)
+        .EUt(MV);
+
+    event.recipes.gtceu.electric_blast_furnace('tfg:mv_renewable_cobalt_oxidative_roast')
+        .itemInputs('40x tfg:igneous_intermediate_dust')
+        .inputFluids(Fluid.of('gtceu:oxygen', 1000))
+        .itemOutputs('20x tfg:cobalt_oxidized_calcine_dust')
+        .duration(900)
+        .EUt(MV)
+        .blastFurnaceTemp(1300);
+
+    event.recipes.gtceu.autoclave('tfg:mv_renewable_cobalt_pressure_leach')
+        .itemInputs('20x tfg:cobalt_oxidized_calcine_dust')
+        .inputFluids(Fluid.of('tfg:sulfate_pressure_lixiviant', 5000))
+        .outputFluids(Fluid.of('tfg:cobalt_sulfate_leachate', 8000))
+        .duration(1000)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_renewable_cobalt_liquor_purification')
+        .inputFluids(Fluid.of('tfg:cobalt_sulfate_leachate', 8000))
+        .itemOutputs('8x tfg:cobalt_impurity_sludge_dust')
+        .outputFluids(Fluid.of('tfg:purified_cobalt_liquor', 6000))
+        .duration(500)
+        .EUt(MV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:mv_renewable_cobalt_hydroxide')
+        .itemInputs('8x gtceu:sodium_hydroxide_dust')
+        .inputFluids(Fluid.of('tfg:purified_cobalt_liquor', 6000))
+        .itemOutputs('12x tfg:cobalt_hydroxide_precipitate_dust')
+        .outputFluids(Fluid.of('tfg:cobalt_sulfate_wastewater', 6000))
+        .duration(700)
+        .EUt(MV);
+
+    // The Cobaltite mineralization stage consumes renewable elemental arsenic.
+    event.recipes.gtceu.chemical_reactor('tfg:mv_renewable_cobaltite_precursor')
+        .itemInputs('12x tfg:cobalt_hydroxide_precipitate_dust', '4x gtceu:arsenic_dust')
+        .inputFluids(Fluid.of('gtceu:hydrogen_sulfide', 1000))
+        .itemOutputs('12x tfg:cobaltite_precursor_dust')
+        .duration(900)
+        .EUt(MV);
+
+    event.recipes.gtceu.autoclave('tfg:mv_renewable_poor_cobaltite')
+        .itemInputs('12x tfg:cobaltite_precursor_dust')
+        .notConsumable('#tfg:renewable_cobaltite_seed')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs(ChemicalHelper.get(TFGTagPrefix.poorRawOre, GTMaterials.Cobaltite, 2))
+        .duration(1000)
+        .EUt(MV);
+
+    // ---------------------------------------------------------------------
+    // HV expansion: Gold. Gold is intentionally not normalized to a full 16x
+    // HV batch; it remains a genuinely expensive strategic material.
+    // ---------------------------------------------------------------------
+
+    event.recipes.gtceu.electric_blast_furnace('tfg:hv_renewable_gold_refractory_roast')
+        .itemInputs('48x tfg:igneous_felsic_dust')
+        .itemOutputs('24x tfg:refractory_gold_calcine_dust', '24x tfg:gold_refractory_tailings_dust')
+        .duration(400)
+        .EUt(HV)
+        .blastFurnaceTemp(1600);
+
+    event.recipes.gtceu.large_chemical_reactor('tfg:hv_renewable_gold_aqua_regia_leach')
+        .itemInputs('24x tfg:refractory_gold_calcine_dust')
+        .inputFluids(
+            Fluid.of('gtceu:aqua_regia', 4000),
+            Fluid.of('minecraft:water', 4000)
+        )
+        .outputFluids(Fluid.of('tfg:chloroauric_leachate', 8000))
+        .duration(600)
+        .EUt(HV);
+
+    event.recipes.gtceu.centrifuge('tfg:hv_renewable_gold_liquor_purification')
+        .inputFluids(Fluid.of('tfg:chloroauric_leachate', 8000))
+        .outputFluids(
+            Fluid.of('tfg:purified_gold_chloride', 6000),
+            Fluid.of('tfg:spent_aqua_regia', 2000)
+        )
+        .duration(400)
+        .EUt(HV);
+
+    event.recipes.gtceu.large_chemical_reactor('tfg:hv_renewable_gold_reduction')
+        .inputFluids(
+            Fluid.of('tfg:purified_gold_chloride', 6000),
+            Fluid.of('gtceu:hydrogen', 1000)
+        )
+        .itemOutputs('16x tfg:gold_nuclei_dust')
+        .outputFluids(Fluid.of('gtceu:hydrochloric_acid', 1000))
+        .duration(600)
+        .EUt(HV);
+
+    event.recipes.gtceu.autoclave('tfg:hv_renewable_poor_native_gold')
+        .itemInputs('16x tfg:gold_nuclei_dust')
+        .notConsumable('#tfg:renewable_native_gold_seed')
+        .inputFluids(Fluid.of('minecraft:water', 4000))
+        .itemOutputs('4x tfc:ore/poor_native_gold')
+        .duration(1100)
+        .EUt(HV);
+
+    // ---------------------------------------------------------------------
+    // Secondary uses and recovery paths for every new side stream.
+    // ---------------------------------------------------------------------
+
+    event.recipes.gtceu.centrifuge('tfg:lv_recycle_redstone_silicate_tailings')
+        .itemInputs('8x tfg:redstone_silicate_tailings_dust')
+        .itemOutputs('gtceu:silicon_dioxide_dust')
+        .duration(160)
+        .EUt(16);
+
+    event.recipes.gtceu.centrifuge('tfg:lv_recycle_tin_silicate_residue')
+        .itemInputs('8x tfg:tin_silicate_residue_dust')
+        .itemOutputs('gtceu:silicon_dioxide_dust')
+        .duration(160)
+        .EUt(16);
+
+    event.recipes.gtceu.chemical_reactor('tfg:lv_recycle_spent_alkaline_brine')
+        .itemInputs('gtceu:silicon_dioxide_dust')
+        .inputFluids(Fluid.of('tfg:spent_alkaline_brine', 6000))
+        .outputFluids(
+            Fluid.of('tfg:sodium_silicate', 1000),
+            Fluid.of('minecraft:water', 4000)
+        )
+        .duration(400)
+        .EUt(LV);
+
+    event.recipes.gtceu.centrifuge('tfg:lv_recycle_lead_gangue')
+        .itemInputs('8x tfg:lead_gangue_dust')
+        .itemOutputs('gtceu:stone_dust', 'gtceu:calcite_dust')
+        .duration(200)
+        .EUt(16);
+
+    // The four residue left by one Nickel batch can be separately valorized.
+    event.recipes.gtceu.centrifuge('tfg:mv_recycle_nickel_iron_silica_residue')
+        .itemInputs('4x tfg:nickel_iron_silica_residue_dust')
+        .itemOutputs('gtceu:iron_dust', 'gtceu:silicon_dioxide_dust')
+        .duration(240)
+        .EUt(MV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:mv_recycle_nickel_sulfate_wastewater')
+        .itemInputs('2x tfc:powder/flux')
+        .inputFluids(Fluid.of('tfg:nickel_sulfate_wastewater', 6000))
+        .itemOutputs('2x gtceu:gypsum_dust')
+        .outputFluids(Fluid.of('minecraft:water', 4500))
+        .duration(320)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_recycle_silver_silicate_residue')
+        .itemInputs('8x tfg:silver_silicate_residue_dust')
+        .itemOutputs('gtceu:silicon_dioxide_dust')
+        .duration(180)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_recycle_depleted_silver_brine')
+        .inputFluids(Fluid.of('tfg:depleted_silver_brine', 6000))
+        .itemOutputs('2x gtceu:salt_dust')
+        .outputFluids(Fluid.of('minecraft:water', 4000))
+        .duration(300)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_recycle_arsenic_silicate_tailings')
+        .itemInputs('8x tfg:arsenic_silicate_tailings_dust')
+        .itemOutputs('gtceu:silicon_dioxide_dust')
+        .duration(180)
+        .EUt(MV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:mv_recycle_arsenic_spent_liquor')
+        .inputFluids(Fluid.of('tfg:arsenic_spent_liquor', 4000))
+        .outputFluids(
+            Fluid.of('gtceu:diluted_hydrochloric_acid', 1000),
+            Fluid.of('minecraft:water', 2500)
+        )
+        .duration(300)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:mv_recycle_cobalt_impurity_sludge')
+        .itemInputs('8x tfg:cobalt_impurity_sludge_dust')
+        .itemOutputs('gtceu:clay_dust')
+        .duration(200)
+        .EUt(MV);
+
+    event.recipes.gtceu.chemical_reactor('tfg:mv_recycle_cobalt_sulfate_wastewater')
+        .itemInputs('2x tfc:powder/flux')
+        .inputFluids(Fluid.of('tfg:cobalt_sulfate_wastewater', 6000))
+        .itemOutputs('2x gtceu:gypsum_dust')
+        .outputFluids(Fluid.of('minecraft:water', 4500))
+        .duration(320)
+        .EUt(MV);
+
+    event.recipes.gtceu.centrifuge('tfg:hv_recycle_gold_refractory_tailings')
+        .itemInputs('8x tfg:gold_refractory_tailings_dust')
+        .itemOutputs('gtceu:silicon_dioxide_dust')
+        .duration(200)
+        .EUt(HV);
+
+    event.recipes.gtceu.large_chemical_reactor('tfg:hv_recover_spent_aqua_regia')
+        .inputFluids(Fluid.of('tfg:spent_aqua_regia', 2000))
+        .outputFluids(
+            Fluid.of('gtceu:diluted_hydrochloric_acid', 1000),
+            Fluid.of('minecraft:water', 750)
+        )
+        .duration(300)
+        .EUt(HV);
 
     // Waste valorization. These recipes intentionally convert custom waste into
     // existing TFG/GT materials instead of adding parallel substitutes. Recovery
