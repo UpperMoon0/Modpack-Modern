@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "tfg-nstut-managed",
   "name": "TFG NsTut Fork Overlay",
-  "version": "0.13.10-nstut.19",
-  "description": "Generated from UpperMoon0/TFG-Modern-Fork nstut-0.13.10.19 on upstream 0.13.10.",
+  "version": "0.13.10-nstut.20",
+  "description": "Generated from UpperMoon0/TFG-Modern-Fork nstut-0.13.10.20 on upstream 0.13.10.",
   "requiredPaths": [
     "mods",
     "config",
@@ -61,61 +61,85 @@
     },
     {
       "id": "fork-b33be5cbe1b980b9",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/assets/tfg/lang/en_us.json",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/assets/tfg/lang/en_us.json",
       "sha256": "3a2c47d653038985cecd1316f248c96cea4f86b7195f49188226eb0d4b963959",
       "fileName": "en_us.json"
     },
     {
       "id": "fork-237b5676858bc7c4",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/server_scripts/mega_cells/recipes.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/mega_cells/recipes.js",
       "sha256": "4a71c281fbece816670def191714be2e01a1b7cc3cb9729724bbc559c4fa4cc1",
       "fileName": "recipes.js"
     },
     {
+      "id": "fork-cb08779a96f77818",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/species/recipes.js",
+      "sha256": "360b79741894fff397bbdf048b2354b73a9058892ddb925ecb0931bd7f331ffe",
+      "fileName": "recipes.js"
+    },
+    {
       "id": "fork-8aab3c717235e8f7",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/server_scripts/tfg/food/recipes.food.sandwiches.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/food/recipes.food.sandwiches.js",
       "sha256": "f63b31ff4add27464f890fe41eea5ca528392745cc70975f218dcee9c99c9ed0",
       "fileName": "recipes.food.sandwiches.js"
     },
     {
       "id": "fork-caebfa881c79cfaf",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/server_scripts/tfg/natural_blocks/recipes.alabaster.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/natural_blocks/recipes.alabaster.js",
       "sha256": "8ea9077d4455648c2255f8974d9bf544266b25d621f54520fb541380abcf2f4d",
       "fileName": "recipes.alabaster.js"
     },
     {
+      "id": "fork-58c6b419d5ee7755",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/natural_blocks/recipes.rocks.js",
+      "sha256": "480513d16e9905e7e80287277e101ebde72c23f362556a4b4428d18d9ebb029a",
+      "fileName": "recipes.rocks.js"
+    },
+    {
+      "id": "fork-6de99e816e18e0fd",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/ores_and_materials/recipes.alloys.js",
+      "sha256": "4184f839b8383dd28b0f1ea2ec8601c3e3cc1e59d6f2cb2a2197a1a9dc901d11",
+      "fileName": "recipes.alloys.js"
+    },
+    {
       "id": "fork-b98f9210172db41f",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
       "sha256": "85e9ce5b080352013a9f2c183d71efb7a39e990b1a6b50ed501e63917b110dab",
       "fileName": "recipes.renewable_ores.js"
     },
     {
       "id": "fork-d47bef3134b6f04b",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
       "sha256": "a90fb17bce475a038a7f70c580ad3f27f3ff588d946f49cd6794cd4179fd21fd",
       "fileName": "tags.materials.js"
     },
     {
       "id": "fork-3ed704fbacf021f3",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/server_scripts/tfg/primitive/medicine/recipes.medicine.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/primitive/medicine/recipes.medicine.js",
       "sha256": "5f993731e1d86ab48809ef7f093a1c8613b793cbe265a6daa8071821f9e28b01",
       "fileName": "recipes.medicine.js"
     },
     {
+      "id": "fork-acbbc3617991e1a2",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/primitive/recipes.compost.js",
+      "sha256": "35587c1fdb227f03e53e611814fae3895f4398c063942309b7ac70b2e8fa5d77",
+      "fileName": "recipes.compost.js"
+    },
+    {
       "id": "fork-49f8525e4c1f8aeb",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/server_scripts/tfg/recipes.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/server_scripts/tfg/recipes.js",
       "sha256": "237e44d213022ecee51518ad7a707b8860b78594f02f93b423e29713b41200be",
       "fileName": "recipes.js"
     },
     {
       "id": "fork-5449fb0a6e2f7eb0",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/startup_scripts/tfg/materials.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/startup_scripts/tfg/materials.js",
       "sha256": "1b73035ff03e85d2b3ed75cb55ccd46860c74f9c9f006d694a8dacbe1d2c29f8",
       "fileName": "materials.js"
     },
     {
       "id": "fork-8720a4453c43dfce",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.19/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.20/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
       "sha256": "8645d46eef6ad2bfb02f341566c338d89f86fbb87966b22f953a88a0f752eb09",
       "fileName": "materials.renewable_ores.js"
     }
@@ -379,6 +403,15 @@
     },
     {
       "type": "installFile",
+      "artifact": "fork-cb08779a96f77818",
+      "destination": "kubejs/server_scripts/species/recipes.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
       "artifact": "fork-8aab3c717235e8f7",
       "destination": "kubejs/server_scripts/tfg/food/recipes.food.sandwiches.js",
       "targets": [
@@ -390,6 +423,24 @@
       "type": "installFile",
       "artifact": "fork-caebfa881c79cfaf",
       "destination": "kubejs/server_scripts/tfg/natural_blocks/recipes.alabaster.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-58c6b419d5ee7755",
+      "destination": "kubejs/server_scripts/tfg/natural_blocks/recipes.rocks.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-6de99e816e18e0fd",
+      "destination": "kubejs/server_scripts/tfg/ores_and_materials/recipes.alloys.js",
       "targets": [
         "client",
         "server"
@@ -417,6 +468,15 @@
       "type": "installFile",
       "artifact": "fork-3ed704fbacf021f3",
       "destination": "kubejs/server_scripts/tfg/primitive/medicine/recipes.medicine.js",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "fork-acbbc3617991e1a2",
+      "destination": "kubejs/server_scripts/tfg/primitive/recipes.compost.js",
       "targets": [
         "client",
         "server"

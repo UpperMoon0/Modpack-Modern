@@ -5,6 +5,21 @@
  * @param {Internal.RecipesEventJS} event 
  */
 function registerTFGRockRecipes(event) {
+	// TFG owns these rock transformations with pack-specific costs and companion routes.
+	[
+		'gtceu:forge_hammer/hammer_cracked_light_concrete_bricks',
+		'gtceu:forge_hammer/hammer_deepslate_into_cracked',
+		'gtceu:forge_hammer/hammer_cracked_dark_concrete_bricks',
+		'gtceu:forge_hammer/hammer_nether_bricks_into_cracked',
+		'gtceu:forge_hammer/hammer_cracked_red_granite_bricks',
+		'gtceu:forge_hammer/hammer_stone_into_cracked',
+		'gtceu:forge_hammer/hammer_deepslate_bricks_into_cracked',
+		'gtceu:forge_hammer/hammer_light_concrete_cobblestone',
+		'gtceu:forge_hammer/hammer_dark_concrete_cobblestone',
+		'gtceu:forge_hammer/hammer_red_granite_cobblestone',
+		'gtceu:forge_hammer/hammer_stone_brick_into_cracked'
+	].forEach(id => event.remove({ id: id }))
+
 	function rawToPolished(id, addChiselRecipes, input, output) {
 		if (addChiselRecipes) {
 			event.recipes.tfc.chisel(output, input, 'smooth')
@@ -19,7 +34,7 @@ function registerTFGRockRecipes(event) {
 		event.recipes.gtceu.laser_engraver(`tfg:${id}`)
 			.itemInputs(input)
 			.itemOutputs(output)
-			.notConsumable('tfc:lens')
+			.notConsumable('gtceu:glass_lens')
 			.duration(30)
 			.EUt(GTValues.VA[GTValues.ULV]);
 	}
@@ -132,7 +147,7 @@ function registerTFGRockRecipes(event) {
 
 		// Raw to cobble
 		if (rock.raw != null && rock.cobble != null) {
-			event.recipes.gtceu.forge_hammer(`${rockId}_raw_to_cobble`)
+			event.recipes.gtceu.forge_hammer(`tfg:${rockId}_raw_to_cobble`)
 				.itemInputs(rock.raw.block)
 				.itemOutputs(rock.cobble.block)
 				.duration(10)
@@ -639,9 +654,9 @@ function registerTFGRockRecipes(event) {
 	removeCutterRecipe(event, 'blackstone_button')
 	removeCutterRecipe(event, 'blackstone_button_water')
 	removeCutterRecipe(event, 'blackstone_button_distilled_water')
-	removeCutterRecipe(event, 'cut_polished_blackstone_brickslab_into_button')
-	removeCutterRecipe(event, 'cut_polished_blackstone_brickslab_into_button_water')
-	removeCutterRecipe(event, 'cut_polished_blackstone_brickslab_into_button_distilled_water')
+	removeCutterRecipe(event, 'cut_polished_blackstoneslab_into_button')
+	removeCutterRecipe(event, 'cut_polished_blackstoneslab_into_button_water')
+	removeCutterRecipe(event, 'cut_polished_blackstoneslab_into_button_distilled_water')
 
 	event.recipes.gtceu.cutter('tfg:blackstone_button')
 		.itemInputs('minecraft:polished_blackstone_pressure_plate')
