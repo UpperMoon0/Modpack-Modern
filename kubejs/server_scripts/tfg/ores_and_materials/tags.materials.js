@@ -21,12 +21,18 @@ function registerTFGMaterialItemTags(event) {
 		event.add('tfg:renewable_' + ore + '_seed', 'tfc:ore/rich_' + ore)
 	}
 
-	// GT raw-ore discovery seeds use the pack's poor/normal/rich raw forms.
-	for (const material of [GTMaterials.Redstone, GTMaterials.Galena, GTMaterials.Cobaltite]) {
-		const name = material.getName();
-		event.add('tfg:renewable_' + name + '_seed', ChemicalHelper.get(TFGTagPrefix.poorRawOre, material, 1).getItem().id)
-		event.add('tfg:renewable_' + name + '_seed', ChemicalHelper.get(TagPrefix.rawOre, material, 1).getItem().id)
-		event.add('tfg:renewable_' + name + '_seed', ChemicalHelper.get(TFGTagPrefix.richRawOre, material, 1).getItem().id)
+	// GT raw-ore discovery seeds use explicit registered item IDs. Do not resolve
+	// ChemicalHelper stacks during the tag event: Galena can resolve to an empty
+	// ingredient there even though the poor/normal/rich raw items are registered.
+	const gtRawOreSeeds = {
+		redstone: ['gtceu:poor_raw_redstone', 'gtceu:raw_redstone', 'gtceu:rich_raw_redstone'],
+		galena: ['gtceu:poor_raw_galena', 'gtceu:raw_galena', 'gtceu:rich_raw_galena'],
+		cobaltite: ['gtceu:poor_raw_cobaltite', 'gtceu:raw_cobaltite', 'gtceu:rich_raw_cobaltite']
+	}
+	for (const [name, items] of Object.entries(gtRawOreSeeds)) {
+		for (const item of items) {
+			event.add('tfg:renewable_' + name + '_seed', item)
+		}
 	}
 	event.add('tfg:renewable_arsenic_seed', 'gtceu:arsenic_dust')
 
