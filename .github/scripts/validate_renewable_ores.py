@@ -120,7 +120,19 @@ for name, (material, count) in gt_finals.items():
     require(expected in recipe_text, f"{name}: missing poor GT raw-ore output x{count}")
     require(f".notConsumable('#tfg:renewable_{name}_seed')" in recipe_text,
             f"{name}: missing non-consumable discovery seed")
-    require(material in tags_text, f"{name}: missing GT any-grade seed registration")
+    for grade_prefix in ("poor_raw_", "raw_", "rich_raw_"):
+        item_id = f"gtceu:{grade_prefix}{name}"
+        require(item_id in tags_text,
+                f"{name}: missing explicit GT seed item {item_id}")
+
+# ChemicalHelper lookup is deliberately forbidden for GT seed tags. These tags are
+# consumed while recipes are being built, and Galena demonstrated that resolving
+# helper stacks during the tag event can leave the tag empty at recipe parse time.
+gt_seed_section = tags_text.split("// GT raw-ore discovery seeds", 1)[1].split(
+    "event.add('tfg:renewable_arsenic_seed'", 1
+)[0]
+require("ChemicalHelper.get(" not in gt_seed_section,
+        "GT renewable seed tags must use explicit registered item IDs")
 
 # Arsenic is intentionally an elemental renewable chain, not an ore synthesis chain.
 require(".itemOutputs('4x gtceu:arsenic_dust')" in recipe_text,
