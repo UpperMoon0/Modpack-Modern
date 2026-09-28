@@ -33,7 +33,7 @@ function registerTFGSandwichFoodRecipes(event) {
 			//Note: preserves needs to be first in the recipe code or else it will consider it as the usable_in_jam_sandwich ingredients.
 			// 1 jam + 2 cheese
 			global.processorRecipe(event, `${grain.name}_${type[0]}_jam_sandwich_1`, 100, 16, {
-				circuit: 4,
+				circuit: 5,
 				itemInputs: [`2x ${type[1]}`, '#tfc:foods/preserves', '2x #tfc:foods/usable_in_jam_sandwich'],
 				itemOutputs: [`2x tfc:food/${grain.name}_bread_jam_sandwich`, 'tfc:empty_jar'],
 				itemOutputProvider: TFC.isp.of(`2x tfc:food/${grain.name}_bread_jam_sandwich`).meal(

@@ -355,7 +355,7 @@ function registerTFGRenewableOreRecipes(event) {
     event.recipes.gtceu.mixer('tfg:mv_renewable_sulfate_pressure_lixiviant')
         .inputFluids(
             Fluid.of('gtceu:sulfuric_acid', 3000),
-            Fluid.of('minecraft:water', 4500)
+            Fluid.of('gtceu:distilled_water', 4500)
         )
         .outputFluids(Fluid.of('tfg:sulfate_pressure_lixiviant', 7500))
         .duration(200)

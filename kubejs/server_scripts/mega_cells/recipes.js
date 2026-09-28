@@ -488,7 +488,7 @@ const registerMegaCellsRecipes = (event) => {
 
         //back
     event.recipes.gtceu.packer('megacells:crafting_mega_accelerator_back')
-        .itemInputs('ae2:crafting_accelerator')
+        .itemInputs('megacells:mega_crafting_accelerator')
         .itemOutputs('megacells:mega_crafting_unit', 'ae2:engineering_processor')
         .duration(10)
         .EUt(12)

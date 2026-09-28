@@ -184,6 +184,13 @@ require("8x gtceu:sodium_hydroxide_dust" not in tin_mixer,
 require("Fluid.of('gtceu:oxygen', 4000)" in gold_roast,
         "gold refractory roast must consume oxygen to avoid the Tin/Gold lookup-prefix collision")
 
+lixiviant = recipe_bodies.get("tfg:mv_renewable_sulfate_pressure_lixiviant", "")
+require("Fluid.of('gtceu:sulfuric_acid', 3000)" in lixiviant
+        and "Fluid.of('gtceu:distilled_water', 4500)" in lixiviant,
+        "sulfate pressure lixiviant must use sulfuric acid + distilled water")
+require("Fluid.of('minecraft:water', 4500)" not in lixiviant,
+        "sulfate pressure lixiviant must not collide with TFG diluted sulfuric acid")
+
 # GTCEu Chemical Bath is item + one fluid -> item. Leaching stages that need a
 # process liquor must produce a wet/leached solid first, then separate it in a
 # centrifuge or use a Chemical Reactor for fluid-fluid chemistry.
