@@ -269,7 +269,7 @@ function registerTFGRenewableOreRecipes(event) {
         .blastFurnaceTemp(1000);
 
     event.recipes.gtceu.mixer('tfg:lv_renewable_sodium_stannate')
-        .itemInputs('12x tfg:tin_alkaline_calcine_dust')
+        .itemInputs('12x tfg:tin_alkaline_calcine_dust', '8x gtceu:sodium_hydroxide_dust')
         .inputFluids(Fluid.of('minecraft:water', 8000))
         .outputFluids(Fluid.of('tfg:sodium_stannate_liquor', 6000))
         .duration(600)
