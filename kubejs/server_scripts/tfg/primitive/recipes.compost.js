@@ -234,10 +234,10 @@ function registerTFGCompostRecipes(event) {
 
 	// Pure fertilisers from other ingredients
 
-	event.recipes.greate.pressing(
+	event.recipes.greate.compacting(
 		['2x tfc:pure_nitrogen', '2x tfc:pure_potassium', 'tfc:pure_phosphorus'],
 		['tfc:compost', 'tfc:compost', 'tfc:compost', 'tfc:compost', 'tfc:compost', 'tfc:compost', 'tfc:compost', 'tfc:compost'])
-		.id('tfg:pressing/compost_to_pure')
+		.id('tfg:compacting/compost_to_pure')
 
 	event.recipes.greate.pressing(
 		['tfc:pure_phosphorus'],
@@ -286,11 +286,11 @@ function registerTFGCompostRecipes(event) {
 		'gtceu:apatite_dust', 'gtceu:apatite_dust', 'gtceu:apatite_dust'])
 		.id('tfg:pressing/apatite_to_pure')
 		
-	event.recipes.greate.pressing(
+	event.recipes.greate.compacting(
 		['tfc:pure_phosphorus', 'tfc:pure_nitrogen', 'tfc:pure_potassium'],
 		['gtceu:fertilizer', 'gtceu:fertilizer', 'gtceu:fertilizer', 'gtceu:fertilizer', 
 		'gtceu:fertilizer', 'gtceu:fertilizer', 'gtceu:fertilizer', 'gtceu:fertilizer'])
-		.id('tfg:pressing/fertilizer_to_pure')
+		.id('tfg:compacting/fertilizer_to_pure')
 
 	event.recipes.greate.pressing(
 		['4x tfc:pure_potassium', 'tfc:pure_nitrogen'],
