@@ -261,15 +261,14 @@ function registerTFGRenewableOreRecipes(event) {
     // Tin: alkaline roast -> sodium stannate -> hydrated oxide -> seeded Cassiterite.
     // 1 poor Cassiterite per 111k EU batch.
     event.recipes.gtceu.electric_blast_furnace('tfg:lv_renewable_tin_alkaline_roast')
-        .itemInputs('24x tfg:igneous_felsic_dust', '4x tfc:powder/soda_ash')
-        .inputFluids(Fluid.of('tfc:lye', 1000))
+        .itemInputs('24x tfg:igneous_felsic_dust', '8x gtceu:sodium_hydroxide_dust', '4x tfc:powder/soda_ash')
         .itemOutputs('12x tfg:tin_alkaline_calcine_dust', '12x tfg:tin_silicate_residue_dust')
         .duration(900)
         .EUt(LV)
         .blastFurnaceTemp(1000);
 
     event.recipes.gtceu.mixer('tfg:lv_renewable_sodium_stannate')
-        .itemInputs('12x tfg:tin_alkaline_calcine_dust', '8x gtceu:sodium_hydroxide_dust')
+        .itemInputs('12x tfg:tin_alkaline_calcine_dust')
         .inputFluids(Fluid.of('minecraft:water', 8000))
         .outputFluids(Fluid.of('tfg:sodium_stannate_liquor', 6000))
         .duration(600)
@@ -531,6 +530,7 @@ function registerTFGRenewableOreRecipes(event) {
 
     event.recipes.gtceu.electric_blast_furnace('tfg:hv_renewable_gold_refractory_roast')
         .itemInputs('48x tfg:igneous_felsic_dust')
+        .inputFluids(Fluid.of('gtceu:oxygen', 4000))
         .itemOutputs('24x tfg:refractory_gold_calcine_dust', '24x tfg:gold_refractory_tailings_dust')
         .duration(400)
         .EUt(HV)

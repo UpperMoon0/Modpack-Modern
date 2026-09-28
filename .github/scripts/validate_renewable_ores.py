@@ -41,7 +41,7 @@ blocks = re.findall(
     recipe_text,
     re.DOTALL,
 )
-require(len(blocks) >= 65, f"expected at least 65 renewable recipes, found {len(blocks)}")
+require(len(blocks) == 89, f"expected exactly 89 audited renewable recipes, found {len(blocks)}")
 recipe_ids = [recipe_id for _, recipe_id, _ in blocks]
 require(len(recipe_ids) == len(set(recipe_ids)), "duplicate renewable recipe ID")
 recipe_bodies = {recipe_id: body for _, recipe_id, body in blocks}
@@ -59,6 +59,130 @@ require(max(fluid_amounts, default=0) <= 8000,
 # No programmed-circuit forks: every alternate treatment has a distinct recipe/map.
 require(".circuit(" not in recipe_text and ".circuitMeta(" not in recipe_text,
         "renewable chains must not depend on circuit-number selection")
+
+# GTCEu 7.5.3 recipe lookup is a prefix tree. A recipe whose complete input
+# signature is a strict subset of another recipe in the same map can make the
+# longer recipe unreachable. This previously happened because Gold used only
+# igneous_felsic_dust while Tin used the same dust plus alkaline reagents.
+def _method_payloads(body: str, method: str) -> list[str]:
+    payloads: list[str] = []
+    needle = f".{method}("
+    pos = 0
+    while True:
+        start = body.find(needle, pos)
+        if start < 0:
+            return payloads
+        cursor = start + len(needle)
+        depth = 1
+        quote: str | None = None
+        escaped = False
+        while cursor < len(body) and depth:
+            char = body[cursor]
+            if quote is not None:
+                if escaped:
+                    escaped = False
+                elif char == "\\":
+                    escaped = True
+                elif char == quote:
+                    quote = None
+            else:
+                if char in {"'", '"'}:
+                    quote = char
+                elif char == "(":
+                    depth += 1
+                elif char == ")":
+                    depth -= 1
+            cursor += 1
+        payloads.append(body[start + len(needle):cursor - 1])
+        pos = cursor
+
+
+def _top_level_arg_count(payload: str) -> int:
+    if not payload.strip():
+        return 0
+    depth = 0
+    quote: str | None = None
+    escaped = False
+    count = 1
+    for char in payload:
+        if quote is not None:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == quote:
+                quote = None
+            continue
+        if char in {"'", '"'}:
+            quote = char
+        elif char in "([{":
+            depth += 1
+        elif char in ")]}":
+            depth = max(0, depth - 1)
+        elif char == "," and depth == 0:
+            count += 1
+    return count
+
+
+# Pin the actual 7.5.3 recipe-map slot ceilings used by every renewable machine.
+recipe_io_caps = {
+    "autoclave": (2, 2, 1, 1),
+    "centrifuge": (2, 6, 1, 6),
+    "chemical_bath": (1, 6, 1, 1),
+    "chemical_reactor": (2, 2, 3, 2),
+    "electric_blast_furnace": (3, 3, 1, 1),
+    "large_chemical_reactor": (3, 3, 5, 4),
+    "mixer": (6, 1, 2, 1),
+}
+for machine, recipe_id, body in blocks:
+    cap = recipe_io_caps.get(machine)
+    require(cap is not None, f"{recipe_id}: renewable recipe uses un-audited recipe map {machine}")
+    if cap is None:
+        continue
+    item_inputs = sum(_top_level_arg_count(x) for x in _method_payloads(body, "itemInputs"))
+    item_inputs += sum(_top_level_arg_count(x) for x in _method_payloads(body, "notConsumable"))
+    item_outputs = sum(_top_level_arg_count(x) for x in _method_payloads(body, "itemOutputs"))
+    fluid_inputs = sum(_top_level_arg_count(x) for x in _method_payloads(body, "inputFluids"))
+    fluid_outputs = sum(_top_level_arg_count(x) for x in _method_payloads(body, "outputFluids"))
+    actual = (item_inputs, item_outputs, fluid_inputs, fluid_outputs)
+    require(all(value <= limit for value, limit in zip(actual, cap)),
+            f"{recipe_id}: IO {actual} exceeds {machine} cap {cap}")
+
+
+def _input_signature(body: str) -> frozenset[str]:
+    signature: set[str] = set()
+    for payload in _method_payloads(body, "itemInputs") + _method_payloads(body, "notConsumable"):
+        for match in re.finditer(r"'([^']+)'", payload):
+            item = re.sub(r"^\d+x\s+", "", match.group(1))
+            if ":" in item or item.startswith("#"):
+                signature.add(f"item:{item}")
+    for payload in _method_payloads(body, "inputFluids"):
+        for match in re.finditer(r"Fluid\.of\('([^']+)'", payload):
+            signature.add(f"fluid:{match.group(1)}")
+    return frozenset(signature)
+
+
+signatures = [(machine, recipe_id, _input_signature(body)) for machine, recipe_id, body in blocks]
+for index, (machine_a, recipe_a, signature_a) in enumerate(signatures):
+    for machine_b, recipe_b, signature_b in signatures[index + 1:]:
+        if machine_a != machine_b or not signature_a or not signature_b:
+            continue
+        require(not (signature_a < signature_b or signature_b < signature_a),
+                f"{machine_a}: strict-subset lookup collision between {recipe_a} and {recipe_b}")
+
+tin_roast = recipe_bodies.get("tfg:lv_renewable_tin_alkaline_roast", "")
+tin_mixer = recipe_bodies.get("tfg:lv_renewable_sodium_stannate", "")
+gold_roast = recipe_bodies.get("tfg:hv_renewable_gold_refractory_roast", "")
+require("24x tfg:igneous_felsic_dust" in tin_roast
+        and "8x gtceu:sodium_hydroxide_dust" in tin_roast
+        and "4x tfc:powder/soda_ash" in tin_roast,
+        "tin alkaline roast must retain felsic dust + NaOH + soda ash")
+require(".inputFluids(" not in tin_roast,
+        "tin alkaline roast must stay within the EBF's three item-input slots")
+require("8x gtceu:sodium_hydroxide_dust" not in tin_mixer,
+        "tin NaOH cost must be paid in the alkaline roast, not duplicated downstream")
+require("Fluid.of('gtceu:oxygen', 4000)" in gold_roast,
+        "gold refractory roast must consume oxygen to avoid the Tin/Gold lookup-prefix collision")
 
 # GTCEu Chemical Bath is item + one fluid -> item. Leaching stages that need a
 # process liquor must produce a wet/leached solid first, then separate it in a
@@ -291,8 +415,8 @@ material_blocks = {
         re.DOTALL,
     )
 }
-require(len(material_blocks) >= 70,
-        f"expected at least 70 renewable custom materials, found {len(material_blocks)}")
+require(len(material_blocks) == 73,
+        f"expected exactly 73 audited renewable custom materials, found {len(material_blocks)}")
 method_calls = re.findall(
     r"\.(itemInputs|inputFluids|notConsumable|itemOutputs|outputFluids)\((.*?)\)\s*(?=\.|;)",
     recipe_text,
