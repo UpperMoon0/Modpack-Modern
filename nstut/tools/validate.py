@@ -231,6 +231,21 @@ def main() -> int:
     if herbal_section.count("Fluid.of('gtceu:distilled_water', 50)") != 2:
         fail("herbal distilled-water pill/tablet routes must each consume 50 mB distilled water")
 
+    mega_cells = (ROOT / "kubejs/server_scripts/mega_cells/recipes.js").read_text(encoding="utf-8")
+    mega_reverse_start = mega_cells.find("packer('megacells:crafting_mega_accelerator_back')")
+    if mega_reverse_start < 0:
+        fail("MEGA crafting accelerator reverse Packer recipe is missing")
+        mega_reverse = ""
+    else:
+        mega_reverse_end = mega_cells.find(chr(10) + "    event.recipes.gtceu.", mega_reverse_start + 1)
+        mega_reverse = mega_cells[
+            mega_reverse_start:mega_reverse_end if mega_reverse_end >= 0 else len(mega_cells)
+        ]
+    if "itemInputs('megacells:mega_crafting_accelerator')" not in mega_reverse:
+        fail("MEGA crafting accelerator reverse recipe must consume megacells:mega_crafting_accelerator")
+    if "itemInputs('ae2:crafting_accelerator')" in mega_reverse:
+        fail("MEGA reverse recipe still collides with AE2 crafting accelerator unpacking")
+
     gtceu = (ROOT / "config/gtceu.yaml").read_text(encoding="utf-8")
     if not re.search(r"(?m)^\s*shouldWeatherOrTerrainExplosion:\s*false\s*$", gtceu):
         fail("GTCEu weather/terrain explosion policy is not disabled")
