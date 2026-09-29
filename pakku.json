@@ -320,7 +320,13 @@
         "UpperMoon0/Building-Gadgets-Extra": {
             "update_strategy": "NONE"
         },
-        "UpperMoon0/Perfomant-Boom": {\n            "update_strategy": "NONE"\n        },\n        "UpperMoon0/Celestial-Nail": {\n            "update_strategy": "NONE"\n        },\n        "extra-gauges": {
+        "UpperMoon0/Perfomant-Boom": {
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/Celestial-Nail": {
+            "update_strategy": "NONE"
+        },
+        "extra-gauges": {
             "update_strategy": "NONE"
         }
     },
