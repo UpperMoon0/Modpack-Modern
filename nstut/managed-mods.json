@@ -169,6 +169,48 @@
       "cleanupPatterns": [
         "mods/extra_gauges-*.jar"
       ]
+    },
+    {
+      "id": "perfomant-boom",
+      "name": "Perfomant Boom",
+      "version": "1.1.1",
+      "repository": "UpperMoon0/Perfomant-Boom",
+      "fileName": "perfomant_boom-forge-1.1.1.jar",
+      "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.1/perfomant_boom-forge-1.1.1.jar",
+      "sha256": "419a5451f8890feca8dfc04867a10c37d0308832013d7ef8d46e90717c61bb5f",
+      "installTargets": [
+        "client",
+        "server"
+      ],
+      "cleanupTargets": [
+        "client",
+        "server"
+      ],
+      "cleanupPatterns": [
+        "mods/perfomant_boom-*.jar",
+        "mods/perfomant-boom-*.jar"
+      ]
+    },
+    {
+      "id": "celestial-nail",
+      "name": "Celestial Nail",
+      "version": "0.1.0",
+      "repository": "UpperMoon0/Celestial-Nail",
+      "fileName": "celestial-nail-forge-1.20.1-0.1.0.jar",
+      "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.0/celestial-nail-forge-1.20.1-0.1.0.jar",
+      "sha256": "606a7013aad88ace5f167ee5f6effc32d82641280ebca8fc3181183c5afbe3d0",
+      "installTargets": [
+        "client",
+        "server"
+      ],
+      "cleanupTargets": [
+        "client",
+        "server"
+      ],
+      "cleanupPatterns": [
+        "mods/celestial-nail-*.jar",
+        "mods/celestial_nail-*.jar"
+      ]
     }
   ]
 }
