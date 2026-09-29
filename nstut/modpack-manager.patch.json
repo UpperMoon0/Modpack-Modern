@@ -393,14 +393,14 @@
         "mediumCreatureStressRange": 24,
         "largeCreatureStressRange": 32,
         "poorMultiplier": 0.5,
-        "normalMultiplier": 1,
-        "greatMultiplier": 2,
-        "balance.globalRpmMultiplier": 1,
-        "balance.globalStressMultiplier": 1,
+        "normalMultiplier": 1.0,
+        "greatMultiplier": 2.0,
+        "balance.globalRpmMultiplier": 1.0,
+        "balance.globalStressMultiplier": 1.0,
         "balance.enableIndividualAnimalStats": false,
         "path.evaluationMode": "LEGACY",
         "path.enableStressScaling": false,
-        "path.minimumCoverage": 1
+        "path.minimumCoverage": 1.0
       },
       "skipIfMissing": false,
       "targets": [
