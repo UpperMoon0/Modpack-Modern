@@ -20,8 +20,7 @@
         "!defaultconfigs/ftbranks/ranks.snbt",
         "!config/ftbbackups2.json"
     ],
-    "server_overrides": [
-    ],
+    "server_overrides": [],
     "client_overrides": [
         "resourcepacks",
         "shaderpacks",
@@ -321,6 +320,12 @@
             "update_strategy": "NONE"
         },
         "extra-gauges": {
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/Perfomant-Boom": {
+            "update_strategy": "NONE"
+        },
+        "UpperMoon0/Celestial-Nail": {
             "update_strategy": "NONE"
         }
     },

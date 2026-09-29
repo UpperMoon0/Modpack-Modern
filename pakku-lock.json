@@ -1334,6 +1334,64 @@
             ]
         },
         {
+            "pakku_id": "Sh25BNJmWOAVHfrb",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/Celestial-Nail"
+            },
+            "name": {
+                "github": "Celestial-Nail"
+            },
+            "id": {
+                "github": "1393137032"
+            },
+            "update_strategy": "NONE",
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "celestial-nail-forge-1.20.1-0.1.0.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.0/celestial-nail-forge-1.20.1-0.1.0.jar",
+                    "id": "599118885",
+                    "parent_id": "1393137032",
+                    "hashes": {
+                        "sha256": "606a7013aad88ace5f167ee5f6effc32d82641280ebca8fc3181183c5afbe3d0"
+                    },
+                    "size": 304546,
+                    "date_published": "2026-09-29T20:13:00Z"
+                }
+            ]
+        },
+        {
+            "pakku_id": "BCjeYMT0t6w2D9DM",
+            "type": "MOD",
+            "slug": {
+                "github": "UpperMoon0/Perfomant-Boom"
+            },
+            "name": {
+                "github": "Perfomant-Boom"
+            },
+            "id": {
+                "github": "1182552668"
+            },
+            "update_strategy": "NONE",
+            "files": [
+                {
+                    "type": "github",
+                    "file_name": "perfomant_boom-forge-1.1.1.jar",
+                    "release_type": "release",
+                    "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.1/perfomant_boom-forge-1.1.1.jar",
+                    "id": "599120547",
+                    "parent_id": "1182552668",
+                    "hashes": {
+                        "sha256": "419a5451f8890feca8dfc04867a10c37d0308832013d7ef8d46e90717c61bb5f"
+                    },
+                    "size": 101447,
+                    "date_published": "2026-09-29T20:13:55Z"
+                }
+            ]
+        },
+        {
             "pakku_id": "Wg44U8f1K4nbIsj1",
             "pakku_links": [
                 "64uacGcEw697jVGs",
