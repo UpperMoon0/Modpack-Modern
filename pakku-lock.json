@@ -1349,16 +1349,16 @@
             "files": [
                 {
                     "type": "github",
-                    "file_name": "celestial-nail-forge-1.20.1-0.1.0.jar",
+                    "file_name": "celestial-nail-forge-1.20.1-0.1.1.jar",
                     "release_type": "release",
-                    "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.0/celestial-nail-forge-1.20.1-0.1.0.jar",
-                    "id": "599118885",
+                    "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.1/celestial-nail-forge-1.20.1-0.1.1.jar",
+                    "id": "600689346",
                     "parent_id": "1393137032",
                     "hashes": {
-                        "sha256": "606a7013aad88ace5f167ee5f6effc32d82641280ebca8fc3181183c5afbe3d0"
+                        "sha256": "f5c7626b0f4727079cc01f90601ddb2f3ee867bedfdc93dd6bbce497755a7b3d"
                     },
-                    "size": 304546,
-                    "date_published": "2026-09-29T20:13:00Z"
+                    "size": 304506,
+                    "date_published": "2026-09-30T10:50:25Z"
                 }
             ]
         },
@@ -1378,16 +1378,16 @@
             "files": [
                 {
                     "type": "github",
-                    "file_name": "perfomant_boom-forge-1.1.1.jar",
+                    "file_name": "perfomant_boom-forge-1.1.2.jar",
                     "release_type": "release",
-                    "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.1/perfomant_boom-forge-1.1.1.jar",
-                    "id": "599120547",
+                    "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.2/perfomant_boom-forge-1.1.2.jar",
+                    "id": "600694704",
                     "parent_id": "1182552668",
                     "hashes": {
-                        "sha256": "419a5451f8890feca8dfc04867a10c37d0308832013d7ef8d46e90717c61bb5f"
+                        "sha256": "44389be4087fc43cfa995bc07d657c1fda7de57cc66a1ca2e918b657bb1dacd1"
                     },
-                    "size": 101447,
-                    "date_published": "2026-09-29T20:13:55Z"
+                    "size": 101792,
+                    "date_published": "2026-09-30T10:53:34Z"
                 }
             ]
         },
