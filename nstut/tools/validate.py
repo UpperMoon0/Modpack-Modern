@@ -202,27 +202,27 @@ def main() -> int:
         (fixture / "server.properties").write_bytes(b"level-name=custom-world\r")
         (fixture / "custom-world/playerdata").mkdir(parents=True)
         (fixture / "config").mkdir()
-        premium = "a2f1e3fa-89d4-42b9-95a5-f97188fcb077"
-        conflicting = "93aa42eb-0c4a-4958-b53f-ab1c1cac8b9c"
-        offline = "9081f85f-3067-38fc-8a5d-951c5643ea8c"
+        premium = "11111111-1111-4111-8111-111111111111"
+        conflicting = "22222222-2222-4222-8222-222222222222"
+        offline = "33333333-3333-3333-8333-333333333333"
         save = fixture / f"custom-world/playerdata/{premium}.dat"
         save.write_bytes(b"preserve inventory and mod capabilities")
         (fixture / f"custom-world/playerdata/{conflicting}.dat").write_bytes(b"other player")
         (fixture / f"custom-world/playerdata/{offline}.dat").write_bytes(b"offline player")
-        (fixture / "usernamecache.json").write_text(json.dumps({premium: "NsTut", offline: "OfflineGuest"}))
+        (fixture / "usernamecache.json").write_text(json.dumps({premium: "KnownPlayer", offline: "OfflineGuest"}))
         (fixture / "usercache.json").write_text(json.dumps([
-            {"name": "NSTUT", "uuid": premium},
-            {"name": "NoSavedData", "uuid": "144fca83-3095-4a97-8d15-07f0a39df05b"},
+            {"name": "KNOWNPLAYER", "uuid": premium},
+            {"name": "NoSavedData", "uuid": "44444444-4444-4444-8444-444444444444"},
         ]))
         registry, names = identity_tool.prepare(fixture)
-        if set(registry) != {"nstut"} or registry["nstut"]["premiumUuid"] != premium:
+        if set(registry) != {"knownplayer"} or registry["knownplayer"]["premiumUuid"] != premium:
             fail("identity preparation must reserve saved premium IDs only")
-        registry["nstut"]["lastVerifiedAt"] = 123
+        registry["knownplayer"]["lastVerifiedAt"] = 123
         registry_path = fixture / "config/trueuuid-registry.json"
         registry_path.write_text(json.dumps(registry))
         if identity_tool.prepare(fixture)[0] != registry or save.read_bytes() != b"preserve inventory and mod capabilities":
             fail("identity preparation must preserve existing bindings and saves")
-        registry["nstut"]["premiumUuid"] = conflicting
+        registry["knownplayer"]["premiumUuid"] = conflicting
         registry_path.write_text(json.dumps(registry))
         try:
             identity_tool.prepare(fixture)
@@ -231,7 +231,7 @@ def main() -> int:
         else:
             fail("identity preparation must refuse conflicting existing bindings")
         registry_path.unlink()
-        (fixture / "usercache.json").write_text(json.dumps([{"name": "NsTut", "uuid": conflicting}]))
+        (fixture / "usercache.json").write_text(json.dumps([{"name": "KnownPlayer", "uuid": conflicting}]))
         try:
             identity_tool.prepare(fixture)
         except ValueError:
