@@ -207,7 +207,6 @@ def main() -> int:
         offline = "33333333-3333-3333-8333-333333333333"
         save = fixture / f"custom-world/playerdata/{premium}.dat"
         save.write_bytes(b"preserve inventory and mod capabilities")
-        (fixture / f"custom-world/playerdata/{conflicting}.dat").write_bytes(b"other player")
         (fixture / f"custom-world/playerdata/{offline}.dat").write_bytes(b"offline player")
         (fixture / "usernamecache.json").write_text(json.dumps({premium: "KnownPlayer", offline: "OfflineGuest"}))
         (fixture / "usercache.json").write_text(json.dumps([
@@ -217,11 +216,39 @@ def main() -> int:
         registry, names = identity_tool.prepare(fixture)
         if set(registry) != {"knownplayer"} or registry["knownplayer"]["premiumUuid"] != premium:
             fail("identity preparation must reserve saved premium IDs only")
+        for source in (
+            "level-name : custom-world\r",
+            "level\\u002dname=custom-\\\r\n  world\r\n",
+            "level-name=wrong\nlevel-name=custom-world\n",
+        ):
+            (fixture / "server.properties").write_bytes(source.encode("latin-1"))
+            if identity_tool.prepare(fixture)[0] != registry:
+                fail("identity preparation must read Java world-name syntax")
+        orphan = fixture / f"custom-world/playerdata/{conflicting}.dat"
+        orphan.write_bytes(b"other player")
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError as error:
+            if "missing cached names" not in str(error):
+                raise
+        else:
+            fail("identity preparation must refuse unnamed saved premium identities")
+        orphan.unlink()
         registry["knownplayer"]["lastVerifiedAt"] = 123
         registry_path = fixture / "config/trueuuid-registry.json"
         registry_path.write_text(json.dumps(registry))
         if identity_tool.prepare(fixture)[0] != registry or save.read_bytes() != b"preserve inventory and mod capabilities":
             fail("identity preparation must preserve existing bindings and saves")
+        registry_path.write_text(json.dumps({"KNOWNPLAYER": registry["knownplayer"]}))
+        if identity_tool.prepare(fixture)[0] != registry:
+            fail("identity preparation must normalize existing registry name casing")
+        registry_path.write_text(json.dumps({"broken": {"premiumUuid": premium}}))
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError:
+            pass
+        else:
+            fail("identity preparation must reject malformed preexisting registry entries")
         registry["knownplayer"]["premiumUuid"] = conflicting
         registry_path.write_text(json.dumps(registry))
         try:
@@ -231,6 +258,7 @@ def main() -> int:
         else:
             fail("identity preparation must refuse conflicting existing bindings")
         registry_path.unlink()
+        orphan.write_bytes(b"other player")
         (fixture / "usercache.json").write_text(json.dumps([{"name": "KnownPlayer", "uuid": conflicting}]))
         try:
             identity_tool.prepare(fixture)

@@ -11,21 +11,72 @@ import argparse
 import datetime
 import json
 import pathlib
+import re
 import shutil
 import uuid
 
 
+def properties(source: str) -> dict[str, str]:
+    """Read Java properties keys/values, including escapes and continuations."""
+    def unescape(value: str) -> str:
+        def escaped(match: re.Match) -> str:
+            text = match.group(1)
+            if text.startswith("u"):
+                if len(text) != 5 or not re.fullmatch(r"u[0-9a-fA-F]{4}", text):
+                    raise ValueError("invalid properties Unicode escape")
+                return chr(int(text[1:], 16))
+            return {"t": "\t", "n": "\n", "r": "\r", "f": "\f"}.get(text, text)
+        decoded = re.sub(r"\\(u.{0,4}|.)", escaped, value)
+        return decoded.encode("utf-16-le", "surrogatepass").decode("utf-16-le")
+
+    result: dict[str, str] = {}
+    logical = ""
+    pending = False
+    lines = re.split(r"\r\n|[\r\n]", source)
+    for index, physical in enumerate(lines):
+        body = physical.lstrip(" \t\f")
+        if not pending and (not body or body.startswith(("#", "!"))):
+            continue
+        continued = (len(body) - len(body.rstrip("\\"))) % 2 == 1
+        logical += body[:-1] if continued else body
+        pending = continued
+        if continued and index != len(lines) - 1:
+            continue
+        match = re.match(r"((?:\\.|[^=: \t\f])*)(.*)", logical)
+        raw_key, rest = match.groups()
+        rest = rest.lstrip(" \t\f")
+        if rest.startswith(("=", ":")):
+            rest = rest[1:].lstrip(" \t\f")
+        result[unescape(raw_key)] = unescape(rest)
+        logical = ""
+        pending = False
+    return result
+
+
 def prepare(root: pathlib.Path) -> tuple[dict, list[str]]:
     props = root / "server.properties"
-    world = "world"
-    for line in props.read_text(encoding="latin-1").splitlines():
-        if line.startswith("level-name="):
-            world = line.partition("=")[2].strip() or "world"
+    world = properties(props.read_bytes().decode("latin-1")).get("level-name") or "world"
     world_path = (root / world).resolve()
     world_path.relative_to(root.resolve())
 
     registry_file = root / "config/trueuuid-registry.json"
-    registry = json.loads(registry_file.read_text()) if registry_file.exists() else {}
+    original_registry = json.loads(registry_file.read_text()) if registry_file.exists() else {}
+    if not isinstance(original_registry, dict):
+        raise ValueError("TrueUUID registry must be a JSON object")
+    registry = {}
+    for name, entry in original_registry.items():
+        if not isinstance(entry, dict):
+            raise ValueError(f"invalid TrueUUID registry entry for {name}")
+        # A malformed entry makes TrueUUID abort its load, potentially leaving
+        # later premium names unprotected. Validate the entire input first.
+        uuid.UUID(entry["premiumUuid"])
+        for field in ("firstVerifiedAt", "lastVerifiedAt"):
+            if type(entry.get(field)) is not int:
+                raise ValueError(f"invalid TrueUUID {field} for {name}")
+        key = name.lower()
+        if key in registry and registry[key] != entry:
+            raise ValueError(f"conflicting case-insensitive TrueUUID bindings for {name}")
+        registry[key] = entry
     candidates: dict[str, str] = {}
     names: dict[str, str] = {}
     def add(name: str, value: str) -> None:
@@ -59,6 +110,15 @@ def prepare(root: pathlib.Path) -> tuple[dict, list[str]]:
             "premiumUuid": value, "firstVerifiedAt": 0, "lastVerifiedAt": 0,
             "authSource": "MOJANG", "authDisplayName": "Mojang",
         }
+    saved = set()
+    for path in (world_path / "playerdata").glob("*.dat"):
+        identity = uuid.UUID(path.stem)
+        if identity.version == 4:
+            saved.add(str(identity))
+    reserved = {str(uuid.UUID(entry["premiumUuid"])) for entry in registry.values()}
+    missing = saved - reserved
+    if missing:
+        raise ValueError("missing cached names for saved premium identities: " + ", ".join(sorted(missing)))
     return registry, sorted(names.values())
 
 
