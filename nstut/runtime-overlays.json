@@ -87,6 +87,20 @@
       "values": {
         "online-mode": false
       }
+    },
+    {
+      "format": "toml",
+      "path": "config/trueuuid-common.toml",
+      "targets": [
+        "server"
+      ],
+      "values": {
+        "auth.timeoutMs": 30000,
+        "auth.allowOfflineOnTimeout": false,
+        "auth.allowOfflineOnFailure": true,
+        "auth.knownPremiumDenyOffline": true,
+        "auth.allowOfflineForUnknownOnly": true
+      }
     }
   ]
 }

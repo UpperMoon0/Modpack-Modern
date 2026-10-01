@@ -20,8 +20,7 @@
         "!defaultconfigs/ftbranks/ranks.snbt",
         "!config/ftbbackups2.json"
     ],
-    "server_overrides": [
-    ],
+    "server_overrides": [],
     "client_overrides": [
         "resourcepacks",
         "shaderpacks",
@@ -327,6 +326,9 @@
             "update_strategy": "NONE"
         },
         "extra-gauges": {
+            "update_strategy": "NONE"
+        },
+        "YuWan-030/TrueUUID": {
             "update_strategy": "NONE"
         }
     },
