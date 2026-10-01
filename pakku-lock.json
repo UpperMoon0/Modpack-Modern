@@ -1349,16 +1349,16 @@
             "files": [
                 {
                     "type": "github",
-                    "file_name": "celestial-nail-forge-1.20.1-0.1.1.jar",
+                    "file_name": "celestial-nail-forge-1.20.1-0.1.2.jar",
                     "release_type": "release",
-                    "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.1/celestial-nail-forge-1.20.1-0.1.1.jar",
-                    "id": "600689346",
+                    "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.2/celestial-nail-forge-1.20.1-0.1.2.jar",
+                    "id": "603031870",
                     "parent_id": "1393137032",
                     "hashes": {
-                        "sha256": "f5c7626b0f4727079cc01f90601ddb2f3ee867bedfdc93dd6bbce497755a7b3d"
+                        "sha256": "79393b558da60f6aa9289e987e8838df50c113cbf8bde8403ebd704dff5c34c4"
                     },
-                    "size": 304506,
-                    "date_published": "2026-09-30T10:50:25Z"
+                    "size": 307245,
+                    "date_published": "2026-10-01T10:45:59Z"
                 }
             ]
         },
@@ -1378,16 +1378,16 @@
             "files": [
                 {
                     "type": "github",
-                    "file_name": "perfomant_boom-forge-1.1.2.jar",
+                    "file_name": "perfomant_boom-forge-1.1.3.jar",
                     "release_type": "release",
-                    "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.2/perfomant_boom-forge-1.1.2.jar",
-                    "id": "600694704",
+                    "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.3/perfomant_boom-forge-1.1.3.jar",
+                    "id": "603037290",
                     "parent_id": "1182552668",
                     "hashes": {
-                        "sha256": "44389be4087fc43cfa995bc07d657c1fda7de57cc66a1ca2e918b657bb1dacd1"
+                        "sha256": "61fe197fdb6a3b54b3ee5dbaf071523b7acbe376dccef4b9c9a98fa9ef620038"
                     },
-                    "size": 101792,
-                    "date_published": "2026-09-30T10:53:34Z"
+                    "size": 103119,
+                    "date_published": "2026-10-01T10:48:57Z"
                 }
             ]
         },
@@ -4976,16 +4976,16 @@
             "files": [
                 {
                     "type": "github",
-                    "file_name": "createhorsepower-ce-1.20.1-1.2.6.jar",
+                    "file_name": "createhorsepower-ce-1.20.1-1.2.7.jar",
                     "release_type": "release",
-                    "url": "https://github.com/UpperMoon0/CreateHorsePower-CE/releases/download/v1.2.6/createhorsepower-ce-1.20.1-1.2.6.jar",
-                    "id": "579403952",
+                    "url": "https://github.com/UpperMoon0/CreateHorsePower-CE/releases/download/v1.2.7/createhorsepower-ce-1.20.1-1.2.7.jar",
+                    "id": "592940723",
                     "parent_id": "1350393644",
                     "hashes": {
-                        "sha256": "ba6dcc4028019c000a2eb7d270bccde16e558cd07ce9671e322ff704e87b1249"
+                        "sha256": "b1e6c2b5d71d7fea9bfafd2623e23e5897016e90b7955221c5b913d8d0a79025"
                     },
-                    "size": 402531,
-                    "date_published": "2026-09-21T16:22:30Z"
+                    "size": 458284,
+                    "date_published": "2026-09-27T13:01:36Z"
                 }
             ]
         },
@@ -5880,16 +5880,16 @@
             "files": [
                 {
                     "type": "github",
-                    "file_name": "economy-forge-1.20.1-0.0.13.jar",
+                    "file_name": "economy-forge-1.20.1-0.0.14.jar",
                     "release_type": "release",
-                    "url": "https://github.com/UpperMoon0/Economy/releases/download/v0.0.13/economy-forge-1.20.1-0.0.13.jar",
-                    "id": "581795582",
+                    "url": "https://github.com/UpperMoon0/Economy/releases/download/v0.0.14/economy-forge-1.20.1-0.0.14.jar",
+                    "id": "595235609",
                     "parent_id": "1169139940",
                     "hashes": {
-                        "sha256": "3890e33933d11139384b51c7e45ceefd13b0d17fae0ec6f2ee93ccf33dd3f031"
+                        "sha256": "5d50c0fa5a937c20742ba239091c376b6302e84d16b262443bffa947fc3d66c6"
                     },
-                    "size": 581892,
-                    "date_published": "2026-09-22T16:35:02Z"
+                    "size": 721288,
+                    "date_published": "2026-09-28T11:22:00Z"
                 }
             ]
         },
@@ -12294,16 +12294,16 @@
             "files": [
                 {
                     "type": "github",
-                    "file_name": "openui-mc-forge-1.20.1-0.0.11.jar",
+                    "file_name": "openui-mc-forge-1.20.1-0.0.12.jar",
                     "release_type": "release",
-                    "url": "https://github.com/UpperMoon0/OpenUI-MC/releases/download/v0.0.11/openui-mc-forge-1.20.1-0.0.11.jar",
-                    "id": "581564304",
+                    "url": "https://github.com/UpperMoon0/OpenUI-MC/releases/download/v0.0.12/openui-mc-forge-1.20.1-0.0.12.jar",
+                    "id": "595613160",
                     "parent_id": "1341517843",
                     "hashes": {
-                        "sha256": "a8c00a2cf36c4160f7c6ae9888c30ffddb235180b67121bc162d492c9146117b"
+                        "sha256": "9a58b71322d96b044c32db758ad2594c73c54d75e8a16ad1218b5aa28c58d3d9"
                     },
-                    "size": 1294911,
-                    "date_published": "2026-09-22T14:23:08Z"
+                    "size": 1305806,
+                    "date_published": "2026-09-28T14:30:34Z"
                 }
             ]
         },

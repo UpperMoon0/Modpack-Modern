@@ -335,26 +335,51 @@ def main() -> int:
         fail("Simply Speakers runtime overlay must use TOML patching")
     if speaker_overlay.get("targets") != ["server"]:
         fail(f"Simply Speakers runtime overlay must be server-only: {speaker_overlay.get('targets')!r}")
-    if speaker_overlay.get("values") != {"speakerRange": 512}:
-        fail(f"Simply Speakers speakerRange policy must be 512: {speaker_overlay.get('values')!r}")
+    if speaker_overlay.get("values") != {"speakerRange": 512, "maxUploadSize": 104857600}:
+        fail(f"Simply Speakers server policy must be range 512 and upload limit 100 MiB: {speaker_overlay.get('values')!r}")
+
+    for rel in ("config/simplyspeakers-common.toml", ".pakku/server-overrides/config/simplyspeakers-common.toml"):
+        if tomllib.loads((ROOT / rel).read_text(encoding="utf-8")).get("maxUploadSize") != 104857600:
+            fail(f"{rel} does not set the 100 MiB upload limit")
+    native_properties = (ROOT / ".pakku/server-overrides/server.properties").read_text(encoding="utf-8")
+    if re.findall(r"(?m)^online-mode=(.*)$", native_properties) != ["false"]:
+        fail("native server export must use offline mode")
+    properties_overlay = next((x for x in runtime["overlays"] if x["path"] == "server.properties"), None)
+    if properties_overlay != {"format": "properties", "path": "server.properties", "targets": ["server"], "values": {"online-mode": False}}:
+        fail("offline mode must be managed as a server-only properties overlay")
+    client_speaker = [x for x in runtime["overlays"] if x["path"] == "config/simplyspeakers-common.toml" and x.get("targets") == ["client"]]
+    if len(client_speaker) != 1 or client_speaker[0].get("values") != {"maxUploadSize": 104857600}:
+        fail("client/singleplayer upload limit must be 100 MiB")
 
     patcher = NSTUT / "tools" / "patch-existing-server.py"
     with tempfile.TemporaryDirectory() as temp_dir:
         server = Path(temp_dir)
+        properties = server / "server.properties"
+        properties.write_bytes(b"# keep custom settings\r\nonline-mode=true\r\nlevel-name=my-world\r\nserver-port=25570\r\n")
+        original_properties = properties.read_bytes()
         config = server / "config" / "simplyspeakers-common.toml"
         config.parent.mkdir(parents=True)
         config.write_text(
             "# Simply Speakers\nspeakerRange = 64\ndisableUpload = false\n",
             encoding="utf-8",
         )
+        subprocess.run([sys.executable, str(patcher), str(server), "--dry-run"], check=True)
+        if properties.read_bytes() != original_properties:
+            fail("dry-run mutated server.properties")
         subprocess.run([sys.executable, str(patcher), str(server)], check=True)
+        if properties.read_bytes() != original_properties.replace(b"online-mode=true", b"online-mode=false"):
+            fail("offline patch changed unrelated server properties")
         first_pass = config.read_text(encoding="utf-8")
         patched = tomllib.loads(first_pass)
         if patched.get("speakerRange") != 512:
             fail(f"existing-server patcher left speakerRange at {patched.get('speakerRange')!r}")
+        if patched.get("maxUploadSize") != 104857600:
+            fail("existing-server upload limit must be 100 MiB")
         if patched.get("disableUpload") is not False:
             fail("existing-server patcher changed unrelated Simply Speakers config")
         subprocess.run([sys.executable, str(patcher), str(server)], check=True)
+        if properties.read_bytes() != original_properties.replace(b"online-mode=true", b"online-mode=false"):
+            fail("offline mode patch is not idempotent")
         if config.read_text(encoding="utf-8") != first_pass:
             fail("existing-server Simply Speakers patch is not idempotent")
 
@@ -374,12 +399,20 @@ def main() -> int:
         operation for operation in generated["operations"]
         if operation.get("type") == "patchToml"
         and operation.get("destination") == "config/simplyspeakers-common.toml"
+        and operation.get("targets") == ["server"]
     ]
     if len(speaker_ops) != 1:
         fail(f"expected one generated Simply Speakers TOML patch, found {len(speaker_ops)}")
     speaker_op = speaker_ops[0]
-    if speaker_op.get("values") != {"speakerRange": 512} or speaker_op.get("targets") != ["server"]:
+    if speaker_op.get("values") != {"speakerRange": 512, "maxUploadSize": 104857600} or speaker_op.get("targets") != ["server"]:
         fail(f"generated Simply Speakers patch is wrong: {speaker_op!r}")
+
+    properties_ops = [x for x in generated["operations"] if x.get("destination") == "server.properties"]
+    if len(properties_ops) != 1 or properties_ops[0].get("type") != "patchProperties" or properties_ops[0].get("values") != {"online-mode": False} or properties_ops[0].get("targets") != ["server"]:
+        fail("server.properties must be patched semantically without replacing unrelated settings")
+    client_ops = [x for x in generated["operations"] if x.get("destination") == "config/simplyspeakers-common.toml" and x.get("targets") == ["client"]]
+    if len(client_ops) != 1 or client_ops[0].get("type") != "patchToml" or client_ops[0].get("values") != {"maxUploadSize": 104857600}:
+        fail("client upload limit patch is missing or replaces the complete config")
 
     for operation in generated["operations"]:
         destination = operation.get("destination") or operation.get("pattern") or ""
