@@ -15,6 +15,7 @@ NSTUT = ROOT / "nstut"
 GENERATED = NSTUT / "modpack-manager.patch.json"
 
 SEMANTIC_PATHS = {
+    ".pakku/server-overrides/config/trueuuid-common.toml",
     ".pakku/server-overrides/server.properties",
     "config/simplyspeakers-common.toml",
     ".pakku/server-overrides/config/simplyspeakers-common.toml",

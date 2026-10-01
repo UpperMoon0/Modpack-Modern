@@ -175,6 +175,98 @@ def main() -> int:
         if (config_projects.get(client_key) or {}).get("side") != "CLIENT":
             fail(f"{client_key} must remain client-only")
 
+    trueuuid = next((mod for mod in managed["mods"] if mod["id"] == "trueuuid"), None)
+    if trueuuid is None or trueuuid["installTargets"] != ["client", "server"]:
+        fail("TrueUUID must be installed on both clients and servers")
+    auth_values = {
+        "auth.timeoutMs": 30000,
+        "auth.allowOfflineOnTimeout": False,
+        "auth.allowOfflineOnFailure": True,
+        "auth.knownPremiumDenyOffline": True,
+        "auth.allowOfflineForUnknownOnly": True,
+    }
+    auth = tomllib.loads((ROOT / ".pakku/server-overrides/config/trueuuid-common.toml").read_text())["auth"]
+    if any(auth.get(key.removeprefix("auth.")) != value for key, value in auth_values.items()):
+        fail("native server export must protect known premium identities")
+    auth_overlays = [entry for entry in runtime["overlays"] if entry["path"] == "config/trueuuid-common.toml"]
+    if len(auth_overlays) != 1 or auth_overlays[0]["targets"] != ["server"] or auth_overlays[0]["values"] != auth_values:
+        fail("TrueUUID runtime policy must match the protected server export")
+    if list(ROOT.glob(".pakku/**/trueuuid-registry.json")) or (ROOT / "config/trueuuid-registry.json").exists():
+        fail("server-private premium identity bindings must never ship in the modpack")
+
+    identity_spec = importlib.util.spec_from_file_location("premium_identities", NSTUT / "tools/prepare-premium-identities.py")
+    identity_tool = importlib.util.module_from_spec(identity_spec)
+    identity_spec.loader.exec_module(identity_tool)
+    with tempfile.TemporaryDirectory() as directory:
+        fixture = Path(directory)
+        (fixture / "server.properties").write_bytes(b"level-name=custom-world\r")
+        (fixture / "custom-world/playerdata").mkdir(parents=True)
+        (fixture / "config").mkdir()
+        premium = "11111111-1111-4111-8111-111111111111"
+        conflicting = "22222222-2222-4222-8222-222222222222"
+        offline = "33333333-3333-3333-8333-333333333333"
+        save = fixture / f"custom-world/playerdata/{premium}.dat"
+        save.write_bytes(b"preserve inventory and mod capabilities")
+        (fixture / f"custom-world/playerdata/{offline}.dat").write_bytes(b"offline player")
+        (fixture / "usernamecache.json").write_text(json.dumps({premium: "KnownPlayer", offline: "OfflineGuest"}))
+        (fixture / "usercache.json").write_text(json.dumps([
+            {"name": "KNOWNPLAYER", "uuid": premium},
+            {"name": "NoSavedData", "uuid": "44444444-4444-4444-8444-444444444444"},
+        ]))
+        registry, names = identity_tool.prepare(fixture)
+        if set(registry) != {"knownplayer"} or registry["knownplayer"]["premiumUuid"] != premium:
+            fail("identity preparation must reserve saved premium IDs only")
+        for source in (
+            "level-name : custom-world\r",
+            "level\\u002dname=custom-\\\r\n  world\r\n",
+            "level-name=wrong\nlevel-name=custom-world\n",
+        ):
+            (fixture / "server.properties").write_bytes(source.encode("latin-1"))
+            if identity_tool.prepare(fixture)[0] != registry:
+                fail("identity preparation must read Java world-name syntax")
+        orphan = fixture / f"custom-world/playerdata/{conflicting}.dat"
+        orphan.write_bytes(b"other player")
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError as error:
+            if "missing cached names" not in str(error):
+                raise
+        else:
+            fail("identity preparation must refuse unnamed saved premium identities")
+        orphan.unlink()
+        registry["knownplayer"]["lastVerifiedAt"] = 123
+        registry_path = fixture / "config/trueuuid-registry.json"
+        registry_path.write_text(json.dumps(registry))
+        if identity_tool.prepare(fixture)[0] != registry or save.read_bytes() != b"preserve inventory and mod capabilities":
+            fail("identity preparation must preserve existing bindings and saves")
+        registry_path.write_text(json.dumps({"KNOWNPLAYER": registry["knownplayer"]}))
+        if identity_tool.prepare(fixture)[0] != registry:
+            fail("identity preparation must normalize existing registry name casing")
+        registry_path.write_text(json.dumps({"broken": {"premiumUuid": premium}}))
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError:
+            pass
+        else:
+            fail("identity preparation must reject malformed preexisting registry entries")
+        registry["knownplayer"]["premiumUuid"] = conflicting
+        registry_path.write_text(json.dumps(registry))
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError:
+            pass
+        else:
+            fail("identity preparation must refuse conflicting existing bindings")
+        registry_path.unlink()
+        orphan.write_bytes(b"other player")
+        (fixture / "usercache.json").write_text(json.dumps([{"name": "KnownPlayer", "uuid": conflicting}]))
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError:
+            pass
+        else:
+            fail("identity preparation must refuse conflicting cache names")
+
     # Alabaster recipe audit: raw decoloring must target raw alabaster, and
     # colored bricks must have exactly one dyeing registration. Duplicate
     # Chemical Bath signatures are rejected by GTCEu's lookup DB.

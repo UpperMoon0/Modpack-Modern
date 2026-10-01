@@ -194,11 +194,11 @@
     {
       "id": "celestial-nail",
       "name": "Celestial Nail",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "repository": "UpperMoon0/Celestial-Nail",
-      "fileName": "celestial-nail-forge-1.20.1-0.1.2.jar",
-      "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.2/celestial-nail-forge-1.20.1-0.1.2.jar",
-      "sha256": "79393b558da60f6aa9289e987e8838df50c113cbf8bde8403ebd704dff5c34c4",
+      "fileName": "celestial-nail-forge-1.20.1-0.1.3.jar",
+      "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.3/celestial-nail-forge-1.20.1-0.1.3.jar",
+      "sha256": "e95252ae5624638621504f8d5a25e6bb39aae1b768cef351c6934ca9a347a7a2",
       "installTargets": [
         "client",
         "server"
@@ -210,6 +210,26 @@
       "cleanupPatterns": [
         "mods/celestial-nail-*.jar",
         "mods/celestial_nail-*.jar"
+      ]
+    },
+    {
+      "id": "trueuuid",
+      "name": "TrueUUID",
+      "version": "1.3.0",
+      "repository": "YuWan-030/TrueUUID",
+      "fileName": "trueuuid-1.3.0-forge-1.20.1.jar",
+      "url": "https://github.com/YuWan-030/TrueUUID/releases/download/v1.3.0/trueuuid-1.3.0-forge-1.20.1.jar",
+      "sha256": "4ad014cf05a9a14620579b54b01f5ee14a306c58665c7b632d84ba1f116eee88",
+      "installTargets": [
+        "client",
+        "server"
+      ],
+      "cleanupTargets": [
+        "client",
+        "server"
+      ],
+      "cleanupPatterns": [
+        "mods/trueuuid-*.jar"
       ]
     }
   ]
