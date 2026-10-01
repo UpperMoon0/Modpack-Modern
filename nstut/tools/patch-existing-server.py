@@ -131,7 +131,7 @@ def replace_toml_values(path: pathlib.Path, values: dict[str, object], dry_run: 
 
 def replace_properties_values(path: pathlib.Path, values: dict[str, object], dry_run: bool):
     original = path.read_bytes().decode("latin-1") if path.is_file() else ""
-    newline = "\r\n" if "\r\n" in original else "\n"
+    newline = "\r\n" if "\r\n" in original else "\r" if "\r" in original else "\n"
     rendered = {}
     for key, value in values.items():
         if not re.fullmatch(r"[A-Za-z0-9_.-]+", key):
@@ -140,14 +140,14 @@ def replace_properties_values(path: pathlib.Path, values: dict[str, object], dry
         if "\n" in text or "\r" in text or "\\" in text:
             raise RuntimeError("unsupported properties value")
         rendered[key] = text
-    lines = original.splitlines(keepends=True)
+    lines = [line for line in re.findall(r"[^\r\n]*(?:\r\n|[\r\n]|$)", original) if line]
     output, seen = [], set()
     index = 0
     while index < len(lines):
         start, logical = index, ""
         while index < len(lines):
             physical = lines[index]
-            ending = "\r\n" if physical.endswith("\r\n") else "\n" if physical.endswith("\n") else ""
+            ending = "\r\n" if physical.endswith("\r\n") else "\r" if physical.endswith("\r") else "\n" if physical.endswith("\n") else ""
             body = physical[:-len(ending)] if ending else physical
             body = body.lstrip(" \t\f")
             comment = not logical and body.startswith(("#", "!"))
@@ -168,8 +168,16 @@ def replace_properties_values(path: pathlib.Path, values: dict[str, object], dry
     for key, text in rendered.items():
         if key in seen:
             continue
-        if updated and not updated.endswith(("\r", "\n")):
-            updated += newline
+        if updated:
+            last = [line for line in re.findall(r"[^\r\n]*(?:\r\n|[\r\n]|$)", updated) if line][-1]
+            body = last.rstrip("\r\n")
+            continued = (len(body) - len(body.rstrip("\\"))) % 2 == 1
+            if not last.endswith(("\r", "\n")):
+                updated += newline
+            # End an unfinished logical line with a blank natural line before
+            # adding a separate property; Java ignores the continuation at EOF.
+            if continued:
+                updated += newline
         updated += f"{key}={text}{newline}"
     if updated == original:
         print(f"current {path}")

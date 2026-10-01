@@ -383,6 +383,39 @@ def main() -> int:
         if config.read_text(encoding="utf-8") != first_pass:
             fail("existing-server Simply Speakers patch is not idempotent")
 
+    patcher_spec = importlib.util.spec_from_file_location("nstut_server_patcher", patcher)
+    patcher_module = importlib.util.module_from_spec(patcher_spec)
+    patcher_spec.loader.exec_module(patcher_module)
+    with tempfile.TemporaryDirectory() as temp_dir:
+        properties = Path(temp_dir) / "server.properties"
+        for source in (
+            b"online-mode=true\rlevel-name=custom-world\rserver-port=25570\r",
+            b"online-mode=true\nlevel-name=custom-world\rserver-port=25570\r\n",
+        ):
+            properties.write_bytes(source)
+            patcher_module.replace_properties_values(properties, {"online-mode": False}, False)
+            if properties.read_bytes() != source.replace(b"online-mode=true", b"online-mode=false"):
+                fail("properties patch corrupted CR-only or mixed natural lines")
+            if patcher_module.replace_properties_values(properties, {"online-mode": False}, False):
+                fail("properties patch is not idempotent for CR-only or mixed natural lines")
+        for ending in (b"", b"\n", b"\r", b"\r\n"):
+            for backslashes in range(5):
+                source = b"motd=Hello" + b"\\" * backslashes + ending
+                properties.write_bytes(source)
+                newline = ending or b"\n"
+                expected = source + (newline if not ending else b"")
+                if backslashes % 2:
+                    expected += newline
+                expected += b"online-mode=false" + newline
+                patcher_module.replace_properties_values(properties, {"online-mode": False}, True)
+                if properties.read_bytes() != source:
+                    fail("EOF continuation dry-run changed server properties")
+                patcher_module.replace_properties_values(properties, {"online-mode": False}, False)
+                if properties.read_bytes() != expected:
+                    fail(f"properties append did not close EOF continuation: {ending!r}, {backslashes}")
+                if patcher_module.replace_properties_values(properties, {"online-mode": False}, False):
+                    fail("properties append is not idempotent after EOF continuation")
+
     checks = (
         (".pakku/server-overrides/defaultconfigs/ftbchunks-world.snbt", ("max_claimed_chunks", "max_force_loaded_chunks")),
         (".pakku/server-overrides/defaultconfigs/ftbranks/ranks.snbt", ("ftbchunks.max_claimed", "ftbchunks.max_force_loaded")),
