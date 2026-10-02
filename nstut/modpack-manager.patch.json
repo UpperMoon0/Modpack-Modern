@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "tfg-nstut-managed",
   "name": "TFG NsTut Fork Overlay",
-  "version": "0.13.10-nstut.25",
-  "description": "Generated from UpperMoon0/TFG-Modern-Fork nstut-0.13.10.25 on upstream 0.13.10.",
+  "version": "0.13.10-nstut.27",
+  "description": "Generated from UpperMoon0/TFG-Modern-Fork nstut-0.13.10.27 on upstream 0.13.10.",
   "requiredPaths": [
     "mods",
     "config",
@@ -13,15 +13,15 @@
   "artifacts": [
     {
       "id": "economy",
-      "url": "https://github.com/UpperMoon0/Economy/releases/download/v0.0.13/economy-forge-1.20.1-0.0.13.jar",
-      "sha256": "3890e33933d11139384b51c7e45ceefd13b0d17fae0ec6f2ee93ccf33dd3f031",
-      "fileName": "economy-forge-1.20.1-0.0.13.jar"
+      "url": "https://github.com/UpperMoon0/Economy/releases/download/v0.0.14/economy-forge-1.20.1-0.0.14.jar",
+      "sha256": "5d50c0fa5a937c20742ba239091c376b6302e84d16b262443bffa947fc3d66c6",
+      "fileName": "economy-forge-1.20.1-0.0.14.jar"
     },
     {
       "id": "openui",
-      "url": "https://github.com/UpperMoon0/OpenUI-MC/releases/download/v0.0.11/openui-mc-forge-1.20.1-0.0.11.jar",
-      "sha256": "a8c00a2cf36c4160f7c6ae9888c30ffddb235180b67121bc162d492c9146117b",
-      "fileName": "openui-mc-forge-1.20.1-0.0.11.jar"
+      "url": "https://github.com/UpperMoon0/OpenUI-MC/releases/download/v0.0.12/openui-mc-forge-1.20.1-0.0.12.jar",
+      "sha256": "9a58b71322d96b044c32db758ad2594c73c54d75e8a16ad1218b5aa28c58d3d9",
+      "fileName": "openui-mc-forge-1.20.1-0.0.12.jar"
     },
     {
       "id": "create-precise-controls",
@@ -43,9 +43,9 @@
     },
     {
       "id": "create-horse-power-ce",
-      "url": "https://github.com/UpperMoon0/CreateHorsePower-CE/releases/download/v1.2.6/createhorsepower-ce-1.20.1-1.2.6.jar",
-      "sha256": "ba6dcc4028019c000a2eb7d270bccde16e558cd07ce9671e322ff704e87b1249",
-      "fileName": "createhorsepower-ce-1.20.1-1.2.6.jar"
+      "url": "https://github.com/UpperMoon0/CreateHorsePower-CE/releases/download/v1.2.7/createhorsepower-ce-1.20.1-1.2.7.jar",
+      "sha256": "b1e6c2b5d71d7fea9bfafd2623e23e5897016e90b7955221c5b913d8d0a79025",
+      "fileName": "createhorsepower-ce-1.20.1-1.2.7.jar"
     },
     {
       "id": "building-gadgets-extra",
@@ -61,97 +61,103 @@
     },
     {
       "id": "perfomant-boom",
-      "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.2/perfomant_boom-forge-1.1.2.jar",
-      "sha256": "44389be4087fc43cfa995bc07d657c1fda7de57cc66a1ca2e918b657bb1dacd1",
-      "fileName": "perfomant_boom-forge-1.1.2.jar"
+      "url": "https://github.com/UpperMoon0/Perfomant-Boom/releases/download/v1.1.3/perfomant_boom-forge-1.1.3.jar",
+      "sha256": "61fe197fdb6a3b54b3ee5dbaf071523b7acbe376dccef4b9c9a98fa9ef620038",
+      "fileName": "perfomant_boom-forge-1.1.3.jar"
     },
     {
       "id": "celestial-nail",
-      "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.1/celestial-nail-forge-1.20.1-0.1.1.jar",
-      "sha256": "f5c7626b0f4727079cc01f90601ddb2f3ee867bedfdc93dd6bbce497755a7b3d",
-      "fileName": "celestial-nail-forge-1.20.1-0.1.1.jar"
+      "url": "https://github.com/UpperMoon0/Celestial-Nail/releases/download/v0.1.3/celestial-nail-forge-1.20.1-0.1.3.jar",
+      "sha256": "e95252ae5624638621504f8d5a25e6bb39aae1b768cef351c6934ca9a347a7a2",
+      "fileName": "celestial-nail-forge-1.20.1-0.1.3.jar"
+    },
+    {
+      "id": "trueuuid",
+      "url": "https://github.com/YuWan-030/TrueUUID/releases/download/v1.3.0/trueuuid-1.3.0-forge-1.20.1.jar",
+      "sha256": "4ad014cf05a9a14620579b54b01f5ee14a306c58665c7b632d84ba1f116eee88",
+      "fileName": "trueuuid-1.3.0-forge-1.20.1.jar"
     },
     {
       "id": "fork-b33be5cbe1b980b9",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/assets/tfg/lang/en_us.json",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/assets/tfg/lang/en_us.json",
       "sha256": "3a2c47d653038985cecd1316f248c96cea4f86b7195f49188226eb0d4b963959",
       "fileName": "en_us.json"
     },
     {
       "id": "fork-237b5676858bc7c4",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/mega_cells/recipes.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/mega_cells/recipes.js",
       "sha256": "4a71c281fbece816670def191714be2e01a1b7cc3cb9729724bbc559c4fa4cc1",
       "fileName": "recipes.js"
     },
     {
       "id": "fork-cb08779a96f77818",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/species/recipes.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/species/recipes.js",
       "sha256": "360b79741894fff397bbdf048b2354b73a9058892ddb925ecb0931bd7f331ffe",
       "fileName": "recipes.js"
     },
     {
       "id": "fork-8aab3c717235e8f7",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/food/recipes.food.sandwiches.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/food/recipes.food.sandwiches.js",
       "sha256": "f63b31ff4add27464f890fe41eea5ca528392745cc70975f218dcee9c99c9ed0",
       "fileName": "recipes.food.sandwiches.js"
     },
     {
       "id": "fork-caebfa881c79cfaf",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/natural_blocks/recipes.alabaster.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/natural_blocks/recipes.alabaster.js",
       "sha256": "8ea9077d4455648c2255f8974d9bf544266b25d621f54520fb541380abcf2f4d",
       "fileName": "recipes.alabaster.js"
     },
     {
       "id": "fork-58c6b419d5ee7755",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/natural_blocks/recipes.rocks.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/natural_blocks/recipes.rocks.js",
       "sha256": "480513d16e9905e7e80287277e101ebde72c23f362556a4b4428d18d9ebb029a",
       "fileName": "recipes.rocks.js"
     },
     {
       "id": "fork-6de99e816e18e0fd",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/ores_and_materials/recipes.alloys.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/ores_and_materials/recipes.alloys.js",
       "sha256": "4184f839b8383dd28b0f1ea2ec8601c3e3cc1e59d6f2cb2a2197a1a9dc901d11",
       "fileName": "recipes.alloys.js"
     },
     {
       "id": "fork-b98f9210172db41f",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/ores_and_materials/recipes.renewable_ores.js",
       "sha256": "85e9ce5b080352013a9f2c183d71efb7a39e990b1a6b50ed501e63917b110dab",
       "fileName": "recipes.renewable_ores.js"
     },
     {
       "id": "fork-d47bef3134b6f04b",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/ores_and_materials/tags.materials.js",
       "sha256": "a90fb17bce475a038a7f70c580ad3f27f3ff588d946f49cd6794cd4179fd21fd",
       "fileName": "tags.materials.js"
     },
     {
       "id": "fork-3ed704fbacf021f3",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/primitive/medicine/recipes.medicine.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/primitive/medicine/recipes.medicine.js",
       "sha256": "5f993731e1d86ab48809ef7f093a1c8613b793cbe265a6daa8071821f9e28b01",
       "fileName": "recipes.medicine.js"
     },
     {
       "id": "fork-acbbc3617991e1a2",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/primitive/recipes.compost.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/primitive/recipes.compost.js",
       "sha256": "35587c1fdb227f03e53e611814fae3895f4398c063942309b7ac70b2e8fa5d77",
       "fileName": "recipes.compost.js"
     },
     {
       "id": "fork-49f8525e4c1f8aeb",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/server_scripts/tfg/recipes.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/server_scripts/tfg/recipes.js",
       "sha256": "237e44d213022ecee51518ad7a707b8860b78594f02f93b423e29713b41200be",
       "fileName": "recipes.js"
     },
     {
       "id": "fork-5449fb0a6e2f7eb0",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/startup_scripts/tfg/materials.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/startup_scripts/tfg/materials.js",
       "sha256": "1b73035ff03e85d2b3ed75cb55ccd46860c74f9c9f006d694a8dacbe1d2c29f8",
       "fileName": "materials.js"
     },
     {
       "id": "fork-8720a4453c43dfce",
-      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.25/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
+      "url": "https://raw.githubusercontent.com/UpperMoon0/TFG-Modern-Fork/refs/tags/nstut-0.13.10.27/kubejs/startup_scripts/tfg/materials/materials.renewable_ores.js",
       "sha256": "8645d46eef6ad2bfb02f341566c338d89f86fbb87966b22f953a88a0f752eb09",
       "fileName": "materials.renewable_ores.js"
     }
@@ -168,7 +174,7 @@
     {
       "type": "installFile",
       "artifact": "economy",
-      "destination": "mods/economy-forge-1.20.1-0.0.13.jar",
+      "destination": "mods/economy-forge-1.20.1-0.0.14.jar",
       "targets": [
         "client",
         "server"
@@ -185,7 +191,7 @@
     {
       "type": "installFile",
       "artifact": "openui",
-      "destination": "mods/openui-mc-forge-1.20.1-0.0.11.jar",
+      "destination": "mods/openui-mc-forge-1.20.1-0.0.12.jar",
       "targets": [
         "client"
       ]
@@ -275,7 +281,7 @@
     {
       "type": "installFile",
       "artifact": "create-horse-power-ce",
-      "destination": "mods/createhorsepower-ce-1.20.1-1.2.6.jar",
+      "destination": "mods/createhorsepower-ce-1.20.1-1.2.7.jar",
       "targets": [
         "client",
         "server"
@@ -342,7 +348,7 @@
     {
       "type": "installFile",
       "artifact": "perfomant-boom",
-      "destination": "mods/perfomant_boom-forge-1.1.2.jar",
+      "destination": "mods/perfomant_boom-forge-1.1.3.jar",
       "targets": [
         "client",
         "server"
@@ -367,7 +373,24 @@
     {
       "type": "installFile",
       "artifact": "celestial-nail",
-      "destination": "mods/celestial-nail-forge-1.20.1-0.1.1.jar",
+      "destination": "mods/celestial-nail-forge-1.20.1-0.1.3.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "removeMatching",
+      "pattern": "mods/trueuuid-*.jar",
+      "targets": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "type": "installFile",
+      "artifact": "trueuuid",
+      "destination": "mods/trueuuid-1.3.0-forge-1.20.1.jar",
       "targets": [
         "client",
         "server"
@@ -412,7 +435,8 @@
       "type": "patchToml",
       "destination": "config/simplyspeakers-common.toml",
       "values": {
-        "speakerRange": 512
+        "speakerRange": 512,
+        "maxUploadSize": 104857600
       },
       "skipIfMissing": false,
       "targets": [
@@ -441,6 +465,43 @@
       },
       "replaceAll": true,
       "skipIfMissing": true,
+      "targets": [
+        "server"
+      ]
+    },
+    {
+      "type": "patchToml",
+      "destination": "config/simplyspeakers-common.toml",
+      "values": {
+        "maxUploadSize": 104857600
+      },
+      "skipIfMissing": false,
+      "targets": [
+        "client"
+      ]
+    },
+    {
+      "type": "patchProperties",
+      "destination": "server.properties",
+      "values": {
+        "online-mode": false
+      },
+      "skipIfMissing": false,
+      "targets": [
+        "server"
+      ]
+    },
+    {
+      "type": "patchToml",
+      "destination": "config/trueuuid-common.toml",
+      "values": {
+        "auth.timeoutMs": 30000,
+        "auth.allowOfflineOnTimeout": false,
+        "auth.allowOfflineOnFailure": true,
+        "auth.knownPremiumDenyOffline": true,
+        "auth.allowOfflineForUnknownOnly": true
+      },
+      "skipIfMissing": false,
       "targets": [
         "server"
       ]

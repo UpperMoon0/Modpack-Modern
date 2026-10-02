@@ -1,0 +1,8 @@
+# Verify premium sessions and retain their original player UUIDs.
+# Only new, unbound names may explicitly request an offline identity.
+[auth]
+timeoutMs = 30000
+allowOfflineOnTimeout = false
+allowOfflineOnFailure = true
+knownPremiumDenyOffline = true
+allowOfflineForUnknownOnly = true

@@ -1,0 +1,3 @@
+# Managed server audio policy.
+speakerRange = 512
+maxUploadSize = 104857600

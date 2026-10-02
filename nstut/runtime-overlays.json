@@ -42,7 +42,8 @@
         "server"
       ],
       "values": {
-        "speakerRange": 512
+        "speakerRange": 512,
+        "maxUploadSize": 104857600
       }
     },
     {
@@ -65,6 +66,40 @@
       "values": {
         "ftbchunks.max_claimed": 1000000,
         "ftbchunks.max_force_loaded": 1000000
+      }
+    },
+    {
+      "format": "toml",
+      "path": "config/simplyspeakers-common.toml",
+      "targets": [
+        "client"
+      ],
+      "values": {
+        "maxUploadSize": 104857600
+      }
+    },
+    {
+      "format": "properties",
+      "path": "server.properties",
+      "targets": [
+        "server"
+      ],
+      "values": {
+        "online-mode": false
+      }
+    },
+    {
+      "format": "toml",
+      "path": "config/trueuuid-common.toml",
+      "targets": [
+        "server"
+      ],
+      "values": {
+        "auth.timeoutMs": 30000,
+        "auth.allowOfflineOnTimeout": false,
+        "auth.allowOfflineOnFailure": true,
+        "auth.knownPremiumDenyOffline": true,
+        "auth.allowOfflineForUnknownOnly": true
       }
     }
   ]

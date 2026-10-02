@@ -15,6 +15,10 @@ NSTUT = ROOT / "nstut"
 GENERATED = NSTUT / "modpack-manager.patch.json"
 
 SEMANTIC_PATHS = {
+    ".pakku/server-overrides/config/trueuuid-common.toml",
+    ".pakku/server-overrides/server.properties",
+    "config/simplyspeakers-common.toml",
+    ".pakku/server-overrides/config/simplyspeakers-common.toml",
     "config/gtceu.yaml",
     "defaultconfigs/createhorsepower-server.toml",
     ".pakku/server-overrides/defaultconfigs/ftbchunks-world.snbt",
@@ -122,6 +126,12 @@ def build_manifest() -> dict:
                     "targets": overlay["targets"],
                 }
             )
+        elif overlay["format"] == "properties":
+            operations.append({
+                "type": "patchProperties", "destination": overlay["path"],
+                "values": overlay["values"], "skipIfMissing": False,
+                "targets": overlay["targets"],
+            })
         elif overlay["format"] == "toml":
             operations.append(
                 {

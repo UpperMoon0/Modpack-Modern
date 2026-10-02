@@ -175,6 +175,98 @@ def main() -> int:
         if (config_projects.get(client_key) or {}).get("side") != "CLIENT":
             fail(f"{client_key} must remain client-only")
 
+    trueuuid = next((mod for mod in managed["mods"] if mod["id"] == "trueuuid"), None)
+    if trueuuid is None or trueuuid["installTargets"] != ["client", "server"]:
+        fail("TrueUUID must be installed on both clients and servers")
+    auth_values = {
+        "auth.timeoutMs": 30000,
+        "auth.allowOfflineOnTimeout": False,
+        "auth.allowOfflineOnFailure": True,
+        "auth.knownPremiumDenyOffline": True,
+        "auth.allowOfflineForUnknownOnly": True,
+    }
+    auth = tomllib.loads((ROOT / ".pakku/server-overrides/config/trueuuid-common.toml").read_text())["auth"]
+    if any(auth.get(key.removeprefix("auth.")) != value for key, value in auth_values.items()):
+        fail("native server export must protect known premium identities")
+    auth_overlays = [entry for entry in runtime["overlays"] if entry["path"] == "config/trueuuid-common.toml"]
+    if len(auth_overlays) != 1 or auth_overlays[0]["targets"] != ["server"] or auth_overlays[0]["values"] != auth_values:
+        fail("TrueUUID runtime policy must match the protected server export")
+    if list(ROOT.glob(".pakku/**/trueuuid-registry.json")) or (ROOT / "config/trueuuid-registry.json").exists():
+        fail("server-private premium identity bindings must never ship in the modpack")
+
+    identity_spec = importlib.util.spec_from_file_location("premium_identities", NSTUT / "tools/prepare-premium-identities.py")
+    identity_tool = importlib.util.module_from_spec(identity_spec)
+    identity_spec.loader.exec_module(identity_tool)
+    with tempfile.TemporaryDirectory() as directory:
+        fixture = Path(directory)
+        (fixture / "server.properties").write_bytes(b"level-name=custom-world\r")
+        (fixture / "custom-world/playerdata").mkdir(parents=True)
+        (fixture / "config").mkdir()
+        premium = "11111111-1111-4111-8111-111111111111"
+        conflicting = "22222222-2222-4222-8222-222222222222"
+        offline = "33333333-3333-3333-8333-333333333333"
+        save = fixture / f"custom-world/playerdata/{premium}.dat"
+        save.write_bytes(b"preserve inventory and mod capabilities")
+        (fixture / f"custom-world/playerdata/{offline}.dat").write_bytes(b"offline player")
+        (fixture / "usernamecache.json").write_text(json.dumps({premium: "KnownPlayer", offline: "OfflineGuest"}))
+        (fixture / "usercache.json").write_text(json.dumps([
+            {"name": "KNOWNPLAYER", "uuid": premium},
+            {"name": "NoSavedData", "uuid": "44444444-4444-4444-8444-444444444444"},
+        ]))
+        registry, names = identity_tool.prepare(fixture)
+        if set(registry) != {"knownplayer"} or registry["knownplayer"]["premiumUuid"] != premium:
+            fail("identity preparation must reserve saved premium IDs only")
+        for source in (
+            "level-name : custom-world\r",
+            "level\\u002dname=custom-\\\r\n  world\r\n",
+            "level-name=wrong\nlevel-name=custom-world\n",
+        ):
+            (fixture / "server.properties").write_bytes(source.encode("latin-1"))
+            if identity_tool.prepare(fixture)[0] != registry:
+                fail("identity preparation must read Java world-name syntax")
+        orphan = fixture / f"custom-world/playerdata/{conflicting}.dat"
+        orphan.write_bytes(b"other player")
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError as error:
+            if "missing cached names" not in str(error):
+                raise
+        else:
+            fail("identity preparation must refuse unnamed saved premium identities")
+        orphan.unlink()
+        registry["knownplayer"]["lastVerifiedAt"] = 123
+        registry_path = fixture / "config/trueuuid-registry.json"
+        registry_path.write_text(json.dumps(registry))
+        if identity_tool.prepare(fixture)[0] != registry or save.read_bytes() != b"preserve inventory and mod capabilities":
+            fail("identity preparation must preserve existing bindings and saves")
+        registry_path.write_text(json.dumps({"KNOWNPLAYER": registry["knownplayer"]}))
+        if identity_tool.prepare(fixture)[0] != registry:
+            fail("identity preparation must normalize existing registry name casing")
+        registry_path.write_text(json.dumps({"broken": {"premiumUuid": premium}}))
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError:
+            pass
+        else:
+            fail("identity preparation must reject malformed preexisting registry entries")
+        registry["knownplayer"]["premiumUuid"] = conflicting
+        registry_path.write_text(json.dumps(registry))
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError:
+            pass
+        else:
+            fail("identity preparation must refuse conflicting existing bindings")
+        registry_path.unlink()
+        orphan.write_bytes(b"other player")
+        (fixture / "usercache.json").write_text(json.dumps([{"name": "KnownPlayer", "uuid": conflicting}]))
+        try:
+            identity_tool.prepare(fixture)
+        except ValueError:
+            pass
+        else:
+            fail("identity preparation must refuse conflicting cache names")
+
     # Alabaster recipe audit: raw decoloring must target raw alabaster, and
     # colored bricks must have exactly one dyeing registration. Duplicate
     # Chemical Bath signatures are rejected by GTCEu's lookup DB.
@@ -335,28 +427,86 @@ def main() -> int:
         fail("Simply Speakers runtime overlay must use TOML patching")
     if speaker_overlay.get("targets") != ["server"]:
         fail(f"Simply Speakers runtime overlay must be server-only: {speaker_overlay.get('targets')!r}")
-    if speaker_overlay.get("values") != {"speakerRange": 512}:
-        fail(f"Simply Speakers speakerRange policy must be 512: {speaker_overlay.get('values')!r}")
+    if speaker_overlay.get("values") != {"speakerRange": 512, "maxUploadSize": 104857600}:
+        fail(f"Simply Speakers server policy must be range 512 and upload limit 100 MiB: {speaker_overlay.get('values')!r}")
+
+    for rel in ("config/simplyspeakers-common.toml", ".pakku/server-overrides/config/simplyspeakers-common.toml"):
+        if tomllib.loads((ROOT / rel).read_text(encoding="utf-8")).get("maxUploadSize") != 104857600:
+            fail(f"{rel} does not set the 100 MiB upload limit")
+    native_properties = (ROOT / ".pakku/server-overrides/server.properties").read_text(encoding="utf-8")
+    if re.findall(r"(?m)^online-mode=(.*)$", native_properties) != ["false"]:
+        fail("native server export must use offline mode")
+    properties_overlay = next((x for x in runtime["overlays"] if x["path"] == "server.properties"), None)
+    if properties_overlay != {"format": "properties", "path": "server.properties", "targets": ["server"], "values": {"online-mode": False}}:
+        fail("offline mode must be managed as a server-only properties overlay")
+    client_speaker = [x for x in runtime["overlays"] if x["path"] == "config/simplyspeakers-common.toml" and x.get("targets") == ["client"]]
+    if len(client_speaker) != 1 or client_speaker[0].get("values") != {"maxUploadSize": 104857600}:
+        fail("client/singleplayer upload limit must be 100 MiB")
 
     patcher = NSTUT / "tools" / "patch-existing-server.py"
     with tempfile.TemporaryDirectory() as temp_dir:
         server = Path(temp_dir)
+        properties = server / "server.properties"
+        properties.write_bytes(b"# keep custom settings\r\nonline-mode=true\r\nlevel-name=my-world\r\nserver-port=25570\r\n")
+        original_properties = properties.read_bytes()
         config = server / "config" / "simplyspeakers-common.toml"
         config.parent.mkdir(parents=True)
         config.write_text(
             "# Simply Speakers\nspeakerRange = 64\ndisableUpload = false\n",
             encoding="utf-8",
         )
+        subprocess.run([sys.executable, str(patcher), str(server), "--dry-run"], check=True)
+        if properties.read_bytes() != original_properties:
+            fail("dry-run mutated server.properties")
         subprocess.run([sys.executable, str(patcher), str(server)], check=True)
+        if properties.read_bytes() != original_properties.replace(b"online-mode=true", b"online-mode=false"):
+            fail("offline patch changed unrelated server properties")
         first_pass = config.read_text(encoding="utf-8")
         patched = tomllib.loads(first_pass)
         if patched.get("speakerRange") != 512:
             fail(f"existing-server patcher left speakerRange at {patched.get('speakerRange')!r}")
+        if patched.get("maxUploadSize") != 104857600:
+            fail("existing-server upload limit must be 100 MiB")
         if patched.get("disableUpload") is not False:
             fail("existing-server patcher changed unrelated Simply Speakers config")
         subprocess.run([sys.executable, str(patcher), str(server)], check=True)
+        if properties.read_bytes() != original_properties.replace(b"online-mode=true", b"online-mode=false"):
+            fail("offline mode patch is not idempotent")
         if config.read_text(encoding="utf-8") != first_pass:
             fail("existing-server Simply Speakers patch is not idempotent")
+
+    patcher_spec = importlib.util.spec_from_file_location("nstut_server_patcher", patcher)
+    patcher_module = importlib.util.module_from_spec(patcher_spec)
+    patcher_spec.loader.exec_module(patcher_module)
+    with tempfile.TemporaryDirectory() as temp_dir:
+        properties = Path(temp_dir) / "server.properties"
+        for source in (
+            b"online-mode=true\rlevel-name=custom-world\rserver-port=25570\r",
+            b"online-mode=true\nlevel-name=custom-world\rserver-port=25570\r\n",
+        ):
+            properties.write_bytes(source)
+            patcher_module.replace_properties_values(properties, {"online-mode": False}, False)
+            if properties.read_bytes() != source.replace(b"online-mode=true", b"online-mode=false"):
+                fail("properties patch corrupted CR-only or mixed natural lines")
+            if patcher_module.replace_properties_values(properties, {"online-mode": False}, False):
+                fail("properties patch is not idempotent for CR-only or mixed natural lines")
+        for ending in (b"", b"\n", b"\r", b"\r\n"):
+            for backslashes in range(5):
+                source = b"motd=Hello" + b"\\" * backslashes + ending
+                properties.write_bytes(source)
+                newline = ending or b"\n"
+                expected = source + (newline if not ending else b"")
+                if backslashes % 2:
+                    expected += newline
+                expected += b"online-mode=false" + newline
+                patcher_module.replace_properties_values(properties, {"online-mode": False}, True)
+                if properties.read_bytes() != source:
+                    fail("EOF continuation dry-run changed server properties")
+                patcher_module.replace_properties_values(properties, {"online-mode": False}, False)
+                if properties.read_bytes() != expected:
+                    fail(f"properties append did not close EOF continuation: {ending!r}, {backslashes}")
+                if patcher_module.replace_properties_values(properties, {"online-mode": False}, False):
+                    fail("properties append is not idempotent after EOF continuation")
 
     checks = (
         (".pakku/server-overrides/defaultconfigs/ftbchunks-world.snbt", ("max_claimed_chunks", "max_force_loaded_chunks")),
@@ -374,12 +524,20 @@ def main() -> int:
         operation for operation in generated["operations"]
         if operation.get("type") == "patchToml"
         and operation.get("destination") == "config/simplyspeakers-common.toml"
+        and operation.get("targets") == ["server"]
     ]
     if len(speaker_ops) != 1:
         fail(f"expected one generated Simply Speakers TOML patch, found {len(speaker_ops)}")
     speaker_op = speaker_ops[0]
-    if speaker_op.get("values") != {"speakerRange": 512} or speaker_op.get("targets") != ["server"]:
+    if speaker_op.get("values") != {"speakerRange": 512, "maxUploadSize": 104857600} or speaker_op.get("targets") != ["server"]:
         fail(f"generated Simply Speakers patch is wrong: {speaker_op!r}")
+
+    properties_ops = [x for x in generated["operations"] if x.get("destination") == "server.properties"]
+    if len(properties_ops) != 1 or properties_ops[0].get("type") != "patchProperties" or properties_ops[0].get("values") != {"online-mode": False} or properties_ops[0].get("targets") != ["server"]:
+        fail("server.properties must be patched semantically without replacing unrelated settings")
+    client_ops = [x for x in generated["operations"] if x.get("destination") == "config/simplyspeakers-common.toml" and x.get("targets") == ["client"]]
+    if len(client_ops) != 1 or client_ops[0].get("type") != "patchToml" or client_ops[0].get("values") != {"maxUploadSize": 104857600}:
+        fail("client upload limit patch is missing or replaces the complete config")
 
     for operation in generated["operations"]:
         destination = operation.get("destination") or operation.get("pattern") or ""
